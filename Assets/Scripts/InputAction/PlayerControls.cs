@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Action/PlayerControl.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/InputAction/PlayerControls.inputactions'
 
 using System;
 using System.Collections;
@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @PlayerControl : IInputActionCollection, IDisposable
+public class @PlayerControls : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
-    public @PlayerControl()
+    public @PlayerControls()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""name"": ""PlayerControl"",
+    ""name"": ""PlayerControls"",
     ""maps"": [
         {
             ""name"": ""Ground"",
@@ -22,6 +22,14 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""991cd16d-deb6-4d2b-81da-2e125a18b1a2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""827484eb-d62d-46a8-a0de-aed6b920ff8a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -93,6 +101,28 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50d006f3-39a7-4528-a5d1-e53bc17ff40c"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""592e0856-4b3b-4ac2-8c56-e463bb8e83f9"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -102,6 +132,7 @@ public class @PlayerControl : IInputActionCollection, IDisposable
         // Ground
         m_Ground = asset.FindActionMap("Ground", throwIfNotFound: true);
         m_Ground_Move = m_Ground.FindAction("Move", throwIfNotFound: true);
+        m_Ground_Look = m_Ground.FindAction("Look", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -152,11 +183,13 @@ public class @PlayerControl : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Ground;
     private IGroundActions m_GroundActionsCallbackInterface;
     private readonly InputAction m_Ground_Move;
+    private readonly InputAction m_Ground_Look;
     public struct GroundActions
     {
-        private @PlayerControl m_Wrapper;
-        public GroundActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        private @PlayerControls m_Wrapper;
+        public GroundActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Ground_Move;
+        public InputAction @Look => m_Wrapper.m_Ground_Look;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -169,6 +202,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
+                @Look.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -176,6 +212,9 @@ public class @PlayerControl : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
             }
         }
     }
@@ -183,5 +222,6 @@ public class @PlayerControl : IInputActionCollection, IDisposable
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
 }
