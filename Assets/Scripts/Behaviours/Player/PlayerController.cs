@@ -8,18 +8,19 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float MovementSpeed = 5.0f;
-    public float MovementSmoothSpeed = 1.0f;
+    [Range(1, 10)] public float MovementSmoothSpeedStart = 2.0f;
+    [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
     public float TurnSpeed = 0.1f;
     public float TurnStartMargin = 0.01f;
     public float TurnEndMargin = 0.2f;
 
     public bool IsMoving { get; set; }
+    public Vector3 RawInputMovement { get; set; }
+    public Vector3 SmoothInputMovement { get; set; }
+    public Vector3 Velocity { get; set; }
 
     private Camera _mainCamera;
     private Rigidbody _body;
-
-    private Vector3 _rawInputMovement;
-    private Vector3 _smoothInputMovement;
 
     /// <summary>
     /// Get direction from the camera.
@@ -35,15 +36,15 @@ public class PlayerController : MonoBehaviour
             cameraForward.y = 0f;
             cameraRight.y = 0f;
 
-            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
+            return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
         }
     }
 
-#region Events
+    #region Events
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+        RawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
         IsMoving = (inputMovement != Vector2.zero);
     }
@@ -62,9 +63,9 @@ public class PlayerController : MonoBehaviour
     {
 
     }
-#endregion
+    #endregion
 
-#region Unity Message
+    #region Unity Message
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -81,14 +82,15 @@ public class PlayerController : MonoBehaviour
         Move();
         Turn();
     }
-#endregion
+    #endregion
 
     /// <summary>
     /// Lerp the smooth input movement based on raw input movement.
     /// </summary>
     private void UpdateSmoothInputMovement()
     {
-        _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement, Time.deltaTime * MovementSmoothSpeed);
+        SmoothInputMovement = Vector3.Lerp(SmoothInputMovement, RawInputMovement,
+            Time.deltaTime * (IsMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
     }
 
     /// <summary>
@@ -96,8 +98,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        Vector3 movement = GetCameraDirection * MovementSpeed * Time.deltaTime;
-        _body.MovePosition(transform.position + movement);
+        Velocity = GetCameraDirection * MovementSpeed * Time.deltaTime;
+        _body.MovePosition(transform.position + Velocity);
     }
 
     /// <summary>
@@ -105,7 +107,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Turn()
     {
-        if ((IsMoving && _smoothInputMovement.sqrMagnitude > TurnStartMargin) || (!IsMoving && _smoothInputMovement.sqrMagnitude > TurnEndMargin))
+        if ((IsMoving && SmoothInputMovement.sqrMagnitude > TurnStartMargin) || (!IsMoving && SmoothInputMovement.sqrMagnitude > TurnEndMargin))
         {
             Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(GetCameraDirection), TurnSpeed);
             _body.MoveRotation(rotation);
