@@ -1,5 +1,5 @@
 {
-    "name": "PlayerControl",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Ground",
@@ -9,6 +9,14 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "991cd16d-deb6-4d2b-81da-2e125a18b1a2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "827484eb-d62d-46a8-a0de-aed6b920ff8a",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
@@ -78,6 +86,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50d006f3-39a7-4528-a5d1-e53bc17ff40c",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "592e0856-4b3b-4ac2-8c56-e463bb8e83f9",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
