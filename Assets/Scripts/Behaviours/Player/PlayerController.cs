@@ -2,29 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityAtoms.BaseAtoms;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    #region Inspector
+    [Header("Setup")]
+    [SerializeField] private Vector3Variable _smoothInputMovementAtoms;
+    [SerializeField] private BoolVariable _isDashingAtoms;
+    [Space(10)]
     [Header("Movement Settings")]
-    public float MovementSpeed = 5.0f;
+    [SerializeField] private FloatVariable _movementSpeedAtoms;
+    [SerializeField] private FloatVariable _dashSpeedAtoms;
+    [Space(10)]
     [Range(1, 10)] public float MovementSmoothSpeedStart = 2.0f;
     [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
-    public float TurnSpeed = 0.1f;
-    public float TurnStartMargin = 0.01f;
-    public float TurnEndMargin = 0.2f;
+    [Space(10)]
+    [Min(0)] public float TurnSpeed = 0.1f;
+    [Min(0)] public float TurnStartMargin = 0.01f;
+    [Min(0)] public float TurnEndMargin = 0.2f;
+    #endregion
 
-    public bool IsMoving { get; set; }
-    public Vector3 RawInputMovement { get; set; }
-    public Vector3 SmoothInputMovement { get; set; }
-    public Vector3 Velocity { get; set; }
+    private bool _isMoving { get; set; }
+    private bool _isDashing { get; set; }
+    private Vector3 _rawInputMovement { get; set; }
+    private Vector3 _smoothInputMovement { get; set; }
 
     private Camera _mainCamera;
     private Rigidbody _body;
 
-    /// <summary>
-    /// Get direction from the camera.
-    /// </summary>
+    private float _movementSpeed;
+    private float _dashSpeed;
+
     private Vector3 GetCameraDirection
     {
         get
@@ -36,17 +46,27 @@ public class PlayerController : MonoBehaviour
             cameraForward.y = 0f;
             cameraRight.y = 0f;
 
-            return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
+            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
         }
     }
 
     #region Events
+    public void OnMovementChange(float speed) => _movementSpeed = speed;
+    public void OnDashChange(float speed) => _dashSpeed = speed;
+
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        RawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
-        IsMoving = (inputMovement != Vector2.zero);
+        _isMoving = (inputMovement != Vector2.zero);
+    }
+
+    public void OnDash(InputAction.CallbackContext value)
+    {
+        _isDashing = (value.ReadValue<float>() > 0.5f);
+        _isDashingAtoms.Value = _isDashing;
+        _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
     }
 
     public void OnDeviceLost()
@@ -70,6 +90,9 @@ public class PlayerController : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _body = GetComponent<Rigidbody>();
+
+        _movementSpeedAtoms.Changed.Register(OnMovementChange);
+        _dashSpeedAtoms.Changed.Register(OnDashChange);
     }
 
     private void Update()
@@ -79,35 +102,34 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
-        Turn();
+        UpdateMovement();
+        UpdateTurn();
+    }
+
+    private void OnDestroy()
+    {
+        _movementSpeedAtoms.Changed.Unregister(OnMovementChange);
+        _dashSpeedAtoms.Changed.Unregister(OnDashChange);
     }
     #endregion
 
-    /// <summary>
-    /// Lerp the smooth input movement based on raw input movement.
-    /// </summary>
     private void UpdateSmoothInputMovement()
     {
-        SmoothInputMovement = Vector3.Lerp(SmoothInputMovement, RawInputMovement,
-            Time.deltaTime * (IsMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+        _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
+                Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+
+        _smoothInputMovementAtoms.Value = _smoothInputMovement;
     }
 
-    /// <summary>
-    /// Move using rigid-body.
-    /// </summary>
-    private void Move()
+    private void UpdateMovement()
     {
-        Velocity = GetCameraDirection * MovementSpeed * Time.deltaTime;
-        _body.MovePosition(transform.position + Velocity);
+        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
+        _body.MovePosition(transform.position + velocity);
     }
 
-    /// <summary>
-    /// Turn the player around its axis using rigid-body.
-    /// </summary>
-    private void Turn()
+    private void UpdateTurn()
     {
-        if ((IsMoving && SmoothInputMovement.sqrMagnitude > TurnStartMargin) || (!IsMoving && SmoothInputMovement.sqrMagnitude > TurnEndMargin))
+        if ((_isMoving && _smoothInputMovement.sqrMagnitude > TurnStartMargin) || (!_isMoving && _smoothInputMovement.sqrMagnitude > TurnEndMargin))
         {
             Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(GetCameraDirection), TurnSpeed);
             _body.MoveRotation(rotation);
