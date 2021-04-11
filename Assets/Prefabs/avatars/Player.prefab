@@ -87,7 +87,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 8
+  _smoothInputMovementAtoms: {fileID: 11400000, guid: c3ec46a4b0e9a0d45b8364b7aea706ab, type: 2}
+  _isDashingAtoms: {fileID: 11400000, guid: 80b6209639cc0dc4baf791d6900f3920, type: 2}
+  _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
+  _dashSpeedAtoms: {fileID: 11400000, guid: d9ac8df41de677944a6b75d9cc4f1f93, type: 2}
   MovementSmoothSpeedStart: 2
   MovementSmoothSpeedEnd: 5
   TurnSpeed: 0.2
@@ -174,6 +177,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 827484eb-d62d-46a8-a0de-aed6b920ff8a
     m_ActionName: Ground/Look[/Mouse/delta,/DualShock4GamepadHID/rightStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 583105869144826515}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 92ca1554-eefa-4747-ab7e-fd1e822a29de
+    m_ActionName: Ground/Dash[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ground
@@ -191,8 +210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 583105869144826515}
   _animation: {fileID: 748620117856427530}
+  _smoothInputMovementAtoms: {fileID: 11400000, guid: c3ec46a4b0e9a0d45b8364b7aea706ab, type: 2}
+  _isDashingAtoms: {fileID: 11400000, guid: 80b6209639cc0dc4baf791d6900f3920, type: 2}
   IdleBlendSpeed: 0.002
   MotionBlendMargin: 0.01
 --- !u!1001 &2419300552338184298
