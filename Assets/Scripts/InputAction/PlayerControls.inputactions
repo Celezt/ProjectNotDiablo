@@ -14,7 +14,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Look",
+                    "name": "Camera",
                     "type": "Value",
                     "id": "827484eb-d62d-46a8-a0de-aed6b920ff8a",
                     "expectedControlType": "Vector2",
@@ -26,6 +26,14 @@
                     "type": "Value",
                     "id": "92ca1554-eefa-4747-ab7e-fd1e822a29de",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "AimPosition",
+                    "type": "Value",
+                    "id": "4d31b998-47a3-43d2-a362-12179cb9de02",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 }
@@ -153,13 +161,24 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "7bcde9af-02d4-4d0e-a5fd-9ae9001840c5",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "Keyboard",
                     "id": "5a4f75f1-e980-4564-92e6-efe90d08d9f5",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -170,7 +189,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -181,7 +200,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -192,7 +211,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -203,7 +222,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -214,7 +233,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -225,7 +244,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -236,7 +255,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -247,7 +266,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -258,7 +277,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -281,6 +300,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edb7375f-3200-4704-be6d-5c70b0622eee",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AimPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
