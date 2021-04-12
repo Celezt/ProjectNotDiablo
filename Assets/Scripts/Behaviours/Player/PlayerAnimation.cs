@@ -7,10 +7,8 @@ public class PlayerAnimation : MonoBehaviour
 {
     #region Inspector
     [Header("Setup")]
+    [SerializeField] private PlayerController _controller;
     [SerializeField] private Animator _animation;
-    [Space(10)]
-    [SerializeField] private Vector3Variable _smoothInputMovementAtoms;
-    [SerializeField] private BoolVariable _isDashingAtoms;
     [Space(10)]
     [Header("Settings")]
     public float IdleBlendSpeed = 0.002f;
@@ -47,27 +45,27 @@ public class PlayerAnimation : MonoBehaviour
             Animator.StringToHash("Idle"),
             Animator.StringToHash("IsDashing")
         );
-
-        _isDashingAtoms.Changed.Register(OnDashChange);
     }
 
     private void Update()
     {
         UpdateMotionAnimation();
         UpdateIdleAnimation();
-    }
-
-    private void OnDestroy()
-    {
-        _isDashingAtoms.Changed.Unregister(OnDashChange);
+        UpdateDashAnimation();
     }
     #endregion
 
+    private void UpdateDashAnimation()
+    {
+        if (_controller != null)
+            _animation.SetBool(_id.Dash, _controller.IsDashing);
+    }
+
     private void UpdateMotionAnimation()
     {
-        if (_smoothInputMovementAtoms != null)
+        if (_controller != null)
         {
-            float blend = _smoothInputMovementAtoms.Value.magnitude;
+            float blend = _controller.SmoothInputMovement.magnitude;
             _animation.SetFloat(_id.Motion, (blend > 0.01f) ? blend : 0.0f);
         }
     }

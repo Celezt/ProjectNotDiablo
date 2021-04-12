@@ -8,10 +8,6 @@ using UnityAtoms.BaseAtoms;
 public class PlayerController : MonoBehaviour
 {
     #region Inspector
-    [Header("Setup")]
-    [SerializeField] private Vector3Variable _smoothInputMovementAtoms;
-    [SerializeField] private BoolVariable _isDashingAtoms;
-    [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
     [SerializeField] private FloatVariable _dashSpeedAtoms;
@@ -24,10 +20,10 @@ public class PlayerController : MonoBehaviour
     [Min(0)] public float TurnEndMargin = 0.2f;
     #endregion
 
-    private bool _isMoving { get; set; }
-    private bool _isDashing { get; set; }
-    private Vector3 _rawInputMovement { get; set; }
-    private Vector3 _smoothInputMovement { get; set; }
+    public bool IsMoving { get; set; }
+    public bool IsDashing { get; set; }
+    public Vector3 RawInputMovement { get; set; }
+    public Vector3 SmoothInputMovement { get; set; }
 
     private Camera _mainCamera;
     private Rigidbody _body;
@@ -46,7 +42,7 @@ public class PlayerController : MonoBehaviour
             cameraForward.y = 0f;
             cameraRight.y = 0f;
 
-            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
+            return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
         }
     }
 
@@ -57,15 +53,14 @@ public class PlayerController : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+        RawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
-        _isMoving = (inputMovement != Vector2.zero);
+        IsMoving = (inputMovement != Vector2.zero);
     }
 
     public void OnDash(InputAction.CallbackContext value)
     {
-        _isDashing = (value.ReadValue<float>() > 0.5f);
-        _isDashingAtoms.Value = _isDashing;
+        IsDashing = (value.ReadValue<float>() > 0.5f);
         _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
     }
 
@@ -115,10 +110,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateSmoothInputMovement()
     {
-        _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
-                Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
-
-        _smoothInputMovementAtoms.Value = _smoothInputMovement;
+        SmoothInputMovement = Vector3.Lerp(SmoothInputMovement, RawInputMovement,
+                Time.deltaTime * (IsMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
     }
 
     private void UpdateMovement()
@@ -129,7 +122,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateTurn()
     {
-        if ((_isMoving && _smoothInputMovement.sqrMagnitude > TurnStartMargin) || (!_isMoving && _smoothInputMovement.sqrMagnitude > TurnEndMargin))
+        if ((IsMoving && SmoothInputMovement.sqrMagnitude > TurnStartMargin) || (!IsMoving && SmoothInputMovement.sqrMagnitude > TurnEndMargin))
         {
             Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(GetCameraDirection), TurnSpeed);
             _body.MoveRotation(rotation);
