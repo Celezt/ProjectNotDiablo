@@ -120,7 +120,7 @@ public class AI : MonoBehaviour
     void Attack()
     {
         //Weapon Attack
-
+        //GetComponentInChildren<MeleeAttack>(Attack).(GetcomponentInChild<Weapon>)
     }
 
     void Flee()
