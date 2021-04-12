@@ -27,7 +27,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Look"",
+                    ""name"": ""Camera"",
                     ""type"": ""Value"",
                     ""id"": ""827484eb-d62d-46a8-a0de-aed6b920ff8a"",
                     ""expectedControlType"": ""Vector2"",
@@ -39,6 +39,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""92ca1554-eefa-4747-ab7e-fd1e822a29de"",
                     ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""AimPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""4d31b998-47a3-43d2-a362-12179cb9de02"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -166,13 +174,24 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""7bcde9af-02d4-4d0e-a5fd-9ae9001840c5"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""Keyboard"",
                     ""id"": ""5a4f75f1-e980-4564-92e6-efe90d08d9f5"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -183,7 +202,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -194,7 +213,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -205,7 +224,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -216,7 +235,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -227,7 +246,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -238,7 +257,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -249,7 +268,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -260,7 +279,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -271,7 +290,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -296,6 +315,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""edb7375f-3200-4704-be6d-5c70b0622eee"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AimPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -305,8 +335,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         // Ground
         m_Ground = asset.FindActionMap("Ground", throwIfNotFound: true);
         m_Ground_Move = m_Ground.FindAction("Move", throwIfNotFound: true);
-        m_Ground_Look = m_Ground.FindAction("Look", throwIfNotFound: true);
+        m_Ground_Camera = m_Ground.FindAction("Camera", throwIfNotFound: true);
         m_Ground_Dash = m_Ground.FindAction("Dash", throwIfNotFound: true);
+        m_Ground_AimPosition = m_Ground.FindAction("AimPosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -357,15 +388,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Ground;
     private IGroundActions m_GroundActionsCallbackInterface;
     private readonly InputAction m_Ground_Move;
-    private readonly InputAction m_Ground_Look;
+    private readonly InputAction m_Ground_Camera;
     private readonly InputAction m_Ground_Dash;
+    private readonly InputAction m_Ground_AimPosition;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
         public GroundActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Ground_Move;
-        public InputAction @Look => m_Wrapper.m_Ground_Look;
+        public InputAction @Camera => m_Wrapper.m_Ground_Camera;
         public InputAction @Dash => m_Wrapper.m_Ground_Dash;
+        public InputAction @AimPosition => m_Wrapper.m_Ground_AimPosition;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -378,12 +411,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
-                @Look.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
-                @Look.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
-                @Look.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
+                @Camera.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCamera;
+                @Camera.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCamera;
+                @Camera.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCamera;
                 @Dash.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
+                @AimPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
+                @AimPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
+                @AimPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -391,12 +427,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Look.started += instance.OnLook;
-                @Look.performed += instance.OnLook;
-                @Look.canceled += instance.OnLook;
+                @Camera.started += instance.OnCamera;
+                @Camera.performed += instance.OnCamera;
+                @Camera.canceled += instance.OnCamera;
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @AimPosition.started += instance.OnAimPosition;
+                @AimPosition.performed += instance.OnAimPosition;
+                @AimPosition.canceled += instance.OnAimPosition;
             }
         }
     }
@@ -404,7 +443,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnLook(InputAction.CallbackContext context);
+        void OnCamera(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnAimPosition(InputAction.CallbackContext context);
     }
 }

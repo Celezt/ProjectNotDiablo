@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
     [Space(10)]
     [Min(0)] public float TurnSpeed = 0.1f;
-    [Min(0)] public float TurnStartMargin = 0.01f;
-    [Min(0)] public float TurnEndMargin = 0.2f;
+    [Header("Aim Settings")]
+    public LayerMask AimLayerMask;
     #endregion
 
     public bool IsMoving { get; set; }
@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
     private float _movementSpeed;
     private float _dashSpeed;
+    private Vector3 _aimPosition;
+    private Vector3 _aimDirection;
 
     private Vector3 GetCameraDirection
     {
@@ -43,6 +45,16 @@ public class PlayerController : MonoBehaviour
             cameraRight.y = 0f;
 
             return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
+        }
+    }
+
+    private Vector3 GetAimDirection
+    {
+        get
+        {
+            Vector3 playerPosition = transform.position;
+
+            return (_aimPosition != Vector3.zero) ? new Vector3(_aimPosition.x - playerPosition.x, 0, _aimPosition.z - playerPosition.z) : Vector3.forward;
         }
     }
 
@@ -62,6 +74,17 @@ public class PlayerController : MonoBehaviour
     {
         IsDashing = (value.ReadValue<float>() > 0.5f);
         _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
+    }
+
+    public void OnAim(InputAction.CallbackContext value)
+    {
+        Vector2 screenPositon = value.ReadValue<Vector2>();
+        Ray ray = _mainCamera.ScreenPointToRay(screenPositon);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, AimLayerMask))
+            _aimPosition = hit.point;
+
+        _aimDirection = GetAimDirection;
     }
 
     public void OnDeviceLost()
@@ -122,10 +145,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateTurn()
     {
-        if ((IsMoving && SmoothInputMovement.sqrMagnitude > TurnStartMargin) || (!IsMoving && SmoothInputMovement.sqrMagnitude > TurnEndMargin))
-        {
-            Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(GetCameraDirection), TurnSpeed);
-            _body.MoveRotation(rotation);
-        }
+        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_aimDirection), TurnSpeed);
+        _body.MoveRotation(rotation);
     }
 }
