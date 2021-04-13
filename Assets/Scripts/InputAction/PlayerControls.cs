@@ -49,6 +49,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""AimDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""b6b343a3-90d9-4bdd-a91d-ffecfd9df545"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -326,11 +334,50 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""AimPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f589f58-773d-4799-8393-56fc167eeb26"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AimDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Gamepad"",
+            ""bindingGroup"": ""Gamepad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Keyboard And Mouse"",
+            ""bindingGroup"": ""Keyboard And Mouse"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Ground
         m_Ground = asset.FindActionMap("Ground", throwIfNotFound: true);
@@ -338,6 +385,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Ground_Camera = m_Ground.FindAction("Camera", throwIfNotFound: true);
         m_Ground_Dash = m_Ground.FindAction("Dash", throwIfNotFound: true);
         m_Ground_AimPosition = m_Ground.FindAction("AimPosition", throwIfNotFound: true);
+        m_Ground_AimDelta = m_Ground.FindAction("AimDelta", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -391,6 +439,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Ground_Camera;
     private readonly InputAction m_Ground_Dash;
     private readonly InputAction m_Ground_AimPosition;
+    private readonly InputAction m_Ground_AimDelta;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
@@ -399,6 +448,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_Ground_Camera;
         public InputAction @Dash => m_Wrapper.m_Ground_Dash;
         public InputAction @AimPosition => m_Wrapper.m_Ground_AimPosition;
+        public InputAction @AimDelta => m_Wrapper.m_Ground_AimDelta;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -420,6 +470,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @AimPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
                 @AimPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
                 @AimPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
+                @AimDelta.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
+                @AimDelta.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
+                @AimDelta.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -436,15 +489,37 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @AimPosition.started += instance.OnAimPosition;
                 @AimPosition.performed += instance.OnAimPosition;
                 @AimPosition.canceled += instance.OnAimPosition;
+                @AimDelta.started += instance.OnAimDelta;
+                @AimDelta.performed += instance.OnAimDelta;
+                @AimDelta.canceled += instance.OnAimDelta;
             }
         }
     }
     public GroundActions @Ground => new GroundActions(this);
+    private int m_GamepadSchemeIndex = -1;
+    public InputControlScheme GamepadScheme
+    {
+        get
+        {
+            if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
+            return asset.controlSchemes[m_GamepadSchemeIndex];
+        }
+    }
+    private int m_KeyboardAndMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardAndMouseScheme
+    {
+        get
+        {
+            if (m_KeyboardAndMouseSchemeIndex == -1) m_KeyboardAndMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard And Mouse");
+            return asset.controlSchemes[m_KeyboardAndMouseSchemeIndex];
+        }
+    }
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnAimPosition(InputAction.CallbackContext context);
+        void OnAimDelta(InputAction.CallbackContext context);
     }
 }
