@@ -41,7 +41,7 @@ public class PlayerAnimation : MonoBehaviour
     private void Start()
     {
         _id = new ParameterID(
-            Animator.StringToHash("Velocity"),
+            Animator.StringToHash("Motion"),
             Animator.StringToHash("Idle"),
             Animator.StringToHash("IsDashing")
         );
