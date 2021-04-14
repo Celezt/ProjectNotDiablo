@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "AimPosition",
+                    "name": "CursorPosition",
                     "type": "Value",
                     "id": "4d31b998-47a3-43d2-a362-12179cb9de02",
                     "expectedControlType": "Vector2",
@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "AimDelta",
+                    "name": "CursorDelta",
                     "type": "Value",
                     "id": "b6b343a3-90d9-4bdd-a91d-ffecfd9df545",
                     "expectedControlType": "Vector2",
@@ -318,7 +318,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimPosition",
+                    "action": "CursorPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -329,7 +329,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimDelta",
+                    "action": "CursorDelta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

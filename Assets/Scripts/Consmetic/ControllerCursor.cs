@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityAtoms.BaseAtoms;
 
-public class SpriteCursor : MonoBehaviour
+public class ControllerCursor : MonoBehaviour
 {
-    [Header("Setup")]
-    [SerializeField] private PlayerController _controller;
+    [Header("Read References")]
+    [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
 
     private PlayerControls _controls;
     private Image _image;
@@ -37,14 +38,9 @@ public class SpriteCursor : MonoBehaviour
         _image = GetComponent<Image>();
     }
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
-        transform.position = _controller.AimScreenPosition;
+        transform.position = _cursorScreenPositionAtoms.Value;
     }
     #endregion
 }

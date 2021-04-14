@@ -9,8 +9,11 @@ using UnityAtoms.BaseAtoms;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-
     #region Inspector
+    [Header("Write References")]
+    [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
+    [SerializeField] private Vector3Variable _smoothLocalInputMovementAtoms;
+    [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
     [SerializeField] private FloatVariable _dashSpeedAtoms;
@@ -24,27 +27,27 @@ public class PlayerController : MonoBehaviour
     public LayerMask AimLayerMask;
     #endregion
 
-    public bool IsMoving { get; set; }
-    public bool IsDashing { get; set; }
-    public bool IsCameraAngleChanged { get; set; }
-    public Vector3 RawInputMovement { get; set; }
-    public Vector3 SmoothInputMovement { get; set; }
-    public Vector3 LocalVelocity { get; set; }
-    public Vector2 AimScreenPosition { get; set; }
-    public Vector3 AimWorldPosition { get; set; }
-
     private Camera _mainCamera;
     private Rigidbody _body;
 
-    private Coroutine _coroutineUpdateAimOverTime;
-    private Coroutine _coroutineDeltaAim;
+    private Plane _plane = new Plane(Vector3.up, 0);
 
-    private Vector3 _oldPosition;
+    private Coroutine _coroutineUpdateAimOverTime;
+
+    private Vector3 _smoothInputMovement;
+    private Vector3 _cursorWorldPosition;
+    private Vector3 _smoothLocalInputMovement;
+    private Vector3 _rawInputMovement;
+    private Vector3 _cursorWorldDirection = Vector3.forward;
+    private Vector2 _cursorScreenPosition;
+    private Vector2 _deltaCursor;
     private float _movementSpeed;
     private float _dashSpeed;
-    private Vector3 _aimWorldDirection = Vector3.forward;
-    private Vector2 _deltaAim;
-    private bool _isDeltaAim;
+    private bool _isDeltaCursor;
+    private bool _isMoving;
+    private bool _isDashing;
+    private bool _isCameraAngleChanged;
+
 
     private Vector3 GetCameraDirection
     {
@@ -57,7 +60,7 @@ public class PlayerController : MonoBehaviour
             cameraForward.y = 0f;
             cameraRight.y = 0f;
 
-            return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
+            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
         }
     }
 
@@ -67,7 +70,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 playerPosition = transform.position;
 
-            return (AimWorldPosition != Vector3.zero) ? new Vector3(AimWorldPosition.x - playerPosition.x, 0, AimWorldPosition.z - playerPosition.z) : Vector3.forward;
+            return (_cursorWorldPosition != Vector3.zero) ? new Vector3(_cursorWorldPosition.x - playerPosition.x, 0, _cursorWorldPosition.z - playerPosition.z) : Vector3.forward;
         }
     }
 
@@ -75,39 +78,41 @@ public class PlayerController : MonoBehaviour
     public void OnMovementChange(float speed) => _movementSpeed = speed;
     public void OnDashChange(float speed) => _dashSpeed = speed;
 
-    public void OnAim(InputAction.CallbackContext value)
+    public void OnCursor(InputAction.CallbackContext value)
     {
         Vector2 screenPosition = value.ReadValue<Vector2>();
         if (screenPosition != Vector2.zero)
-            AimScreenPosition = value.ReadValue<Vector2>();
+            _cursorScreenPosition = value.ReadValue<Vector2>();
 
-        UpdateAim();
+        _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
+
+        UpdateCursor();
     }
 
-    public void OnDeltaAim(InputAction.CallbackContext value)
+    public void OnDeltaCursor(InputAction.CallbackContext value)
     {
-        _deltaAim = value.ReadValue<Vector2>();
+        _deltaCursor = value.ReadValue<Vector2>();
 
-        _isDeltaAim = (_deltaAim != Vector2.zero);
+        _isDeltaCursor = (_deltaCursor != Vector2.zero);
     }
 
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        RawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
-        IsMoving = (inputMovement != Vector2.zero);
+        _isMoving = (inputMovement != Vector2.zero);
     }
 
     public void OnDash(InputAction.CallbackContext value)
     {
-        IsDashing = (value.ReadValue<float>() > 0.5f);
+        _isDashing = (value.ReadValue<float>() > 0.5f);
         _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
     }
 
     public void OnCamera(InputAction.CallbackContext value)
     {
-        IsCameraAngleChanged = (value.ReadValue<Vector2>() != Vector2.zero);
+        _isCameraAngleChanged = (value.ReadValue<Vector2>() != Vector2.zero);
     }
 
     public void OnDeviceLost(PlayerInput input)
@@ -132,13 +137,11 @@ public class PlayerController : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _body = GetComponent<Rigidbody>();
-
-        _oldPosition = transform.position;
     }
 
     private void OnEnable()
     {
-        _coroutineUpdateAimOverTime = StartCoroutine(UpdateAimOverTime());
+        _coroutineUpdateAimOverTime = StartCoroutine(UpdateCursorOverTime());
 
         _movementSpeedAtoms.Changed.Register(OnMovementChange);
         _dashSpeedAtoms.Changed.Register(OnDashChange);
@@ -147,14 +150,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         UpdateSmoothInputMovement();
-        UpdateDeltaAim();
+        UpdateDeltaCursor();
     }
 
     private void FixedUpdate()
     {
         UpdateMovement();
         UpdateTurn();
-        UpdateLocalVelocity();
     }
 
     private void OnDisable()
@@ -166,18 +168,15 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void UpdateLocalVelocity()
-    {
-        Vector3 currentPosition = transform.position;
-        LocalVelocity = transform.InverseTransformDirection((currentPosition - _oldPosition)/ Time.fixedDeltaTime);
-        _oldPosition = currentPosition;
-        //Debug.Log(LocalVelocity);
-    }
-
     private void UpdateSmoothInputMovement()
     {
-        SmoothInputMovement = Vector3.Lerp(SmoothInputMovement, RawInputMovement,
-                Time.deltaTime * (IsMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+        _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
+                Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+
+        // Transform smooth input movement to the game object's local space.
+        _smoothLocalInputMovement = transform.InverseTransformDirection(_mainCamera.transform.TransformDirection(_smoothInputMovement));
+
+        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement;
     }
 
     private void UpdateMovement()
@@ -188,38 +187,42 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateTurn()
     {
-        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_aimWorldDirection), TurnSpeed * Time.deltaTime);
+        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_cursorWorldDirection), TurnSpeed * Time.deltaTime);
         _body.MoveRotation(rotation);
     }
 
-    private void UpdateAim()
+    private void UpdateCursor()
     {
-        Ray ray = _mainCamera.ScreenPointToRay(AimScreenPosition);
+        Ray ray = _mainCamera.ScreenPointToRay(_cursorScreenPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, AimLayerMask))
-            AimWorldPosition = hit.point;
+            _cursorWorldPosition = hit.point;
+        else if (_plane.Raycast(ray, out float distance))   // Collide with a plane if no object was collided with.
+            _cursorWorldPosition = ray.GetPoint(distance);
 
-        _aimWorldDirection = GetAimDirection;
+        _cursorWorldDirection = GetAimDirection;
     }
 
     // Update aim if aiming using a controller.
-    private void UpdateDeltaAim()
+    private void UpdateDeltaCursor()
     {
-        if (_isDeltaAim)
+        if (_isDeltaCursor)
         {
-            AimScreenPosition += _deltaAim * DeltaAimSpeed;
-            UpdateAim();
+            _cursorScreenPosition += _deltaCursor * DeltaAimSpeed;
+            _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
+
+            UpdateCursor();
         }
     }
 
     // To prevent loosing aim when not performing any aim movement.
-    private IEnumerator UpdateAimOverTime()
+    private IEnumerator UpdateCursorOverTime()
     {
         yield return new WaitForEndOfFrame();
         while (true)
         {
-            yield return new WaitUntil(() => !IsCameraAngleChanged);    // Only update over time if not changing the camera
-            UpdateAim();
+            yield return new WaitUntil(() => !_isCameraAngleChanged);    // Only update over time if not changing the camera
+            UpdateCursor();
             yield return new WaitForSeconds(1.0f);
         }
     }

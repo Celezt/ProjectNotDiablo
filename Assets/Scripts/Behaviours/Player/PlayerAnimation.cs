@@ -6,11 +6,12 @@ using UnityAtoms.BaseAtoms;
 public class PlayerAnimation : MonoBehaviour
 {
     #region Inspector
-    [Header("Setup")]
-    [SerializeField] private PlayerController _controller;
+    [Header("Read References")]
+    [SerializeField] private Vector3Variable _smoothLocalInputMovementAtoms;
+    [Space(10)]
+    [Header("Animations Settings")]
     [SerializeField] private Animator _animation;
     [Space(10)]
-    [Header("Settings")]
     public float IdleBlendSpeed = 0.002f;
     public float MotionBlendMargin = 0.01f;
     #endregion
@@ -51,21 +52,21 @@ public class PlayerAnimation : MonoBehaviour
     {
         UpdateMotionAnimation();
         UpdateIdleAnimation();
-        UpdateDashAnimation();
+        //UpdateDashAnimation();
     }
     #endregion
 
-    private void UpdateDashAnimation()
-    {
-        if (_controller != null)
-            _animation.SetBool(_id.Dash, _controller.IsDashing);
-    }
+    //private void UpdateDashAnimation()
+    //{
+    //    if (_smoothLocalInputMovementAtoms != null)
+    //        _animation.SetBool(_id.Dash, _controller._isDashing);
+    //}
 
     private void UpdateMotionAnimation()
     {
-        if (_controller != null)
+        if (_smoothLocalInputMovementAtoms != null)
         {
-            float blend = _controller.SmoothInputMovement.magnitude;
+            float blend = _smoothLocalInputMovementAtoms.Value.magnitude;
             _animation.SetFloat(_id.Motion, (blend > 0.01f) ? blend : 0.0f);
         }
     }

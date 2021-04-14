@@ -150,8 +150,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288310801}
-  m_LocalRotation: {x: 0.19905704, y: -0.029484596, z: 0.005317299, w: 0.9795298}
-  m_LocalPosition: {x: 0.0000013742783, y: 0.00000005124261, z: -0.00000093442316}
+  m_LocalRotation: {x: 0.19450541, y: -0.21589339, z: 0.033140738, w: 0.95627373}
+  m_LocalPosition: {x: 0.000004781408, y: 0.00000013220034, z: -0.00000029375556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 176262628}
@@ -476,8 +476,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754493415}
-  m_LocalRotation: {x: 0.14800408, y: -0.029720575, z: 0.003781463, w: 0.9885329}
-  m_LocalPosition: {x: 0.000000042505697, y: 0.00000019904724, z: -0.0000038095332}
+  m_LocalRotation: {x: 0.14466429, y: -0.21732135, z: 0.021902839, w: 0.96507204}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 584359587}
@@ -550,8 +550,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826816345}
-  m_LocalRotation: {x: 0.17352007, y: -0.029612869, z: 0.0045488337, w: 0.9843745}
-  m_LocalPosition: {x: 0.0000013742783, y: 0.00000005124261, z: -0.00000093442316}
+  m_LocalRotation: {x: 0.16957466, y: -0.21668209, z: 0.027515896, w: 0.9610079}
+  m_LocalPosition: {x: 0.000004781408, y: 0.00000013220034, z: -0.00000029375556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 716203193}
@@ -626,7 +626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680407427}
   m_LocalRotation: {x: -0.1705273, y: 0.017059086, z: -0.0029527466, w: 0.9852009}
-  m_LocalPosition: {x: 0.28869852, y: 0.0010474613, z: 0.0035028122}
+  m_LocalPosition: {x: 4.5012507, y: 0.2653185, z: 0.88725233}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 288310803}
@@ -778,8 +778,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975122245}
-  m_LocalRotation: {x: 0.14476657, y: -0.01047498, z: 0.0015326589, w: 0.98940927}
-  m_LocalPosition: {x: 0.24140908, y: 4.145914, z: -11.399815}
+  m_LocalRotation: {x: 0.08243047, y: 0.81342, z: -0.11901649, w: 0.56337225}
+  m_LocalPosition: {x: -10.674187, y: 4.145914, z: 4.009463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1680407429}
@@ -991,7 +991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d52f62855f3663409a40e7c867e4bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 583105869144826515}
+  _cursorScreenPositionAtoms: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
 --- !u!1 &2691928546050736854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,9 +1004,9 @@ GameObject:
   - component: {fileID: 2691928546050736875}
   - component: {fileID: 2691928546050736876}
   - component: {fileID: 2691928546050736873}
+  - component: {fileID: 5064504266361368092}
   - component: {fileID: 583105869144826515}
   - component: {fileID: 2691928546050736877}
-  - component: {fileID: 5064504266361368092}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1069,6 +1069,22 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &5064504266361368092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _animation: {fileID: 748620117856427530}
+  IdleBlendSpeed: 0.002
+  MotionBlendMargin: 0.01
 --- !u!114 &583105869144826515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,6 +1097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cursorScreenPositionAtoms: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
   _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
   _dashSpeedAtoms: {fileID: 11400000, guid: d9ac8df41de677944a6b75d9cc4f1f93, type: 2}
   MovementSmoothSpeedStart: 2
@@ -1111,7 +1129,7 @@ MonoBehaviour:
       - m_Target: {fileID: 583105869144826515}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnDeviceLost
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1126,7 +1144,7 @@ MonoBehaviour:
       - m_Target: {fileID: 583105869144826515}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnDeviceRegained
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1141,7 +1159,7 @@ MonoBehaviour:
       - m_Target: {fileID: 583105869144826515}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnControlsChanged
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1215,7 +1233,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 583105869144826515}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnAim
+        m_MethodName: OnCursor
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1231,7 +1249,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 583105869144826515}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDeltaAim
+        m_MethodName: OnDeltaCursor
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1248,22 +1266,6 @@ MonoBehaviour:
   m_DefaultActionMap: Ground
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &5064504266361368092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2691928546050736854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _controller: {fileID: 583105869144826515}
-  _animation: {fileID: 748620117856427530}
-  IdleBlendSpeed: 0.002
-  MotionBlendMargin: 0.01
 --- !u!1 &7891325530826452774
 GameObject:
   m_ObjectHideFlags: 0
