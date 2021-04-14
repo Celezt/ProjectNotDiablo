@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,31 +5,32 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 
-public class ControllerCursor : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
+    #region Inspector
     [Header("Atoms")]
-    [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
-    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private FloatVariable _healthAtoms;
+    [Space(10)]
+    [Header("UI Setup")]
+    [SerializeField] private Text _controllerLabel;
+    [SerializeField] private Text _healthLabel;
+    #endregion
 
     private PlayerControls _input;
-    private Image _image;
 
     #region Events
+    public void OnHealthChange(float health) => _healthLabel.text = health.ToString();
     public void OnControlsChanged(PlayerInput input)
     {
         InputControlScheme scheme = input.user.controlScheme.Value;
 
         if (scheme == _input.GamepadScheme)
         {
-            enabled = true;
-            _image.enabled = true;
-            Cursor.visible = false;
+            _controllerLabel.text = "Controller";
         }
         else if (scheme == _input.KeyboardAndMouseScheme)
         {
-            enabled = false;
-            _image.enabled = false;
-            Cursor.visible = true;
+            _controllerLabel.text = "PC";
         }
     }
     #endregion
@@ -39,21 +39,18 @@ public class ControllerCursor : MonoBehaviour
     private void Awake()
     {
         _input = new PlayerControls();
-        _image = GetComponent<Image>();
     }
 
     private void OnEnable()
     {
         _input.Enable();
+        _healthAtoms.Changed.Register(OnHealthChange);
     }
 
-    private void Update()
-    {
-        transform.position = _cursorScreenPositionAtoms.Value;
-    }
     private void OnDisable()
     {
         _input.Disable();
+        _healthAtoms.Changed.Unregister(OnHealthChange);
     }
     #endregion
 }
