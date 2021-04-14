@@ -10,7 +10,7 @@ using UnityAtoms.BaseAtoms;
 public class PlayerController : MonoBehaviour
 {
     #region Inspector
-    [Header("Write References")]
+    [Header("Atoms")]
     [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
     [SerializeField] private Vector3Variable _smoothLocalInputMovementAtoms;
     [Space(10)]
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     [Min(0)] public float TurnSpeed = 1.0f;
     [Header("Aim Settings")]
-    [Tooltip("Only for controllers")] public float DeltaAimSpeed = 3.0f;
+    [Tooltip("Only for controllers")] public float DeltaCursorSpeed = 3.0f;
     public LayerMask AimLayerMask;
     #endregion
 
@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     private Plane _plane = new Plane(Vector3.up, 0);
 
     private Coroutine _coroutineUpdateAimOverTime;
+
+    private PlayerControls _input;
 
     private Vector3 _smoothInputMovement;
     private Vector3 _cursorWorldPosition;
@@ -75,63 +77,52 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Events
-    public void OnMovementChange(float speed) => _movementSpeed = speed;
-    public void OnDashChange(float speed) => _dashSpeed = speed;
+    public void OnMovementSpeedChange(float speed) => _movementSpeed = speed;
+    public void OnDashSpeedChange(float speed) => _dashSpeed = speed;
 
-    public void OnCursor(InputAction.CallbackContext value)
+    public void OnCursorPosition(InputAction.CallbackContext context)
     {
-        Vector2 screenPosition = value.ReadValue<Vector2>();
+        Vector2 screenPosition = context.ReadValue<Vector2>();
         if (screenPosition != Vector2.zero)
-            _cursorScreenPosition = value.ReadValue<Vector2>();
+            _cursorScreenPosition = context.ReadValue<Vector2>();
 
         _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
 
         UpdateCursor();
     }
 
-    public void OnDeltaCursor(InputAction.CallbackContext value)
+    public void OnCursorDelta(InputAction.CallbackContext context)
     {
-        _deltaCursor = value.ReadValue<Vector2>();
-
+        _deltaCursor = context.ReadValue<Vector2>();
+        Debug.Log(_deltaCursor + " " + context.started + " " + context.canceled);
         _isDeltaCursor = (_deltaCursor != Vector2.zero);
     }
 
-    public void OnMovement(InputAction.CallbackContext value)
+    public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 inputMovement = value.ReadValue<Vector2>();
+        Vector2 inputMovement = context.ReadValue<Vector2>();
         _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
         _isMoving = (inputMovement != Vector2.zero);
     }
 
-    public void OnDash(InputAction.CallbackContext value)
+    public void OnDash(InputAction.CallbackContext context)
     {
-        _isDashing = (value.ReadValue<float>() > 0.5f);
+        _isDashing = (context.ReadValue<float>() > 0.5f);
         _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
     }
 
-    public void OnCamera(InputAction.CallbackContext value)
+    public void OnCamera(InputAction.CallbackContext context)
     {
-        _isCameraAngleChanged = (value.ReadValue<Vector2>() != Vector2.zero);
-    }
-
-    public void OnDeviceLost(PlayerInput input)
-    {
-
-    }
-
-    public void OnDeviceRegained(PlayerInput input)
-    {
-
-    }
-
-    public void OnControlsChanged(PlayerInput input)
-    {
-
+        _isCameraAngleChanged = (context.ReadValue<Vector2>() != Vector2.zero);
     }
     #endregion
 
     #region Unity Message
+    private void Awake()
+    {
+        _input = new PlayerControls();
+    }
 
     private void Start()
     {
@@ -143,8 +134,19 @@ public class PlayerController : MonoBehaviour
     {
         _coroutineUpdateAimOverTime = StartCoroutine(UpdateCursorOverTime());
 
-        _movementSpeedAtoms.Changed.Register(OnMovementChange);
-        _dashSpeedAtoms.Changed.Register(OnDashChange);
+        _input.Enable();
+        _input.Ground.Move.performed += OnMove;
+        _input.Ground.Move.canceled += OnMove;
+        _input.Ground.Camera.performed += OnCamera;
+        _input.Ground.Camera.canceled += OnCamera;
+        _input.Ground.Dash.performed += OnDash;
+        _input.Ground.Dash.canceled += OnDash;
+        _input.Ground.CursorPosition.performed += OnCursorPosition;
+        _input.Ground.CursorPosition.canceled += OnCursorPosition;
+        _input.Ground.CursorDelta.performed += OnCursorDelta;
+        _input.Ground.CursorDelta.canceled += OnCursorDelta;
+        _movementSpeedAtoms.Changed.Register(OnMovementSpeedChange);
+        _dashSpeedAtoms.Changed.Register(OnDashSpeedChange);
     }
 
     private void Update()
@@ -163,8 +165,19 @@ public class PlayerController : MonoBehaviour
     {
         StopCoroutine(_coroutineUpdateAimOverTime);
 
-        _movementSpeedAtoms.Changed.Unregister(OnMovementChange);
-        _dashSpeedAtoms.Changed.Unregister(OnDashChange);
+        _input.Disable();
+        _input.Ground.Move.performed -= OnMove;
+        _input.Ground.Move.canceled -= OnMove;
+        _input.Ground.Camera.performed -= OnCamera;
+        _input.Ground.Camera.canceled -= OnCamera;
+        _input.Ground.Dash.performed -= OnDash;
+        _input.Ground.Dash.canceled -= OnDash;
+        _input.Ground.CursorPosition.performed -= OnCursorPosition;
+        _input.Ground.CursorPosition.canceled -= OnCursorPosition;
+        _input.Ground.CursorDelta.performed -= OnCursorDelta;
+        _input.Ground.CursorDelta.canceled -= OnCursorDelta;
+        _movementSpeedAtoms.Changed.Unregister(OnMovementSpeedChange);
+        _dashSpeedAtoms.Changed.Unregister(OnDashSpeedChange);
     }
     #endregion
 
@@ -208,7 +221,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDeltaCursor)
         {
-            _cursorScreenPosition += _deltaCursor * DeltaAimSpeed;
+            _cursorScreenPosition += _deltaCursor * DeltaCursorSpeed;
             _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
 
             UpdateCursor();
