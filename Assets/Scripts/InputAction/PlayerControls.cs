@@ -43,9 +43,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""AimPosition"",
+                    ""name"": ""CursorPosition"",
                     ""type"": ""Value"",
                     ""id"": ""4d31b998-47a3-43d2-a362-12179cb9de02"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CursorDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""b6b343a3-90d9-4bdd-a91d-ffecfd9df545"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -323,21 +331,61 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AimPosition"",
+                    ""action"": ""CursorPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f589f58-773d-4799-8393-56fc167eeb26"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CursorDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Gamepad"",
+            ""bindingGroup"": ""Gamepad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Keyboard And Mouse"",
+            ""bindingGroup"": ""Keyboard And Mouse"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Ground
         m_Ground = asset.FindActionMap("Ground", throwIfNotFound: true);
         m_Ground_Move = m_Ground.FindAction("Move", throwIfNotFound: true);
         m_Ground_Camera = m_Ground.FindAction("Camera", throwIfNotFound: true);
         m_Ground_Dash = m_Ground.FindAction("Dash", throwIfNotFound: true);
-        m_Ground_AimPosition = m_Ground.FindAction("AimPosition", throwIfNotFound: true);
+        m_Ground_CursorPosition = m_Ground.FindAction("CursorPosition", throwIfNotFound: true);
+        m_Ground_CursorDelta = m_Ground.FindAction("CursorDelta", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -390,7 +438,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Ground_Move;
     private readonly InputAction m_Ground_Camera;
     private readonly InputAction m_Ground_Dash;
-    private readonly InputAction m_Ground_AimPosition;
+    private readonly InputAction m_Ground_CursorPosition;
+    private readonly InputAction m_Ground_CursorDelta;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
@@ -398,7 +447,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Ground_Move;
         public InputAction @Camera => m_Wrapper.m_Ground_Camera;
         public InputAction @Dash => m_Wrapper.m_Ground_Dash;
-        public InputAction @AimPosition => m_Wrapper.m_Ground_AimPosition;
+        public InputAction @CursorPosition => m_Wrapper.m_Ground_CursorPosition;
+        public InputAction @CursorDelta => m_Wrapper.m_Ground_CursorDelta;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -417,9 +467,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
-                @AimPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
-                @AimPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
-                @AimPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
+                @CursorPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorDelta.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
+                @CursorDelta.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
+                @CursorDelta.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -433,18 +486,40 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @AimPosition.started += instance.OnAimPosition;
-                @AimPosition.performed += instance.OnAimPosition;
-                @AimPosition.canceled += instance.OnAimPosition;
+                @CursorPosition.started += instance.OnCursorPosition;
+                @CursorPosition.performed += instance.OnCursorPosition;
+                @CursorPosition.canceled += instance.OnCursorPosition;
+                @CursorDelta.started += instance.OnCursorDelta;
+                @CursorDelta.performed += instance.OnCursorDelta;
+                @CursorDelta.canceled += instance.OnCursorDelta;
             }
         }
     }
     public GroundActions @Ground => new GroundActions(this);
+    private int m_GamepadSchemeIndex = -1;
+    public InputControlScheme GamepadScheme
+    {
+        get
+        {
+            if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
+            return asset.controlSchemes[m_GamepadSchemeIndex];
+        }
+    }
+    private int m_KeyboardAndMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardAndMouseScheme
+    {
+        get
+        {
+            if (m_KeyboardAndMouseSchemeIndex == -1) m_KeyboardAndMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard And Mouse");
+            return asset.controlSchemes[m_KeyboardAndMouseSchemeIndex];
+        }
+    }
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnAimPosition(InputAction.CallbackContext context);
+        void OnCursorPosition(InputAction.CallbackContext context);
+        void OnCursorDelta(InputAction.CallbackContext context);
     }
 }
