@@ -321,31 +321,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000029499708
+      value: 0.0000031330865
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0000007966096
+      value: 0.00000090298045
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0000152425855
+      value: -0.000017180975
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9798252
+      value: 0.97982514
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19910538
+      value: 0.19910535
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.016965948
+      value: -0.016966071
       objectReference: {fileID: 0}
     - target: {fileID: 288310803, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0034475704
+      value: 0.0034475895
       objectReference: {fileID: 0}
     - target: {fileID: 754493417, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalPosition.x
@@ -442,6 +442,14 @@ PrefabInstance:
     - target: {fileID: 1975122248, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.0033653597
+      objectReference: {fileID: 0}
+    - target: {fileID: 583105869144826515, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
+      propertyPath: SpeedSideMultiplier
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 583105869144826515, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
+      propertyPath: SpeedBackwardMultiplier
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2691928546050736854, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: m_Name

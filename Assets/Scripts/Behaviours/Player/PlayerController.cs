@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private FloatVariable _movementSpeedAtoms;
     [SerializeField] private FloatVariable _dashSpeedAtoms;
     [Space(10)]
+    public float SpeedForwardMultiplier = 1.0f;
+    public float SpeedBackwardMultiplier = 0.5f;
+    public float SpeedSideMultiplier = 0.8f;
+    [Space(10)]
     [Range(1, 10)] public float MovementSmoothSpeedStart = 2.0f;
     [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
     [Space(10)]
@@ -36,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
     private PlayerControls _input;
 
+    private MovementType _movementType;
+
     private Vector3 _smoothInputMovement;
     private Vector3 _cursorWorldPosition;
     private Vector3 _smoothLocalInputMovement;
@@ -50,6 +56,13 @@ public class PlayerController : MonoBehaviour
     private bool _isDashing;
     private bool _isCameraAngleChanged;
 
+    private enum MovementType
+    {
+        None,
+        Forward,
+        Backward,
+        Side,
+    }
 
     private Vector3 GetCameraDirection
     {
@@ -183,18 +196,32 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateSmoothInputMovement()
     {
+        static MovementType GetMovementType(float angle) => angle switch
+        {
+            var v when v >= 150.0f => MovementType.Backward,
+            var v when v > 100.0f => MovementType.Backward | MovementType.Side,
+            var v when v > 80.0f => MovementType.Side,
+            var v when v > 50.0f => MovementType.Forward | MovementType.Side,
+            var v when v >= 0.0f => MovementType.Forward,
+            _ => MovementType.None,
+        };
+
         _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
                 Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
 
         // Transform smooth input movement to the game object's local space.
-        _smoothLocalInputMovement = transform.InverseTransformDirection(_mainCamera.transform.TransformDirection(_smoothInputMovement));
+        Vector3 value = transform.InverseTransformDirection(_mainCamera.transform.TransformDirection(_smoothInputMovement));
+        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement = new Vector3(value.x, 0, value.z);
 
-        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement;
+        // Get movement type based on the angle of directional movement.
+        float angle = (_rawInputMovement != Vector3.zero) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
+        _movementType = GetMovementType(angle);
     }
 
     private void UpdateMovement()
     {
         Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
+
         _body.MovePosition(transform.position + velocity);
     }
 
