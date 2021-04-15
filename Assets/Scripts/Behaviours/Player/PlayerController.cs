@@ -56,12 +56,13 @@ public class PlayerController : MonoBehaviour
     private bool _isDashing;
     private bool _isCameraAngleChanged;
 
+    [Flags]
     private enum MovementType
     {
-        None,
-        Forward,
-        Backward,
-        Side,
+        None        = 0b_0000_0000,
+        Forward     = 0b_0000_0001,
+        Backward    = 0b_0000_0010,
+        Side        = 0b_0000_0100,
     }
 
     private Vector3 GetCameraDirection
@@ -221,6 +222,27 @@ public class PlayerController : MonoBehaviour
     private void UpdateMovement()
     {
         Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
+
+        switch (_movementType)
+        {
+            case MovementType.Forward:
+                velocity *= SpeedForwardMultiplier;
+                break;
+            case MovementType.Forward | MovementType.Side:
+                velocity *= (SpeedForwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Side:
+                velocity *= SpeedSideMultiplier;
+                break;
+            case MovementType.Backward | MovementType.Side:
+                velocity *= (SpeedBackwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Backward:
+                velocity *= SpeedBackwardMultiplier;
+                break;
+        }
+
+        Debug.Log(_movementType.ToString());
 
         _body.MovePosition(transform.position + velocity);
     }
