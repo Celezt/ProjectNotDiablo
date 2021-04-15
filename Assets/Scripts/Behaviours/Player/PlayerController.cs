@@ -171,8 +171,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateMovement();
-        UpdateTurn();
+        FixedUpdateMovement();
+        FixedUpdateTurn();
     }
 
     private void OnDisable()
@@ -219,40 +219,6 @@ public class PlayerController : MonoBehaviour
         _movementType = GetMovementType(angle);
     }
 
-    private void UpdateMovement()
-    {
-        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
-
-        switch (_movementType)
-        {
-            case MovementType.Forward:
-                velocity *= SpeedForwardMultiplier;
-                break;
-            case MovementType.Forward | MovementType.Side:
-                velocity *= (SpeedForwardMultiplier + SpeedSideMultiplier) / 2;
-                break;
-            case MovementType.Side:
-                velocity *= SpeedSideMultiplier;
-                break;
-            case MovementType.Backward | MovementType.Side:
-                velocity *= (SpeedBackwardMultiplier + SpeedSideMultiplier) / 2;
-                break;
-            case MovementType.Backward:
-                velocity *= SpeedBackwardMultiplier;
-                break;
-        }
-
-        Debug.Log(_movementType.ToString());
-
-        _body.MovePosition(transform.position + velocity);
-    }
-
-    private void UpdateTurn()
-    {
-        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_cursorWorldDirection), TurnSpeed * Time.deltaTime);
-        _body.MoveRotation(rotation);
-    }
-
     private void UpdateCursor()
     {
         Ray ray = _mainCamera.ScreenPointToRay(_cursorScreenPosition);
@@ -275,6 +241,38 @@ public class PlayerController : MonoBehaviour
 
             UpdateCursor();
         }
+    }
+
+    private void FixedUpdateMovement()
+    {
+        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
+
+        switch (_movementType)
+        {
+            case MovementType.Forward:
+                velocity *= SpeedForwardMultiplier;
+                break;
+            case MovementType.Forward | MovementType.Side:
+                velocity *= (SpeedForwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Side:
+                velocity *= SpeedSideMultiplier;
+                break;
+            case MovementType.Backward | MovementType.Side:
+                velocity *= (SpeedBackwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Backward:
+                velocity *= SpeedBackwardMultiplier;
+                break;
+        }
+
+        _body.MovePosition(transform.position + velocity);
+    }
+
+    private void FixedUpdateTurn()
+    {
+        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_cursorWorldDirection), TurnSpeed * Time.deltaTime);
+        _body.MoveRotation(rotation);
     }
 
     // To prevent loosing aim when not performing any aim movement.
