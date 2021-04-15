@@ -294,7 +294,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725481587}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 16, y: 40, z: 16}
+  m_LocalPosition: {x: 16, y: 60, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -362,6 +362,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_1x1: {fileID: 4434198775741944397, guid: 90e7bd114f6f1f24b9ed507ad0669c5a, type: 3}
+  minRooms: 10
+  maxRooms: 12
+  maxRoomCollisions: 50
+  visualize: 1
+  lineToggle: 0
 --- !u!4 &1822945473
 Transform:
   m_ObjectHideFlags: 0
