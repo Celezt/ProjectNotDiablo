@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -12}
+  m_FollowOffset: {x: 0, y: 4.145914, z: -11.4023695}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -150,8 +150,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288310801}
-  m_LocalRotation: {x: 0.030993585, y: -0.968258, z: 0.19365138, w: 0.15496781}
-  m_LocalPosition: {x: -0.00010355511, y: 0.00006366892, z: 0.00012451965}
+  m_LocalRotation: {x: 0.0154446205, y: 0.9857068, z: -0.1471665, w: 0.080532864}
+  m_LocalPosition: {x: -5.682102, y: 0.28447437, z: 34.337364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 176262628}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -12}
+  m_FollowOffset: {x: 0, y: 4.145914, z: -11.4023695}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5, z: -12}
+  m_FollowOffset: {x: 0, y: 4.145914, z: -11.4023695}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -476,8 +476,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754493415}
-  m_LocalRotation: {x: 0.022917928, y: -0.9769952, z: 0.14319, w: 0.15637024}
-  m_LocalPosition: {x: 0.000025873995, y: -0.0000023037442, z: 0.00002439024}
+  m_LocalRotation: {x: 0.011248507, y: 0.99201125, z: -0.095863044, w: 0.08122522}
+  m_LocalPosition: {x: -5.682101, y: 0.28447437, z: 34.337364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 584359587}
@@ -550,8 +550,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826816345}
-  m_LocalRotation: {x: 0.026954323, y: -0.97296536, z: 0.16840926, w: 0.15572515}
-  m_LocalPosition: {x: 0.000025873995, y: -0.0000023037442, z: 0.00002439024}
+  m_LocalRotation: {x: -0.1735607, y: 0.017050162, z: -0.0030053062, w: -0.984671}
+  m_LocalPosition: {x: -3.4242945, y: 1.4696014, z: 11.72379}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 716203193}
@@ -626,7 +626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680407427}
   m_LocalRotation: {x: -0.1705273, y: 0.017059086, z: -0.0029527466, w: 0.9852009}
-  m_LocalPosition: {x: 34.057278, y: 8.201588, z: 22.982254}
+  m_LocalPosition: {x: 3.0163698, y: -5.3620486, z: -10.652832}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 288310803}
@@ -671,7 +671,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 0.5
+    Value: 0.44046393
     m_SpeedMode: 0
     m_MaxSpeed: 2
     m_AccelTime: 0.2
@@ -778,8 +778,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975122245}
-  m_LocalRotation: {x: 0.02986519, y: 0.9701242, z: -0.16791752, w: 0.17254275}
-  m_LocalPosition: {x: 23.554655, y: 5, z: 22.648594}
+  m_LocalRotation: {x: 0.14473556, y: -0.023000596, z: 0.0033653597, w: 0.98919725}
+  m_LocalPosition: {x: 0.5299614, y: 4.145914, z: -11.390047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1680407429}
@@ -915,9 +915,8 @@ GameObject:
   - component: {fileID: 2691928546050736875}
   - component: {fileID: 2691928546050736876}
   - component: {fileID: 2691928546050736873}
-  - component: {fileID: 583105869144826515}
-  - component: {fileID: 2691928546050736877}
   - component: {fileID: 5064504266361368092}
+  - component: {fileID: 583105869144826515}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -979,144 +978,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &583105869144826515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2691928546050736854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
-  _dashSpeedAtoms: {fileID: 11400000, guid: d9ac8df41de677944a6b75d9cc4f1f93, type: 2}
-  MovementSmoothSpeedStart: 2
-  MovementSmoothSpeedEnd: 5
-  TurnSpeed: 0
-  AimLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &2691928546050736877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2691928546050736854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 7449ea2199aede242a551731e623d4d9, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDeviceLost
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDeviceRegained
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnControlsChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnMovement
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 991cd16d-deb6-4d2b-81da-2e125a18b1a2
-    m_ActionName: Ground/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 827484eb-d62d-46a8-a0de-aed6b920ff8a
-    m_ActionName: Ground/Look[/Mouse/delta,/DualShock4GamepadHID/rightStick]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 92ca1554-eefa-4747-ab7e-fd1e822a29de
-    m_ActionName: Ground/Dash[/Keyboard/shift]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 583105869144826515}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnAim
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 4d31b998-47a3-43d2-a362-12179cb9de02
-    m_ActionName: Ground/MousePosition[/Mouse/position]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Ground
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &5064504266361368092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,10 +990,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 583105869144826515}
+  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
   _animation: {fileID: 748620117856427530}
   IdleBlendSpeed: 0.002
   MotionBlendMargin: 0.01
+--- !u!114 &583105869144826515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cursorScreenPositionAtoms: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
+  _dashSpeedAtoms: {fileID: 11400000, guid: d9ac8df41de677944a6b75d9cc4f1f93, type: 2}
+  MovementSmoothSpeedStart: 2
+  MovementSmoothSpeedEnd: 5
+  TurnSpeed: 3
+  DeltaCursorSpeed: 4
+  AimLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1001 &2419300552338184298
 PrefabInstance:
   m_ObjectHideFlags: 0

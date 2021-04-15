@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b46c0f62c93543f88d3eb693740d091, type: 3}
-  m_Name: Player@MovementSpeed
+  m_Script: {fileID: 11500000, guid: 2f868f8b3380b47a38cf0b95f42c134b, type: 3}
+  m_Name: Player@SmoothLocalInputMovement
   m_EditorClassIdentifier: 
   _developerDescription: 
   _id: 
-  _value: 8
-  _changed: {fileID: 11400000, guid: 6ead9426445e7374eaf89a3549d9b5cc, type: 2}
+  _value: {x: 0, y: 0, z: 0}
+  _changed: {fileID: 11400000, guid: 0b5715cd4d1b3884bb899d58c55fe2f0, type: 2}
   _changedWithHistory: {fileID: 0}
-  _triggerChangedOnOnEnable: 1
+  _triggerChangedOnOnEnable: 0
   _triggerChangedWithHistoryOnOnEnable: 0
-  _oldValue: 8
-  _initialValue: 8
+  _oldValue: {x: 0, y: 0, z: 0}
+  _initialValue: {x: 0, y: 0, z: 0}
   _preChangeTransformers: []

@@ -30,9 +30,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "AimPosition",
+                    "name": "CursorPosition",
                     "type": "Value",
                     "id": "4d31b998-47a3-43d2-a362-12179cb9de02",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CursorDelta",
+                    "type": "Value",
+                    "id": "b6b343a3-90d9-4bdd-a91d-ffecfd9df545",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
@@ -310,12 +318,51 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimPosition",
+                    "action": "CursorPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f589f58-773d-4799-8393-56fc167eeb26",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CursorDelta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Keyboard And Mouse",
+            "bindingGroup": "Keyboard And Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
