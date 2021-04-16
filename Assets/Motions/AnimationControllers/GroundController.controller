@@ -208,9 +208,6 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 6525109742101454696}
     m_Position: {x: 310, y: 110, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -6388592918170437404}
-    m_Position: {x: 310, y: 30, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -434,24 +431,24 @@ AnimatorController:
   m_Name: GroundController
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Motion
+  - m_Name: MotionX
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Idle
+    m_Controller: {fileID: 0}
+  - m_Name: MotionZ
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsDashing
-    m_Type: 4
+    m_Controller: {fileID: 0}
+  - m_Name: IdleBlend
+    m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -646,7 +643,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 0f5f811a33031524680b227a45dc9848, type: 3}
     m_Threshold: -0.2
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: 0, y: -0.2}
     m_TimeScale: -1
     m_CycleOffset: 0
     m_DirectBlendParameter: Motion
@@ -662,7 +659,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 0f5f811a33031524680b227a45dc9848, type: 3}
     m_Threshold: 0.2
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: 0, y: 0.2}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Velocity
@@ -670,18 +667,18 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 92e13e67a26415646a752312d3ac0230, type: 3}
     m_Threshold: 1
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Velocity
     m_Mirror: 0
-  m_BlendParameter: Motion
-  m_BlendParameterY: Blend
+  m_BlendParameter: MotionX
+  m_BlendParameterY: MotionZ
   m_MinThreshold: -0.2
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 2
 --- !u!1102 &5517013221941836583
 AnimatorState:
   serializedVersion: 6
@@ -725,7 +722,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Idle
     m_Mirror: 0
-  m_BlendParameter: Idle
+  m_BlendParameter: IdleBlend
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 0
@@ -789,8 +786,7 @@ AnimatorState:
   m_Name: Standard_Motion
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: 5997878273602066219}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0

@@ -21,12 +21,11 @@ public class PlayerAnimation : MonoBehaviour
 
     private float _idleBlend;
 
-    private readonly int _motionID = Animator.StringToHash("Motion");
-    private readonly int _idleID = Animator.StringToHash("Idle");
-    private readonly int _dashID = Animator.StringToHash("IsDashing");
+    private readonly int _motionZID = Animator.StringToHash("MotionZ");
+    private readonly int _motionXID = Animator.StringToHash("MotionX");
+    private readonly int _idleID = Animator.StringToHash("IdleBlend");
 
     #region Events
-    public void OnDashChange(bool value) => _animation.SetBool(_dashID , value);
     public void OnMovementTypeChange(MovementType value) => _movementType = value;
     #endregion
 
@@ -52,8 +51,9 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (_smoothLocalInputMovementAtoms != null)
         {
-            float blend = _smoothLocalInputMovementAtoms.Value.z;
-            _animation.SetFloat(_motionID, blend);
+            Vector3 blend = _smoothLocalInputMovementAtoms.Value;
+            _animation.SetFloat(_motionZID, blend.z);
+            _animation.SetFloat(_motionXID, blend.x);
         }
     }
 
