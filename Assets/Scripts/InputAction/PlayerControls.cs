@@ -43,7 +43,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""AimPosition"",
+                    ""name"": ""CursorPosition"",
                     ""type"": ""Value"",
                     ""id"": ""4d31b998-47a3-43d2-a362-12179cb9de02"",
                     ""expectedControlType"": ""Vector2"",
@@ -51,7 +51,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""AimDelta"",
+                    ""name"": ""CursorDelta"",
                     ""type"": ""Value"",
                     ""id"": ""b6b343a3-90d9-4bdd-a91d-ffecfd9df545"",
                     ""expectedControlType"": ""Vector2"",
@@ -331,7 +331,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AimPosition"",
+                    ""action"": ""CursorPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -342,7 +342,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AimDelta"",
+                    ""action"": ""CursorDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -384,8 +384,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Ground_Move = m_Ground.FindAction("Move", throwIfNotFound: true);
         m_Ground_Camera = m_Ground.FindAction("Camera", throwIfNotFound: true);
         m_Ground_Dash = m_Ground.FindAction("Dash", throwIfNotFound: true);
-        m_Ground_AimPosition = m_Ground.FindAction("AimPosition", throwIfNotFound: true);
-        m_Ground_AimDelta = m_Ground.FindAction("AimDelta", throwIfNotFound: true);
+        m_Ground_CursorPosition = m_Ground.FindAction("CursorPosition", throwIfNotFound: true);
+        m_Ground_CursorDelta = m_Ground.FindAction("CursorDelta", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -438,8 +438,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Ground_Move;
     private readonly InputAction m_Ground_Camera;
     private readonly InputAction m_Ground_Dash;
-    private readonly InputAction m_Ground_AimPosition;
-    private readonly InputAction m_Ground_AimDelta;
+    private readonly InputAction m_Ground_CursorPosition;
+    private readonly InputAction m_Ground_CursorDelta;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
@@ -447,8 +447,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Ground_Move;
         public InputAction @Camera => m_Wrapper.m_Ground_Camera;
         public InputAction @Dash => m_Wrapper.m_Ground_Dash;
-        public InputAction @AimPosition => m_Wrapper.m_Ground_AimPosition;
-        public InputAction @AimDelta => m_Wrapper.m_Ground_AimDelta;
+        public InputAction @CursorPosition => m_Wrapper.m_Ground_CursorPosition;
+        public InputAction @CursorDelta => m_Wrapper.m_Ground_CursorDelta;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -467,12 +467,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnDash;
-                @AimPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
-                @AimPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
-                @AimPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimPosition;
-                @AimDelta.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
-                @AimDelta.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
-                @AimDelta.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAimDelta;
+                @CursorPosition.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorPosition.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorPosition.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorPosition;
+                @CursorDelta.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
+                @CursorDelta.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
+                @CursorDelta.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCursorDelta;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -486,12 +486,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
-                @AimPosition.started += instance.OnAimPosition;
-                @AimPosition.performed += instance.OnAimPosition;
-                @AimPosition.canceled += instance.OnAimPosition;
-                @AimDelta.started += instance.OnAimDelta;
-                @AimDelta.performed += instance.OnAimDelta;
-                @AimDelta.canceled += instance.OnAimDelta;
+                @CursorPosition.started += instance.OnCursorPosition;
+                @CursorPosition.performed += instance.OnCursorPosition;
+                @CursorPosition.canceled += instance.OnCursorPosition;
+                @CursorDelta.started += instance.OnCursorDelta;
+                @CursorDelta.performed += instance.OnCursorDelta;
+                @CursorDelta.canceled += instance.OnCursorDelta;
             }
         }
     }
@@ -519,7 +519,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
-        void OnAimPosition(InputAction.CallbackContext context);
-        void OnAimDelta(InputAction.CallbackContext context);
+        void OnCursorPosition(InputAction.CallbackContext context);
+        void OnCursorDelta(InputAction.CallbackContext context);
     }
 }

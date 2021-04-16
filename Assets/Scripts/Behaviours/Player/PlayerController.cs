@@ -9,42 +9,61 @@ using UnityAtoms.BaseAtoms;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-
     #region Inspector
+    [Header("Atoms")]
+    [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
+    [SerializeField] private Vector3Variable _smoothLocalInputMovementAtoms;
+    [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
     [SerializeField] private FloatVariable _dashSpeedAtoms;
+    [Space(10)]
+    public float SpeedForwardMultiplier = 1.0f;
+    public float SpeedBackwardMultiplier = 0.5f;
+    public float SpeedSideMultiplier = 0.8f;
     [Space(10)]
     [Range(1, 10)] public float MovementSmoothSpeedStart = 2.0f;
     [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
     [Space(10)]
     [Min(0)] public float TurnSpeed = 1.0f;
     [Header("Aim Settings")]
-    [Tooltip("Only for controllers")] public float DeltaAimSpeed = 3.0f;
+    [Tooltip("Only for controllers")] public float DeltaCursorSpeed = 3.0f;
     public LayerMask AimLayerMask;
     #endregion
-
-    public bool IsMoving { get; set; }
-    public bool IsDashing { get; set; }
-    public bool IsCameraAngleChanged { get; set; }
-    public Vector3 RawInputMovement { get; set; }
-    public Vector3 SmoothInputMovement { get; set; }
-    public Vector3 LocalVelocity { get; set; }
-    public Vector2 AimScreenPosition { get; set; }
-    public Vector3 AimWorldPosition { get; set; }
 
     private Camera _mainCamera;
     private Rigidbody _body;
 
-    private Coroutine _coroutineUpdateAimOverTime;
-    private Coroutine _coroutineDeltaAim;
+    private Plane _plane = new Plane(Vector3.up, 0);
 
-    private Vector3 _oldPosition;
+    private Coroutine _coroutineUpdateAimOverTime;
+
+    private PlayerControls _input;
+
+    private MovementType _movementType;
+
+    private Vector3 _smoothInputMovement;
+    private Vector3 _cursorWorldPosition;
+    private Vector3 _smoothLocalInputMovement;
+    private Vector3 _rawInputMovement;
+    private Vector3 _cursorWorldDirection = Vector3.forward;
+    private Vector2 _cursorScreenPosition;
+    private Vector2 _deltaCursor;
     private float _movementSpeed;
     private float _dashSpeed;
-    private Vector3 _aimWorldDirection = Vector3.forward;
-    private Vector2 _deltaAim;
-    private bool _isDeltaAim;
+    private bool _isDeltaCursor;
+    private bool _isMoving;
+    private bool _isDashing;
+    private bool _isCameraAngleChanged;
+
+    [Flags]
+    private enum MovementType
+    {
+        None        = 0b_0000_0000,
+        Forward     = 0b_0000_0001,
+        Backward    = 0b_0000_0010,
+        Side        = 0b_0000_0100,
+    }
 
     private Vector3 GetCameraDirection
     {
@@ -57,7 +76,7 @@ public class PlayerController : MonoBehaviour
             cameraForward.y = 0f;
             cameraRight.y = 0f;
 
-            return cameraForward * SmoothInputMovement.z + cameraRight * SmoothInputMovement.x;
+            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
         }
     }
 
@@ -67,159 +86,203 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 playerPosition = transform.position;
 
-            return (AimWorldPosition != Vector3.zero) ? new Vector3(AimWorldPosition.x - playerPosition.x, 0, AimWorldPosition.z - playerPosition.z) : Vector3.forward;
+            return (_cursorWorldPosition != Vector3.zero) ? new Vector3(_cursorWorldPosition.x - playerPosition.x, 0, _cursorWorldPosition.z - playerPosition.z) : Vector3.forward;
         }
     }
 
     #region Events
-    public void OnMovementChange(float speed) => _movementSpeed = speed;
-    public void OnDashChange(float speed) => _dashSpeed = speed;
+    public void OnMovementSpeedChange(float speed) => _movementSpeed = speed;
+    public void OnDashSpeedChange(float speed) => _dashSpeed = speed;
 
-    public void OnAim(InputAction.CallbackContext value)
+    public void OnCursorPosition(InputAction.CallbackContext context)
     {
-        Vector2 screenPosition = value.ReadValue<Vector2>();
+        Vector2 screenPosition = context.ReadValue<Vector2>();
         if (screenPosition != Vector2.zero)
-            AimScreenPosition = value.ReadValue<Vector2>();
+            _cursorScreenPosition = context.ReadValue<Vector2>();
 
-        UpdateAim();
+        _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
+
+        UpdateCursor();
     }
 
-    public void OnDeltaAim(InputAction.CallbackContext value)
+    public void OnCursorDelta(InputAction.CallbackContext context)
     {
-        _deltaAim = value.ReadValue<Vector2>();
-
-        _isDeltaAim = (_deltaAim != Vector2.zero);
+        _deltaCursor = context.ReadValue<Vector2>();
+        Debug.Log(_deltaCursor + " " + context.started + " " + context.canceled);
+        _isDeltaCursor = (_deltaCursor != Vector2.zero);
     }
 
-    public void OnMovement(InputAction.CallbackContext value)
+    public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 inputMovement = value.ReadValue<Vector2>();
-        RawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+        Vector2 inputMovement = context.ReadValue<Vector2>();
+        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
 
-        IsMoving = (inputMovement != Vector2.zero);
+        _isMoving = (inputMovement != Vector2.zero);
     }
 
-    public void OnDash(InputAction.CallbackContext value)
+    public void OnDash(InputAction.CallbackContext context)
     {
-        IsDashing = (value.ReadValue<float>() > 0.5f);
+        _isDashing = (context.ReadValue<float>() > 0.5f);
         _body.AddForce(transform.forward * _dashSpeed * _body.mass, ForceMode.Impulse);
     }
 
-    public void OnCamera(InputAction.CallbackContext value)
+    public void OnCamera(InputAction.CallbackContext context)
     {
-        IsCameraAngleChanged = (value.ReadValue<Vector2>() != Vector2.zero);
-    }
-
-    public void OnDeviceLost(PlayerInput input)
-    {
-
-    }
-
-    public void OnDeviceRegained(PlayerInput input)
-    {
-
-    }
-
-    public void OnControlsChanged(PlayerInput input)
-    {
-
+        _isCameraAngleChanged = (context.ReadValue<Vector2>() != Vector2.zero);
     }
     #endregion
 
     #region Unity Message
+    private void Awake()
+    {
+        _input = new PlayerControls();
+    }
 
     private void Start()
     {
         _mainCamera = Camera.main;
         _body = GetComponent<Rigidbody>();
-
-        _oldPosition = transform.position;
     }
 
     private void OnEnable()
     {
-        _coroutineUpdateAimOverTime = StartCoroutine(UpdateAimOverTime());
+        _coroutineUpdateAimOverTime = StartCoroutine(UpdateCursorOverTime());
 
-        _movementSpeedAtoms.Changed.Register(OnMovementChange);
-        _dashSpeedAtoms.Changed.Register(OnDashChange);
+        _input.Enable();
+        _input.Ground.Move.performed += OnMove;
+        _input.Ground.Move.canceled += OnMove;
+        _input.Ground.Camera.performed += OnCamera;
+        _input.Ground.Camera.canceled += OnCamera;
+        _input.Ground.Dash.performed += OnDash;
+        _input.Ground.Dash.canceled += OnDash;
+        _input.Ground.CursorPosition.performed += OnCursorPosition;
+        _input.Ground.CursorPosition.canceled += OnCursorPosition;
+        _input.Ground.CursorDelta.performed += OnCursorDelta;
+        _input.Ground.CursorDelta.canceled += OnCursorDelta;
+        _movementSpeedAtoms.Changed.Register(OnMovementSpeedChange);
+        _dashSpeedAtoms.Changed.Register(OnDashSpeedChange);
     }
 
     private void Update()
     {
         UpdateSmoothInputMovement();
-        UpdateDeltaAim();
+        UpdateDeltaCursor();
     }
 
     private void FixedUpdate()
     {
-        UpdateMovement();
-        UpdateTurn();
-        UpdateLocalVelocity();
+        FixedUpdateMovement();
+        FixedUpdateTurn();
     }
 
     private void OnDisable()
     {
         StopCoroutine(_coroutineUpdateAimOverTime);
 
-        _movementSpeedAtoms.Changed.Unregister(OnMovementChange);
-        _dashSpeedAtoms.Changed.Unregister(OnDashChange);
+        _input.Disable();
+        _input.Ground.Move.performed -= OnMove;
+        _input.Ground.Move.canceled -= OnMove;
+        _input.Ground.Camera.performed -= OnCamera;
+        _input.Ground.Camera.canceled -= OnCamera;
+        _input.Ground.Dash.performed -= OnDash;
+        _input.Ground.Dash.canceled -= OnDash;
+        _input.Ground.CursorPosition.performed -= OnCursorPosition;
+        _input.Ground.CursorPosition.canceled -= OnCursorPosition;
+        _input.Ground.CursorDelta.performed -= OnCursorDelta;
+        _input.Ground.CursorDelta.canceled -= OnCursorDelta;
+        _movementSpeedAtoms.Changed.Unregister(OnMovementSpeedChange);
+        _dashSpeedAtoms.Changed.Unregister(OnDashSpeedChange);
     }
     #endregion
 
-    private void UpdateLocalVelocity()
-    {
-        Vector3 currentPosition = transform.position;
-        LocalVelocity = transform.InverseTransformDirection((currentPosition - _oldPosition)/ Time.fixedDeltaTime);
-        _oldPosition = currentPosition;
-        //Debug.Log(LocalVelocity);
-    }
-
     private void UpdateSmoothInputMovement()
     {
-        SmoothInputMovement = Vector3.Lerp(SmoothInputMovement, RawInputMovement,
-                Time.deltaTime * (IsMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+        static MovementType GetMovementType(float angle) => angle switch
+        {
+            var v when v >= 150.0f => MovementType.Backward,
+            var v when v > 100.0f => MovementType.Backward | MovementType.Side,
+            var v when v > 80.0f => MovementType.Side,
+            var v when v > 50.0f => MovementType.Forward | MovementType.Side,
+            var v when v >= 0.0f => MovementType.Forward,
+            _ => MovementType.None,
+        };
+
+        _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
+                Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
+
+        // Transform smooth input movement to the game object's local space.
+        Vector3 value = transform.InverseTransformDirection(_mainCamera.transform.TransformDirection(_smoothInputMovement));
+        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement = new Vector3(value.x, 0, value.z);
+
+        // Get movement type based on the angle of directional movement.
+        float angle = (_rawInputMovement != Vector3.zero) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
+        _movementType = GetMovementType(angle);
     }
 
-    private void UpdateMovement()
+    private void UpdateCursor()
     {
-        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
-        _body.MovePosition(transform.position + velocity);
-    }
-
-    private void UpdateTurn()
-    {
-        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_aimWorldDirection), TurnSpeed * Time.deltaTime);
-        _body.MoveRotation(rotation);
-    }
-
-    private void UpdateAim()
-    {
-        Ray ray = _mainCamera.ScreenPointToRay(AimScreenPosition);
+        Ray ray = _mainCamera.ScreenPointToRay(_cursorScreenPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, AimLayerMask))
-            AimWorldPosition = hit.point;
+            _cursorWorldPosition = hit.point;
+        else if (_plane.Raycast(ray, out float distance))   // Collide with a plane if no object was collided with.
+            _cursorWorldPosition = ray.GetPoint(distance);
 
-        _aimWorldDirection = GetAimDirection;
+        _cursorWorldDirection = GetAimDirection;
     }
 
     // Update aim if aiming using a controller.
-    private void UpdateDeltaAim()
+    private void UpdateDeltaCursor()
     {
-        if (_isDeltaAim)
+        if (_isDeltaCursor)
         {
-            AimScreenPosition += _deltaAim * DeltaAimSpeed;
-            UpdateAim();
+            _cursorScreenPosition += _deltaCursor * DeltaCursorSpeed;
+            _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
+
+            UpdateCursor();
         }
     }
 
+    private void FixedUpdateMovement()
+    {
+        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.deltaTime;
+
+        switch (_movementType)
+        {
+            case MovementType.Forward:
+                velocity *= SpeedForwardMultiplier;
+                break;
+            case MovementType.Forward | MovementType.Side:
+                velocity *= (SpeedForwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Side:
+                velocity *= SpeedSideMultiplier;
+                break;
+            case MovementType.Backward | MovementType.Side:
+                velocity *= (SpeedBackwardMultiplier + SpeedSideMultiplier) / 2;
+                break;
+            case MovementType.Backward:
+                velocity *= SpeedBackwardMultiplier;
+                break;
+        }
+
+        _body.MovePosition(transform.position + velocity);
+    }
+
+    private void FixedUpdateTurn()
+    {
+        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_cursorWorldDirection), TurnSpeed * Time.deltaTime);
+        _body.MoveRotation(rotation);
+    }
+
     // To prevent loosing aim when not performing any aim movement.
-    private IEnumerator UpdateAimOverTime()
+    private IEnumerator UpdateCursorOverTime()
     {
         yield return new WaitForEndOfFrame();
         while (true)
         {
-            yield return new WaitUntil(() => !IsCameraAngleChanged);    // Only update over time if not changing the camera
-            UpdateAim();
+            yield return new WaitUntil(() => !_isCameraAngleChanged);    // Only update over time if not changing the camera
+            UpdateCursor();
             yield return new WaitForSeconds(1.0f);
         }
     }
