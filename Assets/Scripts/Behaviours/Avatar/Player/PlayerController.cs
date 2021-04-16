@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [Header("Atoms")]
     [SerializeField] private Vector2Variable _cursorScreenPositionAtoms;
     [SerializeField] private Vector3Variable _smoothLocalInputMovementAtoms;
+    [SerializeField] private MovementTypeVariable _movementTypeAtoms;
     [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
@@ -20,14 +21,14 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     public float SpeedForwardMultiplier = 1.0f;
     public float SpeedBackwardMultiplier = 0.5f;
-    public float SpeedSideMultiplier = 0.8f;
+    public float SpeedSideMultiplier = 0.6f;
     [Space(10)]
     [Range(1, 10)] public float MovementSmoothSpeedStart = 2.0f;
     [Range(1, 10)] public float MovementSmoothSpeedEnd = 2.0f;
     [Space(10)]
-    [Min(0)] public float TurnSpeed = 1.0f;
+    [Min(0)] public float TurnSpeed = 3.0f;
     [Header("Aim Settings")]
-    [Tooltip("Only for controllers")] public float DeltaCursorSpeed = 3.0f;
+    [Tooltip("Only for controllers")] public float DeltaCursorSpeed = 600.0f;
     public LayerMask AimLayerMask;
     #endregion
 
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _body;
 
     private Plane _plane = new Plane(Vector3.up, 0);
+    private Transform _cameraPivotTransform;
 
     private Coroutine _coroutineUpdateAimOverTime;
 
@@ -55,15 +57,6 @@ public class PlayerController : MonoBehaviour
     private bool _isMoving;
     private bool _isDashing;
     private bool _isCameraAngleChanged;
-
-    [Flags]
-    private enum MovementType
-    {
-        None        = 0b_0000_0000,
-        Forward     = 0b_0000_0001,
-        Backward    = 0b_0000_0010,
-        Side        = 0b_0000_0100,
-    }
 
     private Vector3 GetCameraDirection
     {
@@ -108,7 +101,6 @@ public class PlayerController : MonoBehaviour
     public void OnCursorDelta(InputAction.CallbackContext context)
     {
         _deltaCursor = context.ReadValue<Vector2>();
-        Debug.Log(_deltaCursor + " " + context.started + " " + context.canceled);
         _isDeltaCursor = (_deltaCursor != Vector2.zero);
     }
 
@@ -142,6 +134,7 @@ public class PlayerController : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _body = GetComponent<Rigidbody>();
+        _cameraPivotTransform = transform.Find("CameraPivot");
     }
 
     private void OnEnable()
@@ -165,8 +158,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        UpdateSmoothInputMovement();
         UpdateDeltaCursor();
+        UpdateSmoothInputMovement();
     }
 
     private void FixedUpdate()
@@ -210,13 +203,22 @@ public class PlayerController : MonoBehaviour
         _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
                 Time.deltaTime * (_isMoving ? MovementSmoothSpeedStart : MovementSmoothSpeedEnd));
 
+        // Transform camera pivot to look away from the camera.
+        Vector3 cameraPosition = _mainCamera.transform.position;
+        Vector3 cameraPivotPosition = _cameraPivotTransform.transform.position;
+        _cameraPivotTransform.rotation =
+            Quaternion.LookRotation(cameraPivotPosition - new Vector3(cameraPosition.x, cameraPivotPosition.y, cameraPosition.z));
+
         // Transform smooth input movement to the game object's local space.
-        Vector3 value = transform.InverseTransformDirection(_mainCamera.transform.TransformDirection(_smoothInputMovement));
-        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement = new Vector3(value.x, 0, value.z);
+        _smoothLocalInputMovementAtoms.Value = _smoothLocalInputMovement =
+            transform.InverseTransformDirection(_cameraPivotTransform.TransformDirection(_smoothInputMovement));
 
         // Get movement type based on the angle of directional movement.
         float angle = (_rawInputMovement != Vector3.zero) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
         _movementType = GetMovementType(angle);
+
+        if (_movementTypeAtoms.Value != _movementType)
+            _movementTypeAtoms.Value = _movementType;
     }
 
     private void UpdateCursor()
@@ -236,7 +238,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDeltaCursor)
         {
-            _cursorScreenPosition += _deltaCursor * DeltaCursorSpeed;
+            _cursorScreenPosition += _deltaCursor * Time.deltaTime * DeltaCursorSpeed;
             _cursorScreenPositionAtoms.Value = _cursorScreenPosition;
 
             UpdateCursor();
