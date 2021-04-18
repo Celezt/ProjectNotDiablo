@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7586093321368120776}
   - component: {fileID: 7586093321368119863}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TorchFlare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7586093321435195191}
   - component: {fileID: 7586093321435195190}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TorchLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.9529412, g: 0.82046294, b: 0.45360002, a: 1}
   m_Intensity: 5
-  m_Range: 7
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 7586093321967573247}
   - component: {fileID: 7586093321968376031}
   - component: {fileID: 7586093321969343007}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Torch_Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5,30 +5,48 @@ using UnityEngine.AI;
 
 public class AI : MonoBehaviour
 {
-    public FieldOfView fieldOfView;
-    bool enemyVisible;
+    //
+    [Header("AI Stats")]
+
+    public float health;
+    public float maxHealth;
+
+    [Space(10)]
+
     public float baseSpeed = 5;
-    float ChargeSpeed;
     public float baseAcceleration = 5;
-    float chargeAcceleration;
-    NavMeshAgent agent;
-    bool isCharging;
-    public Vector3 destination;
-    public GameObject player;
-    public enum AiState { Idle, Fleeing, InCombat, Patrolling };
-    public AiState currentState;
-    public float weaponRange;
-    public float distanceToPlayer;
-    public float distanceToDestination;
     public float chargeRange;
 
-    public float wanderRadius;
-    public float wanderTimer;
-    private float timer;
+    [Header("Equiped Weapon")]
+    public GameObject selectedWeapon;
+    private float cooldownTimer;
 
-    public PatrolArea selectedPatrolArea;
 
+    //Hidden Varibles
     bool atDestination;
+    bool isCharging = false;
+    bool enemyVisible;
+    bool PlayerInRange = false;
+
+    PatrolArea selectedPatrolArea;
+    NavMeshAgent agent;
+
+    private FieldOfView fieldOfView;
+
+    private Vector3 destination;
+    public GameObject player;
+
+    private enum AiState { Idle, Fleeing, InCombat, Patrolling };
+    private AiState currentState;
+
+    //floats
+    float weaponRange;
+    float distanceToPlayer;
+    float distanceToDestination;
+    float ChargeSpeed;
+    float chargeAcceleration;
+
+    //Weapon Stats
 
 
     // Start is called before the first frame update
@@ -46,6 +64,15 @@ public class AI : MonoBehaviour
     void OnEnable()
     {
         FindPatrolArea();
+        if (selectedWeapon.GetComponent<Ranged>() != null)
+        {
+            weaponRange = selectedWeapon.GetComponent<Ranged>().range;
+        }
+        if (selectedWeapon.GetComponent<Melee>() != null)
+        {
+            weaponRange = selectedWeapon.GetComponent<Melee>().range;
+        }
+
     }
 
     // Update is called once per frame
@@ -62,7 +89,6 @@ public class AI : MonoBehaviour
             distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
             Alert();
             currentState = AiState.InCombat;
-
         }
         if (destination != null && currentState == AiState.InCombat)
         {
@@ -82,6 +108,10 @@ public class AI : MonoBehaviour
         else if (currentState == AiState.InCombat && weaponRange < distanceToPlayer)
         {
             MoveCloser();
+        }
+        if (PlayerInRange)
+        {
+            Attack();
         }
     }
 
@@ -107,20 +137,27 @@ public class AI : MonoBehaviour
             if (player != null)
             {
                 gameObject.transform.LookAt(player.transform);
+                PlayerInRange = true;
             }
         }
         else if (weaponRange < distanceToPlayer)
         {
             destination = player.transform.position;
-
+            PlayerInRange = false;
         }
         agent.SetDestination(destination);
     }
 
     void Attack()
     {
-        //Weapon Attack
-        //GetComponentInChildren<MeleeAttack>(Attack).(GetcomponentInChild<Weapon>)
+        if (selectedWeapon.GetComponent<Ranged>() != null)
+        {
+            selectedWeapon.GetComponent<Ranged>().Attack(player.transform.position);
+        }
+        if (selectedWeapon.GetComponent<Melee>() != null)
+        {
+            selectedWeapon.GetComponent<Melee>().Attack();
+        }
     }
 
     void Flee()
