@@ -117,9 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _movementTypeAtoms: {fileID: 11400000, guid: 454f0ad6ffb4cdd4eac3809d3a3b9c88, type: 2}
-  _animation: {fileID: 5699960676068550000}
+  _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  _animator: {fileID: 5699960676068550000}
   IdleBlendSpeed: 0.002
   MotionBlendMargin: 0.01
 --- !u!114 &583105869144826515
@@ -134,17 +134,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cursorScreenPositionAtoms: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
-  _smoothLocalInputMovementAtoms: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _movementTypeAtoms: {fileID: 11400000, guid: 454f0ad6ffb4cdd4eac3809d3a3b9c88, type: 2}
+  _cursorScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _movementTypeVariable: {fileID: 11400000, guid: 454f0ad6ffb4cdd4eac3809d3a3b9c88, type: 2}
+  _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  _animatoinModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  _animatoinModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
   _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
-  _dashSpeedAtoms: {fileID: 11400000, guid: d9ac8df41de677944a6b75d9cc4f1f93, type: 2}
   SpeedForwardMultiplier: 1
   SpeedBackwardMultiplier: 0.5
   SpeedSideMultiplier: 0.6
   MovementSmoothSpeedStart: 2
   MovementSmoothSpeedEnd: 5
   TurnSpeed: 3
+  RollInvisibilityLength: 1
+  _rollAnimation: {fileID: 7400000, guid: 512db7c09f1ecd24aa783375a03e5964, type: 3}
+  RollAnimationSpeedMultiplier: 1
   DeltaCursorSpeed: 600
   AimLayerMask:
     serializedVersion: 2
