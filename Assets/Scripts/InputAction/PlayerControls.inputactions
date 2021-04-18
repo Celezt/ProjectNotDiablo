@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Dash",
+                    "name": "Roll",
                     "type": "Value",
                     "id": "92ca1554-eefa-4747-ab7e-fd1e822a29de",
                     "expectedControlType": "Axis",
@@ -296,7 +296,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -307,7 +307,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
