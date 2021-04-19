@@ -9,28 +9,18 @@ public class ItemPickupScript : MonoBehaviour
     public ItemType itemType;
     public FloatVariable health;
     public int healingValue = 25;
+    public int speedValue = 5;
+    public FloatVariable moveSpeed;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void OnTriggerEnter()
     {
         switch (itemType)
         {
            
-            case ItemType.healthPotion:
+            case ItemType.HealthPotion:
                 Debug.Log(health.Value);
-                if(health.Value + healingValue > 100)
+                if(health.Value + healingValue > health.InitialValue)
                 {
                     health.Value = health.InitialValue;
                 }
@@ -39,16 +29,18 @@ public class ItemPickupScript : MonoBehaviour
                     health.Value += healingValue;
                 }
                 break;
-          
+            case ItemType.SpeedPotion:
+                Debug.Log(moveSpeed.Value);
+                moveSpeed.Value += speedValue;
+                break;
         }
-        Debug.Log(health.Value);
         Destroy(gameObject);
     }
 
     public enum ItemType
     {
-        healthPotion,
-        speedPotion
+        HealthPotion,
+        SpeedPotion
     }
 
 }
