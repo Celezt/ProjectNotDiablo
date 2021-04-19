@@ -16,7 +16,7 @@ MonoBehaviour:
     PublicKeyToken=null
   Namespace: 
   BaseType: Cooldown
-  GenerationOptions: 4177791
+  GenerationOptions: 4194303
   Scripts:
   - {fileID: 11500000, guid: d2e413404b958f64bb2987b4738f93c4, type: 3}
   - {fileID: 11500000, guid: 2d236d00a39e2534daa975d6907653da, type: 3}
@@ -25,14 +25,14 @@ MonoBehaviour:
   - {fileID: 11500000, guid: 5e5c87e553e406f43bc58bc0eae851f2, type: 3}
   - {fileID: 11500000, guid: 1ed4674dc9e1a774a86e27f3059f021c, type: 3}
   - {fileID: 11500000, guid: ef805cead09e0e2468752364f547fe60, type: 3}
-  - {fileID: 0}
+  - {fileID: 11500000, guid: 3df398c3232d0874c8bf361a4d760df0, type: 3}
   - {fileID: 11500000, guid: db65cb5afa88bea4aadca472aecb2886, type: 3}
   - {fileID: 11500000, guid: aa58bfa27a473de42939c149126d8f97, type: 3}
   - {fileID: 11500000, guid: 7b88c4e7f9fa54c4c9fcf2e0ce57b301, type: 3}
   - {fileID: 11500000, guid: c944c1ba7252a364fb1af585abdb4e8c, type: 3}
   - {fileID: 11500000, guid: f9c1d017ec6b51a44aef179ca9527c1e, type: 3}
   - {fileID: 11500000, guid: db552ee4c8a51644abe70a7760b3b5d4, type: 3}
-  - {fileID: 0}
+  - {fileID: 11500000, guid: 02491c6b08191a740813b7878a9c72ba, type: 3}
   - {fileID: 11500000, guid: 7879ad4bc71f93c43931cff77ab34206, type: 3}
   - {fileID: 11500000, guid: 85c7056be437c254ebd2f8d57b2514bb, type: 3}
   - {fileID: 11500000, guid: 7bde69cc52c47a94cb9b868a3875ad6c, type: 3}

@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
         if (context.performed)
         {
-            StartCoroutine(WhileRollAction());
+            _invisibleFrameVariable.Add(new Cooldown(RollInvisibilityLength));
 
             AnimatorModifier modifier = new AnimatorModifier(_rollAnimation, RollAnimationSpeedMultiplier);
             modifier.Clip = _rollAnimation;
@@ -303,13 +303,5 @@ public class PlayerController : MonoBehaviour
             UpdateCursor();
             yield return new WaitForSeconds(1.0f);
         }
-    }
-
-    private IEnumerator WhileRollAction()
-    {
-        Cooldown invisibility = new Cooldown(RollInvisibilityLength);
-        _invisibleFrameVariable.Add(invisibility);
-        yield return new WaitForSeconds(RollInvisibilityLength);
-        _invisibleFrameVariable.Remove(invisibility);
     }
 }
