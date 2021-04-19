@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 633606168780372419}
   - component: {fileID: 633606168780372476}
   - component: {fileID: 3126700657898110738}
+  - component: {fileID: 6675371061617300794}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -118,6 +119,33 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!114 &6675371061617300794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633606168780372478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 7449ea2199aede242a551731e623d4d9, type: 3}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: -2710771267523394769, guid: 7449ea2199aede242a551731e623d4d9, type: 3}
+  m_SubmitAction: {fileID: 0}
+  m_CancelAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
 --- !u!1 &633606170208622576
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3bd1cccfe6926d45928e42b4643b8d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthAtoms: {fileID: 11400000, guid: a92aaae2b4ea94a4393224636939cca7, type: 2}
+  _healthVariable: {fileID: 11400000, guid: a92aaae2b4ea94a4393224636939cca7, type: 2}
   _controllerLabel: {fileID: 4711037816169637163}
   _healthLabel: {fileID: 7397780139595633536}
 --- !u!1 &633606170441298953
@@ -275,7 +303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -615.5, y: -409.5}
+  m_AnchoredPosition: {x: -730, y: -373.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &633606170441298957
@@ -328,8 +356,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d52f62855f3663409a40e7c867e4bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cursorScreenPositionAtoms: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
-  _playerInput: {fileID: 0}
+  _cursorScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _playerInput: {fileID: 633606170208622582}
 --- !u!1 &2377622442421649096
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,10 +390,10 @@ RectTransform:
   m_Father: {fileID: 633606168780372477}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000011444, y: -412.1}
-  m_SizeDelta: {x: 116.8701, y: 23.2263}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0.000011444, y: 24.200012}
+  m_SizeDelta: {x: 116.8701, y: 23.226288}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1205378530010504707
 CanvasRenderer:
@@ -441,10 +469,10 @@ RectTransform:
   m_Father: {fileID: 633606168780372477}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -626.5093, y: -412.1}
-  m_SizeDelta: {x: 116.8701, y: 23.2263}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 72.70001, y: 24.200012}
+  m_SizeDelta: {x: 116.87012, y: 23.226288}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4608320490017528020
 CanvasRenderer:

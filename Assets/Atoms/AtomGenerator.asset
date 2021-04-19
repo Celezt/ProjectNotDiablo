@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734fbfb568154d32a89d792102f0c779, type: 3}
+  m_Name: AtomGenerator
+  m_EditorClassIdentifier: 
+  FullQualifiedName: Cooldown, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  Namespace: 
+  BaseType: Cooldown
+  GenerationOptions: 4177791
+  Scripts:
+  - {fileID: 11500000, guid: d2e413404b958f64bb2987b4738f93c4, type: 3}
+  - {fileID: 11500000, guid: 2d236d00a39e2534daa975d6907653da, type: 3}
+  - {fileID: 11500000, guid: 8fb8550cb6b985d439d3c24fa9bc0b52, type: 3}
+  - {fileID: 11500000, guid: fc7daf3a15bc6dd47a197ce7c53d237d, type: 3}
+  - {fileID: 11500000, guid: 5e5c87e553e406f43bc58bc0eae851f2, type: 3}
+  - {fileID: 11500000, guid: 1ed4674dc9e1a774a86e27f3059f021c, type: 3}
+  - {fileID: 11500000, guid: ef805cead09e0e2468752364f547fe60, type: 3}
+  - {fileID: 0}
+  - {fileID: 11500000, guid: db65cb5afa88bea4aadca472aecb2886, type: 3}
+  - {fileID: 11500000, guid: aa58bfa27a473de42939c149126d8f97, type: 3}
+  - {fileID: 11500000, guid: 7b88c4e7f9fa54c4c9fcf2e0ce57b301, type: 3}
+  - {fileID: 11500000, guid: c944c1ba7252a364fb1af585abdb4e8c, type: 3}
+  - {fileID: 11500000, guid: f9c1d017ec6b51a44aef179ca9527c1e, type: 3}
+  - {fileID: 11500000, guid: db552ee4c8a51644abe70a7760b3b5d4, type: 3}
+  - {fileID: 0}
+  - {fileID: 11500000, guid: 7879ad4bc71f93c43931cff77ab34206, type: 3}
+  - {fileID: 11500000, guid: 85c7056be437c254ebd2f8d57b2514bb, type: 3}
+  - {fileID: 11500000, guid: 7bde69cc52c47a94cb9b868a3875ad6c, type: 3}
+  - {fileID: 11500000, guid: d4e048035a02091478cd41b7708016b4, type: 3}
+  - {fileID: 11500000, guid: 497fc63576f36f54594d9db0b5e6524c, type: 3}
+  - {fileID: 11500000, guid: 9880723cc6f3ee94d9269eb00d0a4c40, type: 3}
+  - {fileID: 11500000, guid: e757b7cfde1557646b241724e05b6f8f, type: 3}

@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 {
     #region Inspector
     [Header("Atoms")]
-    [SerializeField] private FloatVariable _healthAtoms;
+    [SerializeField] private FloatVariable _healthVariable;
     [Space(10)]
     [Header("UI Setup")]
     [SerializeField] private Text _controllerLabel;
@@ -44,13 +44,13 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         _input.Enable();
-        _healthAtoms.Changed.Register(OnHealthChange);
+        _healthVariable.Changed.Register(OnHealthChange);
     }
 
     private void OnDisable()
     {
         _input.Disable();
-        _healthAtoms.Changed.Unregister(OnHealthChange);
+        _healthVariable.Changed.Unregister(OnHealthChange);
     }
     #endregion
 }
