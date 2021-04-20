@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------//
 /*
     ----- HOW IT WORKS -----
-    Updated: 2021-04-15
+    Updated: 2021-04-20
 
     1.  Randomly picked rooms are placed somewhat randomly, but relatively 
         near each other. This is because we want the rooms to collide somewhat
@@ -26,11 +26,16 @@
         for some reason, fails (which it really shouldn't), it goes ahead and
         picks the nearest room regardless.
 
-    4.  [Not implemented] Now that each connection has a target connection,
-        we can build corridors! From each connection it will run a
-        path-finding algorithm to its target, with rooms as obstacles. The
-        finished path will be marked in a grid, which all connections share
-        access to.
+    4.  Now that each connection has a target connection, we can prepare the
+        grid used to build corridors. Dynamically create a grid whose size is
+        based on the layout of the rooms. Mark tiles that rooms overlap as
+        room tiles, to make corridors avoid rooms. Also mark tiles that are
+        connections.
+
+    4.  [Not implemented] Now that the tile grid is created, we can start 
+        building the corridor layout (in tiles)! From each connection it will
+        run a path-finding algorithm to its target, located on the tile grid.
+        The tiles of the finished path are marked as corridor tiles.
 
     5.  [Not implemented] After all corridor tiles have been identified, it
         needs to be cleaned up. Corridors that run in parallel must be 
@@ -44,37 +49,50 @@
         spawn their content.
 
 */
+//--------------------------------------------------------------------------//
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Represents a tile that needs to be connected.
-// Each doorway in a room must have a connection specified.
-public struct Connection
-{
-    public Vector2Int position; // Should be the tile that's on the outside of the room
-    public int room;            // Index of the room it originates from
-    public bool connected;
-}
-
-public struct Room
-{
-    public GameObject roomObject;
-    public RectInt bounds;
-    public List<int> connections;
-
-    public void Move(int x, int y) 
-    {
-        roomObject.transform.Translate(x, 0.0f, y);
-        bounds.x = bounds.x + x;
-        bounds.y = bounds.y + y;
-    }
-}
+using Debug = UnityEngine.Debug;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    // Represents a tile that needs to be connected.
+    // Each doorway in a room must have a connection specified.
+    private struct Connection
+    {
+        public Vector2Int position; // Should be the tile that's on the outside of the room
+        public int room;            // Index of the room it originates from
+        public bool connected;
+    }
+
+    private struct Room
+    {
+        public GameObject roomObject;
+        public RectInt bounds;
+        public List<int> connections;
+
+        public void Move(int x, int y) 
+        {
+            roomObject.transform.Translate(x, 0.0f, y);
+            bounds.x = bounds.x + x;
+            bounds.y = bounds.y + y;
+        }
+    }
+
+    private enum Tile : ushort
+    {
+        EMPTY = 0, // Default
+        ROOM,
+        CORRIDOR,
+        CONNECTION
+    }
+
+    //----------------------------------------------------------------------//
 
     public GameObject tile_1x1;
 
@@ -91,11 +109,18 @@ public class DungeonGenerator : MonoBehaviour
     public int maxRoomCollisions = 50;
     
     [Header("Debug")]
-    public bool visualize = true;
 
-    [Tooltip("Toggle between visualizing the graph of corridor connections "+
-        "and graph of rooms that are connected.")]
-    public bool lineToggle = true;
+    [Tooltip("Visualizes the how the connections connect. An edge indicates "+
+        "that the connections are directly connected; you should be able to "+
+        " navigate between them.")]
+    public bool showConnections = false;
+  
+    [Tooltip("Visualizes which rooms leads to which other rooms.")]
+    public bool showRoomConnections = false;
+
+    [Tooltip("Visualizes the tile grid. Red = room, yellow = corridor, "+
+        "green = connection.")]
+    public bool showTileGrid = false;
 
     //----------------------------------------------------------------------//
 
@@ -105,7 +130,12 @@ public class DungeonGenerator : MonoBehaviour
 
     private List<Connection> connections;   // Act as corridor graph vertices
     private List<int> connectionEdges;      // Act as corridor graph edges (1:1)
-    private List<List<int>> connectedRooms; // Lookup table for which rooms are connected to which
+    private List<List<int>> connectedRooms; // Room connection graph; which rooms can be accessed from which
+
+    private int corridorStepIt;
+    private Tile[][] tileGrid;              // A grid where true is a corridor tile, and false is an empty tile.
+    private Vector2Int tileGridSize;        // Size of the tile grid, in tiles.
+    private Vector2Int tileGridOffset;      // Position offset of the tile grid
 
     //----------------------------------------------------------------------//
 
@@ -159,6 +189,9 @@ public class DungeonGenerator : MonoBehaviour
                 room.connections.Add(connections.Count - 1); // Index of the last added connection
                 Debug.Log("Created connection at " + connPos);
             }
+            else {
+                i++; // Create one more connection
+            }
         }
 
         rooms.Add(room);
@@ -167,6 +200,7 @@ public class DungeonGenerator : MonoBehaviour
         Debug.Log("Created room at " + room.bounds);
     }
 
+    // Moves a room and its connections by x and y.
     void MoveRoom(int roomIndex, int x, int y)
     {
         Room tmp = rooms[roomIndex];
@@ -204,7 +238,8 @@ public class DungeonGenerator : MonoBehaviour
                     {
                         collision = true;
                         
-                        Vector2 overlap = new Vector2((r1.width / 2.0f + r2.width / 2.0f) - (r2.center.x - r1.center.x),
+                        Vector2 overlap = new Vector2(
+                            (r1.width / 2.0f + r2.width / 2.0f) - (r2.center.x - r1.center.x),
                             (r1.height / 2.0f + r2.height / 2.0f) - (r2.center.y - r1.center.y));
                         
                         int randMove = Random.Range(0, 10); // Introduce some randomness
@@ -246,11 +281,90 @@ public class DungeonGenerator : MonoBehaviour
         connections.Clear();
 
         roomResolveCount = 0;
+        corridorStepIt = 0;
 
         for (int i = 0; i < connectedRooms.Count; i++)
             connectedRooms[i].Clear();
         
         connectedRooms.Clear();
+    }
+
+    void InitializeTileGrid()
+    {
+        const int padding = 2; // Tiles per side
+        int tmp;
+
+        // First of all, find the bounds of the rooms to determine grid size
+
+        // Find the most extreme coords between all rooms
+        int minX = int.MaxValue; // Left-most
+        int minY = int.MaxValue; // Bottom-most
+        int maxX = int.MinValue; // Right-most
+        int maxY = int.MinValue; // Top-most
+        for (int i = 0; i < rooms.Count; i++) {
+            tmp = rooms[i].bounds.xMin; // Left
+            if (tmp < minX) minX = tmp;
+            
+            tmp = rooms[i].bounds.yMin; // Bottom
+            if (tmp < minY) minY = tmp;
+
+            tmp = rooms[i].bounds.xMax; // Right
+            if (tmp > maxX) maxX = tmp;
+            
+            tmp = rooms[i].bounds.yMax; // Top
+            if (tmp > maxY) maxY = tmp;
+        }
+                
+        tileGridSize = new Vector2Int(maxX, maxY);
+        tileGridSize.x -= minX;
+        tileGridSize.y -= minY;
+
+        tileGridSize.x += padding * 2; // Add padding
+        tileGridSize.y += padding * 2; // Add padding
+
+        tileGridOffset = new Vector2Int(minX - padding, minY - padding);
+
+        Debug.Log($"minX = {minX}\nminY = {minY}\nmaxX = {maxX}\nmaxY = {maxY}");
+
+        // Create the tile grid
+        tileGrid = new Tile[tileGridSize.x][];
+        for (int x = 0; x < tileGridSize.x; x++) {
+            tileGrid[x] = new Tile[tileGridSize.y];
+        }
+
+    }
+
+    // Mark static tiles, i.e. room tiles and connection tiles.
+    void SetStaticTiles()
+    {
+        // Mark room tiles by iterating through all rooms and marking the
+        // tiles they overlap.
+        for (int i = 0; i < rooms.Count; i++) {
+            RectInt bounds = rooms[i].bounds;
+            
+            // Convert to "grid-space"
+            bounds.x -= tileGridOffset.x;
+            bounds.y -= tileGridOffset.y;
+
+            // Shrink bounds by 1 tile, because rooms intially have padding
+            bounds.xMin += 1;
+            bounds.yMin += 1;
+            bounds.xMax -= 1;
+            bounds.yMax -= 1;
+            
+            for (int x = bounds.xMin; x < bounds.xMax; x++) {
+                for (int y = bounds.yMin; y < bounds.yMax; y++) {
+                    tileGrid[x][y] = Tile.ROOM;
+                }
+            }
+        }
+
+        // Mark connection tiles
+        for (int i = 0; i < connections.Count; i++) {
+            int x = connections[i].position.x - tileGridOffset.x;
+            int y = connections[i].position.y - tileGridOffset.y;
+            tileGrid[x][y] = Tile.CONNECTION;
+        }
     }
 
     // Returns true if dungeon was created successfully, otherwise false.
@@ -272,6 +386,18 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         CreateCorridorGraph();
+
+        // Initilize the grid that the corridor creation algorithm uses to see
+        // if a tile is blocked, and mark which tiles are corridor tiles.
+        // The tiles occupied by rooms are marked as room tiles, thus
+        // making them unavailable for corridor placement. Room tiles and
+        // corridor tiles may be adjacent but only crossable there is a 
+        // connection tile in between.
+        InitializeTileGrid();
+
+        // Mark relevant tiles as room tiles and connection tiles. These are
+        // static; they won't change.
+        SetStaticTiles();
 
         return true;
     }
@@ -336,8 +462,9 @@ public class DungeonGenerator : MonoBehaviour
             connectionEdges.Add(nearest); // Associate connection[i] with the nearest connection
 
             int currRoom = connections[i].room;
-            // Add to the lookup table that rooms[i] is connected to the
-            // room of the connection picked.
+
+            // Add to the room connection graph that rooms[i] is connected to 
+            // the room of the connection picked.
             if (!connectedRooms[currRoom].Contains(connections[nearest].room)) {
                 connectedRooms[currRoom].Add(connections[nearest].room);
                 connectedRooms[connections[nearest].room].Add(currRoom);
@@ -352,7 +479,7 @@ public class DungeonGenerator : MonoBehaviour
     // Returns true if the corridor stopped/finished
     bool CorridorCreationStep(Connection from, Connection to)
     {
-
+        
         return true;
     }
 
@@ -365,6 +492,9 @@ public class DungeonGenerator : MonoBehaviour
         connectionEdges = new List<int>();
         connectedRooms = new List<List<int>>();
         roomResolveCount = 0;
+        corridorStepIt = 0;
+        tileGridSize = new Vector2Int();
+        tileGridOffset = new Vector2Int();
     }
 
     void Start()
@@ -380,9 +510,13 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (Keyboard.current.dKey.wasReleasedThisFrame) {
             DestroyDungeon();
-            double time = Time.timeAsDouble*1000.0;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             while (!GenerateDungeon());
-            Debug.Log("Dungeon generation took: " + (Time.timeAsDouble*1000.0 - time) + "ms");
+            
+            stopwatch.Stop();
+            Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
         }
 
         // DEBUG: For manually stepping through room collision resolution.
@@ -401,58 +535,97 @@ public class DungeonGenerator : MonoBehaviour
         */
 
         // DEBUG: For manually stepping through corridor creation
-        /*
         if (Keyboard.current.cKey.wasReleasedThisFrame) {
-            if (CorridorCreationStep(corridorIt)) {
-                Debug.Log("Corridor stopped.");
+            if (corridorStepIt < connections.Count) {
+                if (CorridorCreationStep(connections[corridorStepIt], 
+                    connections[connectionEdges[corridorStepIt]])
+                ) {
+                    Debug.Log("Corridor stopped.");
+                    corridorStepIt++;
+                }
             }
         }
-        */
+        
+        if (showConnections) { // Draw connection edges to their targets
+            for (int i = 0; i < connectionEdges.Count; i++) {
+                if (connectionEdges[i] == -1)
+                    continue;
+                Connection connStart = connections[i];
+                Connection connEnd = connections[connectionEdges[i]];
+                Vector3 start = new Vector3(connStart.position.x + 0.5f, 0.0f, 
+                    connStart.position.y + 0.5f);
+                Vector3 end = new Vector3(connEnd.position.x + 0.5f, 0.0f, 
+                    connEnd.position.y + 0.5f);
+                Debug.DrawLine(start, end, Color.magenta);
+            }
+        }
 
-        if (visualize) {
-            if (lineToggle) {
-                for (int i = 0; i < connectionEdges.Count; i++) {
-                    if (connectionEdges[i] == -1)
-                        continue;
-
-                    Connection connStart = connections[i];
-                    Connection connEnd = connections[connectionEdges[i]];
-                    Vector3 start = new Vector3(connStart.position.x + 0.5f, 0.0f, 
-                        connStart.position.y + 0.5f);
-                    Vector3 end = new Vector3(connEnd.position.x + 0.5f, 0.0f, 
-                        connEnd.position.y + 0.5f);
-                    Debug.DrawLine(start, end, Color.magenta);
+        if (showRoomConnections) { // Draw room connection graph
+            for (int i = 0; i < rooms.Count; i++) {
+                for (int j = 0; j < connectedRooms[i].Count; j++) {       
+                    Vector3 start = rooms[i].roomObject.transform.position;
+                    Vector3 end = rooms[connectedRooms[i][j]].roomObject.transform.position;
+                    Debug.DrawLine(start, end, Color.red);
                 }
             }
-            else {
-                for (int i = 0; i < rooms.Count; i++) {
-                    for (int j = 0; j < connectedRooms[i].Count; j++) {       
-                        Vector3 start = rooms[i].roomObject.transform.position;
-                        Vector3 end = rooms[connectedRooms[i][j]].roomObject.transform.position;
-                        Debug.DrawLine(start, end, Color.red);
-                    }
-                }
-            }
+        }
+
+        if (showTileGrid) { // Draw tile grid bounds
+            Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y);
+            Debug.DrawLine(new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin, 
+                new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin, 
+                Color.green);
+            Debug.DrawLine(new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin,
+                new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin,
+                Color.green);
+            Debug.DrawLine(new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin,
+                new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin,
+                Color.green);
+            Debug.DrawLine(new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin,
+                new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin,
+                Color.green);
         }
     }
 
     void OnDrawGizmos()
     {
-        if (visualize) {
-            // Draw rooms
-            for (int i = 0; i < rooms.Count; i++) {     
-                Gizmos.color = Color.HSVToRGB(i*0.05f, 0.8f, 0.8f);
-                Gizmos.DrawCube(rooms[i].roomObject.transform.position, 
-                    new Vector3(rooms[i].bounds.width - 2, 0.5f + i * 0.02f, rooms[i].bounds.height - 2));
-            }
+        // Draw rooms
+        // for (int i = 0; i < rooms.Count; i++) {     
+        //     Gizmos.color = Color.HSVToRGB(i*0.05f, 0.8f, 0.8f);
+        //     Gizmos.DrawCube(rooms[i].roomObject.transform.position, 
+        //         new Vector3(rooms[i].bounds.width - 2, 0.5f + i * 0.02f, rooms[i].bounds.height - 2));
+        // }
 
-            Gizmos.color = Color.green;
-            for (int i = 0; i < connections.Count; i++) {
-                Vector3 tilePos = new Vector3(connections[i].position.x + 0.5f, 0.0f, 
-                    connections[i].position.y + 0.5f);
-                Gizmos.DrawCube(tilePos, new Vector3(1.0f, 1.0f, 1.0f));
+        if (showTileGrid) {
+            for (int x = 0; x < tileGridSize.x; x++) {
+                for (int y = 0; y < tileGridSize.y; y++) {
+                    Vector3 pos = new Vector3(x + 0.5f + tileGridOffset.x, 
+                        0.5f, y + 0.5f + tileGridOffset.y);
+
+                    if (tileGrid[x][y] == Tile.ROOM) {
+                        Gizmos.color = Color.red;
+                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                    }
+                    else if (tileGrid[x][y] == Tile.CORRIDOR) {
+                        Gizmos.color = Color.yellow;
+                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                    }
+                    else if (tileGrid[x][y] == Tile.CONNECTION) {
+                        Gizmos.color = Color.green;
+                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                    }
+                }
             }
         }
+
+        // if (showConnections || showTileGrid) {
+        //     Gizmos.color = Color.green;
+        //     for (int i = 0; i < connections.Count; i++) {
+        //         Vector3 tilePos = new Vector3(connections[i].position.x + 0.5f, 0.5f, 
+        //             connections[i].position.y + 0.5f);
+        //         Gizmos.DrawCube(tilePos, new Vector3(1.0f, 1.0f, 1.0f));
+        //     }
+        // }
     }
 
 }
