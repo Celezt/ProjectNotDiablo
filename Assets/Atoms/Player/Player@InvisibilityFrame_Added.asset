@@ -9,8 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e5c87e553e406f43bc58bc0eae851f2, type: 3}
+  m_Script: {fileID: 11500000, guid: ce8dd34405eb9644eac029721383e96f, type: 3}
   m_Name: Player@InvisibilityFrame_Added
   m_EditorClassIdentifier: 
   _developerDescription: 
   _replayBufferSize: 1
+  _inspectorRaiseValue:
+    _timeLeft: 0
+    _initTime: 0
+    _paused: 0
+    _isActive: 0
