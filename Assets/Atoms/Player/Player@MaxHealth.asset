@@ -10,17 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b46c0f62c93543f88d3eb693740d091, type: 3}
-  m_Name: Player@Health
+  m_Name: Player@MaxHealth
   m_EditorClassIdentifier: 
   _developerDescription: 
   _id: 
   _value: 100
-  _changed: {fileID: 11400000, guid: 286e7fbea7b14b94b902f9db1c704d5b, type: 2}
+  _changed: {fileID: 11400000, guid: a1df1696f78e0dd45bac6e5dc51faf23, type: 2}
   _changedWithHistory: {fileID: 0}
-  _triggerChangedOnOnEnable: 1
+  _triggerChangedOnOnEnable: 0
   _triggerChangedWithHistoryOnOnEnable: 0
-  _oldValue: 90
+  _oldValue: 100
   _initialValue: 100
-  _preChangeTransformers:
-  - {fileID: 11400000, guid: c5e504deb3b351245a26ef0a869120ce, type: 2}
-  - {fileID: 11400000, guid: 76f0742592970e546ab73fef9fda8f83, type: 2}
+  _preChangeTransformers: []

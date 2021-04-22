@@ -1,46 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 
 public class PlayerStats : MonoBehaviour
 {
+    public PlayerControls Controls
+    {
+        get => _controls;
+    }
+
     #region Inspector
     [Header("Atoms")]
     [SerializeField] private FloatVariable _healthVariable;
-    [SerializeField] private DurationValueList _invisibleFrameVariable;
     #endregion
 
-    private float _oldValue;
+    private PlayerControls _controls;
 
     #region Events
-    public void OnHealthChange(float health)
+    public void OnHotbar(InputAction.CallbackContext context)
     {
-        for (int i = 0; i < _invisibleFrameVariable.Count; i++)
+        switch (context.ReadValue<float>())
         {
-            Duration invisibleFrame = _invisibleFrameVariable[i];
-
-            if (!invisibleFrame.IsActive)
-                _invisibleFrameVariable.Remove(invisibleFrame);
+            case 1:
+                //_healthVariable.Value -= 10;
+                break;
+            case 2:
+                //_healthVariable.Value += 10;
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            default:
+                break;
         }
-
-        if (_invisibleFrameVariable.Count != 0)
-            _healthVariable.Value = _oldValue;
-        else
-            _oldValue = _healthVariable.Value;
     }
     #endregion
 
     #region Unity Message
+    private void Awake()
+    {
+        _controls = new PlayerControls();
+    }
+
     private void OnEnable()
     {
-        _oldValue = _healthVariable.Value;
-        _healthVariable.Changed.Register(OnHealthChange);
+        _controls.Ground.Hotbar.performed += OnHotbar;
+        _controls.Enable();
     }
 
     private void OnDisable()
     {
-        _healthVariable.Changed.Unregister(OnHealthChange);
+        _controls.Ground.Hotbar.performed -= OnHotbar;
+        _controls.Disable();
     }
     #endregion
 }
