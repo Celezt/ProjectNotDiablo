@@ -9,6 +9,7 @@ public class PlayerAnimation : MonoBehaviour
     [Header("Atoms")]
     [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
+    [SerializeField] private BoolVariable _fallingVariable;
     [Space(10)]
     [Header("Animations Settings")]
     [SerializeField] private Animator _animator;
@@ -24,13 +25,21 @@ public class PlayerAnimation : MonoBehaviour
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
     private readonly int _idleID = Animator.StringToHash("IdleBlend");
+    private readonly int _isFallingID = Animator.StringToHash("IsFalling");
+    private readonly int _isCustomID = Animator.StringToHash("IsCustom");
+    private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
 
     #region Events
     public void OnAnimationModifierRaised(AnimatorModifier value)
     {
         _animatorOverrideController["Empty Custom Motion"] = value.Clip;
-        _animator.SetFloat("CustomMotionSpeed", value.SpeedMultiplier);
-        _animator.Play("Custom_Motion");
+        _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
+        _animator.SetBool(_isCustomID, true);
+    }
+
+    public void OnFalling(bool value)
+    {
+        _animator.SetBool(_isFallingID, value);
     }
     #endregion
 
@@ -44,6 +53,7 @@ public class PlayerAnimation : MonoBehaviour
     private void OnEnable()
     {
         _animatorModifierEvent.Register(OnAnimationModifierRaised);
+        _fallingVariable.Changed.Register(OnFalling);
     }
 
     private void Update()
@@ -55,6 +65,7 @@ public class PlayerAnimation : MonoBehaviour
     private void OnDisable()
     {
         _animatorModifierEvent.Unregister(OnAnimationModifierRaised);
+        _fallingVariable.Changed.Unregister(OnFalling);
     }
     #endregion
 

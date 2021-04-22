@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityAtoms.BaseAtoms;
 
-public class CustomMotionSM : StateMachineBehaviour
+public class CustomMotionBehaviour : StateMachineBehaviour
 {
-    [Header("Atoms")]
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
+
+    private readonly int _isCustomID = Animator.StringToHash("IsCustom");
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
+        animator.SetBool(_isCustomID, false);
         _animatorModifierInfoEvent.Raise(new AnimatorModifierInfo(controller, stateInfo));
     }
 }
