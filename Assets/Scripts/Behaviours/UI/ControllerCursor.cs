@@ -5,18 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
+using UnityAtoms.InputSystem;
 
 public class ControllerCursor : MonoBehaviour
 {
     [Header("Atoms")]
     [SerializeField] private Vector2Variable _cursorScreenPositionVariable;
-    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private PlayerInputEvent _deviceChangedEvent;
 
     private PlayerControls _input;
     private Image _image;
 
     #region Events
-    public void OnControlsChanged(PlayerInput input)
+    public void OnDeviceChanged(PlayerInput input)
     {
         InputControlScheme scheme = input.user.controlScheme.Value;
 
@@ -40,6 +41,8 @@ public class ControllerCursor : MonoBehaviour
     {
         _input = new PlayerControls();
         _image = GetComponent<Image>();
+
+        _deviceChangedEvent.Register(OnDeviceChanged);
     }
 
     private void OnEnable()
@@ -54,6 +57,11 @@ public class ControllerCursor : MonoBehaviour
     private void OnDisable()
     {
         _input.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        _deviceChangedEvent.Unregister(OnDeviceChanged);
     }
     #endregion
 }

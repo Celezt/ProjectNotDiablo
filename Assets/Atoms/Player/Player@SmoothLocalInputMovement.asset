@@ -17,7 +17,7 @@ MonoBehaviour:
   _value: {x: 0, y: 0, z: 0}
   _changed: {fileID: 0}
   _changedWithHistory: {fileID: 0}
-  _triggerChangedOnOnEnable: 0
+  _triggerChangedOnOnEnable: 1
   _triggerChangedWithHistoryOnOnEnable: 0
   _oldValue: {x: 0, y: 0, z: 0}
   _initialValue: {x: 0, y: 0, z: 0}
