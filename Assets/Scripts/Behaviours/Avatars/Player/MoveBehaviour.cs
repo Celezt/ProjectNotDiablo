@@ -41,7 +41,7 @@ public class MoveBehaviour : MonoBehaviour
     #endregion
 
     private Camera _mainCamera;
-    private Rigidbody _body;
+    private Rigidbody _rigidbody;
 
     private PlayerControls _controls;
 
@@ -88,11 +88,6 @@ public class MoveBehaviour : MonoBehaviour
         _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
         _isMoving = (inputMovement != Vector2.zero);
     }
-
-    public void OnHotbar(InputAction.CallbackContext context)
-    {
-        //Debug.Log(context.ReadValue<float>());
-    }
     #endregion
 
     #region Unity Message
@@ -104,14 +99,13 @@ public class MoveBehaviour : MonoBehaviour
     private void Start()
     {
         _mainCamera = Camera.main;
-        _body = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
     {
         _controls.Ground.Move.performed += OnMove;
         _controls.Ground.Move.canceled += OnMove;
-        _controls.Ground.Hotbar.performed += OnHotbar;
         _movementSpeedAtoms.Changed.Register(OnMovementSpeedChange);
         _controls.Enable();
     }
@@ -133,7 +127,6 @@ public class MoveBehaviour : MonoBehaviour
     {
         _controls.Ground.Move.performed -= OnMove;
         _controls.Ground.Move.canceled -= OnMove;
-        _controls.Ground.Hotbar.performed -= OnHotbar;
         _movementSpeedAtoms.Changed.Unregister(OnMovementSpeedChange);
         _controls.Disable();
     }
@@ -192,12 +185,12 @@ public class MoveBehaviour : MonoBehaviour
                 break;
         }
 
-        _body.MovePosition(transform.position + velocity);
+        _rigidbody.MovePosition(transform.position + velocity);
     }
 
     private void FixedUpdateTurn()
     {
-        Quaternion rotation = Quaternion.Slerp(_body.rotation, Quaternion.LookRotation(_pointWorldDirectionVariable.Value), _turnSpeed * Time.fixedDeltaTime);
-        _body.MoveRotation(rotation);
+        Quaternion rotation = Quaternion.Slerp(_rigidbody.rotation, Quaternion.LookRotation(_pointWorldDirectionVariable.Value), _turnSpeed * Time.fixedDeltaTime);
+        _rigidbody.MoveRotation(rotation);
     }
 }

@@ -6,8 +6,13 @@ using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
 
-public class UIManager : Singleton<UIManager>
+public class UIGameplayManager : Singleton<UIGameplayManager>
 {
+    public PlayerControls Controls
+    {
+        get => _controller;
+    }
+
     #region Inspector
     [Header("Atoms")]
     [SerializeField] private FloatEvent _healthEvent;
@@ -15,24 +20,22 @@ public class UIManager : Singleton<UIManager>
     [Space(10)]
     [Header("UI Setup")]
     [SerializeField] private Text _controllerLabel;
-    [SerializeField] private Text _healthLabel;
     #endregion
 
-    private PlayerControls _input;
+    private PlayerControls _controller;
 
-    protected UIManager() { }
+    protected UIGameplayManager() { }
 
     #region Events
-    public void OnHealthChange(float health) => _healthLabel.text = health.ToString();
     public void OnDeviceChanged(PlayerInput input)
     {
         InputControlScheme scheme = input.user.controlScheme.Value;
 
-        if (scheme == _input.GamepadScheme)
+        if (scheme == _controller.GamepadScheme)
         {
             _controllerLabel.text = "Controller";
         }
-        else if (scheme == _input.KeyboardAndMouseScheme)
+        else if (scheme == _controller.KeyboardAndMouseScheme)
         {
             _controllerLabel.text = "PC";
         }
@@ -42,21 +45,19 @@ public class UIManager : Singleton<UIManager>
     #region Unity Message
     private void Awake()
     {
-        _input = new PlayerControls();
+        _controller = new PlayerControls();
     }
 
     private void OnEnable()
     {
-        _input.Enable();
+        _controller.Enable();
         _deviceChangedEvent.Register(OnDeviceChanged);
-        _healthEvent.Register(OnHealthChange);
     }
 
     private void OnDisable()
     {
-        _input.Disable();
+        _controller.Disable();
         _deviceChangedEvent.Unregister(OnDeviceChanged);
-        _healthEvent.Unregister(OnHealthChange);
     }
     #endregion
 }
