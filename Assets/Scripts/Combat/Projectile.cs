@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Projectile : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Projectile : MonoBehaviour
     private List<GameObject> targetsAffected = new List<GameObject>();
     private Vector3 originPoint;
 
+    public GameObject hitEffect;
+
+    AudioClip clip;
     private Vector3 destination;
     public void SetVaribles(float _damage, float _speed, float _radius, Vector3 _destination, float _range)
     {
@@ -54,10 +58,17 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    void HitEffect()
+    {
+        GameObject explotion = hitEffect;
+        explotion = (GameObject)Instantiate(explotion, transform.position, transform.rotation);
+        Destroy(explotion, 1.5f);
+    }
+
     void Activate()
     {
         FindTargets(radius);
-
+        HitEffect();
         foreach (GameObject item in targetsAffected)
         {
             Debug.Log(item);

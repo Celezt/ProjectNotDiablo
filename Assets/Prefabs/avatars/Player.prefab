@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192232104863157507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.618, z: 0}
+  m_LocalPosition: {x: 0, y: 1.509, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2691928546050736874}
@@ -44,9 +44,12 @@ GameObject:
   - component: {fileID: 2691928546050736873}
   - component: {fileID: 5064504266361368092}
   - component: {fileID: 583105869144826515}
+  - component: {fileID: 7651242026116013290}
+  - component: {fileID: 5912751637794486405}
+  - component: {fileID: 1705030271867529725}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,12 +86,12 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2691928546050736854}
   serializedVersion: 2
-  m_Mass: 60
-  m_Drag: 3
-  m_AngularDrag: 1000
+  m_Mass: 80
+  m_Drag: 0.5
+  m_AngularDrag: 10000
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &2691928546050736873
@@ -98,10 +101,10 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2691928546050736854}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ec745c3731b663a41b886e701d58ff64, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
@@ -134,26 +137,112 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0553907509a844ba42997488fa3ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cursorScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _cameraPivotTransform: {fileID: 1846149191063106641}
   _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _movementTypeVariable: {fileID: 11400000, guid: 454f0ad6ffb4cdd4eac3809d3a3b9c88, type: 2}
-  _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
-  _animatoinModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _animatoinModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
+  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
   _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
-  SpeedForwardMultiplier: 1
-  SpeedBackwardMultiplier: 0.5
-  SpeedSideMultiplier: 0.6
-  MovementSmoothSpeedStart: 2
-  MovementSmoothSpeedEnd: 5
-  TurnSpeed: 3
-  RollInvisibilityLength: 1
-  _rollAnimation: {fileID: 7400000, guid: 512db7c09f1ecd24aa783375a03e5964, type: 3}
-  RollAnimationSpeedMultiplier: 1
-  DeltaCursorSpeed: 600
-  AimLayerMask:
+  _speedForwardMultiplier: 1
+  _speedBackwardMultiplier: 0.5
+  _speedSideMultiplier: 0.6
+  _movementSmoothSpeedStart: 2
+  _movementSmoothSpeedEnd: 3
+  _turnSpeed: 3
+--- !u!114 &7651242026116013290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179292c3f13effa44bff6600115e786f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveBehaviour: {fileID: 583105869144826515}
+  _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
+  _animation: {fileID: 7400000, guid: 68d04a7b9dcc0fd4b877df82f02d1d61, type: 3}
+  _animationSpeedMultiplier: 1
+  _invisibilityDuration: 1
+  _cooldown: 0.5
+  _forceStrength: 35
+  _forceCurve:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2022883
+      value: 0.8338175
+      inSlope: -3.0060682
+      outSlope: -3.0060682
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.30334586
+    - serializedVersion: 3
+      time: 0.2592463
+      value: 0.3723933
+      inSlope: -1.6331238
+      outSlope: -1.6331238
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.024705628
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.06571183
+      outSlope: 0.06571183
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14871877
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5912751637794486405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e7bddcc043a73448e99af9d29df983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cameraPivotTransform: {fileID: 1846149191063106641}
+  _pointScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
+  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
+  _deltaCursorSpeed: 600
+  _aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 8209
+--- !u!114 &1705030271867529725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c07bfe4351dfb419b180adb6ca6b83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthVariable: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
 --- !u!1001 &5641212627507537238
 PrefabInstance:
   m_ObjectHideFlags: 0
