@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
 public class PointBehaviour : MonoBehaviour
 {
@@ -26,14 +27,13 @@ public class PointBehaviour : MonoBehaviour
     #region Inspector
     [SerializeField] private Transform _cameraPivotTransform;
     [Space(10)]
-    [Header("Atoms")]
+    [Header("Settings")]
+    [SerializeField, Tooltip("Only for controllers")] private FloatReference _deltaCursorSpeedReference;
+    [SerializeField] private LayerMask _aimLayerMask;
+    [Foldout("Atoms", true)]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
     [SerializeField] private Vector3Variable _pointWorldDirectionVariable;
     [SerializeField] private Vector3Variable _pointWorldPositionVariable;
-    [Space(10)]
-    [Header("Settings")]
-    [SerializeField, Tooltip("Only for controllers")] private float _deltaCursorSpeed = 600.0f;
-    [SerializeField] private LayerMask _aimLayerMask;
     #endregion
 
     private Camera _mainCamera;
@@ -133,7 +133,7 @@ public class PointBehaviour : MonoBehaviour
     {
         if (_isPointDelta)
         {
-            _pointScreenPosition += _pointDelta * Time.deltaTime * _deltaCursorSpeed;
+            _pointScreenPosition += _pointDelta * Time.deltaTime * _deltaCursorSpeedReference.Value;
             _pointScreenPositionVariable.Value = _pointScreenPosition;
 
             UpdatePoint();

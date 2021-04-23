@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
 public class DodgeBehaviour : MonoBehaviour
 {
@@ -17,14 +18,13 @@ public class DodgeBehaviour : MonoBehaviour
     #region Inspector
     [SerializeField] private MoveBehaviour _moveBehaviour;
     [Space(10)]
-    [Header("Atoms")]
+    [Header("Settings")]
+    [SerializeField] private DodgeData[] _dodgeData;
+    [Foldout("Atoms", true)]
     [SerializeField] private DurationValueList _invisibleFrameVariable;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private Vector3Variable _rawLocalInputMovement;
-    [Space(10)]
-    [Header("Settings")]
-    [SerializeField] private DodgeData[] _dodgeData;
 
     #endregion
 

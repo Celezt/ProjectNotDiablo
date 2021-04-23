@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 5699960676068550000}
   _smoothLocalMotionReference:
     _usage: 2
     _value: {x: 0, y: 0, z: 0}
@@ -139,7 +140,6 @@ MonoBehaviour:
     _constant: {fileID: 0}
     _variable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
     _variableInstancer: {fileID: 0}
-  _animator: {fileID: 5699960676068550000}
 --- !u!114 &583105869144826515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,16 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cameraPivotTransform: {fileID: 1846149191063106641}
   _dodgeBehaviour: {fileID: 7651242026116013290}
-  _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _rawLocalInputMovementVariable: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
-  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
-  _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
-  _groundCheckEventEnter: {fileID: 11400000, guid: d434d4559c912904fbbe9761d35cd036, type: 2}
-  _groundCheckEventExit: {fileID: 11400000, guid: 82d4f1327b1bd424fbaee602564684e9, type: 2}
-  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
-  _movementEnterEvent: {fileID: 11400000, guid: 38792ab40a52ba543aa1f5b7616b0bd9, type: 2}
-  _movementExitEvent: {fileID: 11400000, guid: 384f10e09620e734fb00959718f8bd0e, type: 2}
   _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
   _speedForwardMultiplier: 1
   _speedBackwardMultiplier: 0.5
@@ -174,10 +164,29 @@ MonoBehaviour:
   _fallLayerMask:
     serializedVersion: 2
     m_Bits: 8209
-  _landAnimationSpeedMultiplier: 2
-  _heavyLandAnimationSpeedMultiplier: 1
-  _heavyLandTime: 1
-  _landAnimation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+  _landData:
+  - Enable: 1
+    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+    AnimationSpeedMultiplier: 1
+    Cooldown: 1
+  - Enable: 1
+    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+    AnimationSpeedMultiplier: 2
+    Cooldown: 0.2
+  - Enable: 0
+    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+    AnimationSpeedMultiplier: 1
+    Cooldown: 0
+  _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _rawLocalInputMovementVariable: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
+  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
+  _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
+  _groundCheckEventEnter: {fileID: 11400000, guid: d434d4559c912904fbbe9761d35cd036, type: 2}
+  _groundCheckEventExit: {fileID: 11400000, guid: 82d4f1327b1bd424fbaee602564684e9, type: 2}
+  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
+  _movementEnterEvent: {fileID: 11400000, guid: 38792ab40a52ba543aa1f5b7616b0bd9, type: 2}
+  _movementExitEvent: {fileID: 11400000, guid: 384f10e09620e734fb00959718f8bd0e, type: 2}
 --- !u!114 &7651242026116013290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,10 +200,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveBehaviour: {fileID: 583105869144826515}
-  _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
-  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
-  _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
   _dodgeData:
   - Animation: {fileID: 7400002, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
     Angle: 120
@@ -303,6 +308,10 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     Direction: {x: 0, y: 0, z: 1}
+  _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
+  _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
 --- !u!114 &5912751637794486405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,13 +325,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraPivotTransform: {fileID: 1846149191063106641}
-  _pointScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
-  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
-  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
-  _deltaCursorSpeed: 600
+  _deltaCursorSpeedReference:
+    _usage: 0
+    _value: 600
+    _constant: {fileID: 0}
+    _variable: {fileID: 0}
+    _variableInstancer: {fileID: 0}
   _aimLayerMask:
     serializedVersion: 2
     m_Bits: 8209
+  _pointScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
+  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
+  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
 --- !u!114 &1705030271867529725
 MonoBehaviour:
   m_ObjectHideFlags: 0

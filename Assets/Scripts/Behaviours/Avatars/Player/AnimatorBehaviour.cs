@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
 public class AnimatorBehaviour : MonoBehaviour
 {
@@ -20,13 +21,13 @@ public class AnimatorBehaviour : MonoBehaviour
     public void RaiseAnimatorModifier(AnimatorModifier modifier) => OnAnimationModifierRaised(modifier);
 
     #region Inspector
-    [Header("Atoms")]
+
+    [Header("Settings")]
+    [SerializeField, MustBeAssigned] private Animator _animator;
+    [Foldout("Atoms", true)]
     [SerializeField] private Vector3Reference _smoothLocalMotionReference;
     [SerializeField] private AnimatorModifierEventReference _animatorModifierEvent;
     [SerializeField] private BoolReference _fallingReference;
-    [Space(10)]
-    [Header("Animations Settings")]
-    [SerializeField] private Animator _animator;
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
