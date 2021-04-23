@@ -155,12 +155,15 @@ MonoBehaviour:
   _cameraPivotTransform: {fileID: 1846149191063106641}
   _dodgeBehaviour: {fileID: 7651242026116013290}
   _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+  _rawLocalInputMovementVariable: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
   _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
   _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
   _groundCheckEventEnter: {fileID: 11400000, guid: d434d4559c912904fbbe9761d35cd036, type: 2}
   _groundCheckEventExit: {fileID: 11400000, guid: 82d4f1327b1bd424fbaee602564684e9, type: 2}
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
   _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
+  _movementEnterEvent: {fileID: 11400000, guid: 38792ab40a52ba543aa1f5b7616b0bd9, type: 2}
+  _movementExitEvent: {fileID: 11400000, guid: 384f10e09620e734fb00959718f8bd0e, type: 2}
   _movementSpeedAtoms: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
   _speedForwardMultiplier: 1
   _speedBackwardMultiplier: 0.5
@@ -191,110 +194,115 @@ MonoBehaviour:
   _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
   _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
-  _smoothLocalInputMovement: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _forwardAnimation: {fileID: 7400000, guid: 68d04a7b9dcc0fd4b877df82f02d1d61, type: 3}
-  _forwardsAnimationSpeedMultiplier: 1
-  _forwardsInvisibilityDuration: 0.8
-  _forwardsCooldown: 0.5
-  _forwardsForceStrength: 35
-  _forwardsforceCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.18830054
-      value: 0.95545864
-      inSlope: -1.0151179
-      outSlope: -1.0151179
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.23981719
-      value: 0.32959634
-      inSlope: -1.3456826
-      outSlope: -1.3456826
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.028226366
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0.06571183
-      outSlope: 0.06571183
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.14871877
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _backwardsAnimation: {fileID: 7400002, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
-  _backwardsAnimationSpeedMultiplier: 5
-  _backwardsInvisibilityDuration: 0.5
-  _backwardsCooldown: 0.5
-  _backwardsForceStrength: 20
-  _backwarsForceCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.020277306
-      value: 0.9901725
-      inSlope: -0.97078145
-      outSlope: -0.97078145
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.038058817
-      value: 0.45308313
-      inSlope: -9.163824
-      outSlope: -9.163824
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.15304244
-    - serializedVersion: 3
-      time: 0.090291455
-      value: 0.1975364
-      inSlope: -0.9706179
-      outSlope: -0.9706179
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0.06571183
-      outSlope: 0.06571183
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.14871877
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
+  _dodgeData:
+  - Animation: {fileID: 7400002, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+    Angle: 120
+    AnimationSpeedMultiplier: 5
+    InvisibilityDuration: 0.5
+    Cooldown: 0.5
+    ForceStrength: 20
+    ForceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.047139198
+        value: 0.95351636
+        inSlope: -2.6923518
+        outSlope: -2.6923518
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.64445925
+      - serializedVersion: 3
+        time: 0.08192021
+        value: 0.5150033
+        inSlope: -9.163824
+        outSlope: -9.163824
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.15304244
+      - serializedVersion: 3
+        time: 0.17033906
+        value: 0.13936989
+        inSlope: -0.9706179
+        outSlope: -0.9706179
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0.06571183
+        outSlope: 0.06571183
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.14871877
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Direction: {x: 0, y: 0, z: -1}
+  - Animation: {fileID: 7400000, guid: 68d04a7b9dcc0fd4b877df82f02d1d61, type: 3}
+    Angle: 0
+    AnimationSpeedMultiplier: 1
+    InvisibilityDuration: 0.8
+    Cooldown: 0.5
+    ForceStrength: 35
+    ForceCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.18830054
+        value: 0.95545864
+        inSlope: -1.0151179
+        outSlope: -1.0151179
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.23981719
+        value: 0.32959634
+        inSlope: -1.3456826
+        outSlope: -1.3456826
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.028226366
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0.06571183
+        outSlope: 0.06571183
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.14871877
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Direction: {x: 0, y: 0, z: 1}
 --- !u!114 &5912751637794486405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7058626723183384902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2691928546050736874}

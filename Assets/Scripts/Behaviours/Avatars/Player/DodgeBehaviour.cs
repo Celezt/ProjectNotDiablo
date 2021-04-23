@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,24 +21,25 @@ public class DodgeBehaviour : MonoBehaviour
     [SerializeField] private DurationValueList _invisibleFrameVariable;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
-    [SerializeField] private Vector3Variable _smoothLocalInputMovement;
+    [SerializeField] private Vector3Variable _rawLocalInputMovement;
     [Space(10)]
     [Header("Settings")]
-    [SerializeField] private AnimationClip _forwardAnimation;
-    [SerializeField] private float _forwardsAnimationSpeedMultiplier = 1.0f;
-    [SerializeField] private float _forwardsInvisibilityDuration = 1.0f;
-    [SerializeField] private float _forwardsCooldown = 0.5f;
-    [SerializeField] private float _forwardsForceStrength = 50.0f;
-    [SerializeField] private AnimationCurve _forwardsforceCurve = AnimationCurve.Linear(0.0f, 0.5f, 1.0f, 0.5f);
-    [Space(10)]
-    [SerializeField] private AnimationClip _backwardsAnimation;
-    [SerializeField] private float _backwardsAnimationSpeedMultiplier = 1.0f;
-    [SerializeField] private float _backwardsInvisibilityDuration = 1.0f;
-    [SerializeField] private float _backwardsCooldown = 0.5f;
-    [SerializeField] private float _backwardsForceStrength = 50.0f;
-    [SerializeField] private AnimationCurve _backwarsForceCurve = AnimationCurve.Linear(0.0f, 0.5f, 1.0f, 0.5f);
+    [SerializeField] private DodgeData[] _dodgeData;
 
     #endregion
+
+    [Serializable]
+    private struct DodgeData
+    {
+        public AnimationClip Animation;
+        [Tooltip("Angle >=")] public float Angle;
+        public float AnimationSpeedMultiplier;
+        public float InvisibilityDuration;
+        [Min(0)] public float Cooldown;
+        public float ForceStrength;
+        public AnimationCurve ForceCurve;
+        public Vector3 Direction;
+    }
 
     private PlayerControls _controls;
     private Rigidbody _rigidbody;
@@ -62,26 +64,22 @@ public class DodgeBehaviour : MonoBehaviour
                     _moveBehaviour.IsRotating = false;
                 }
 
-                Vector3 _inputValue = _smoothLocalInputMovement.Value;
-                _angle = Vector3.Angle(Vector3.forward, (_inputValue.magnitude > 0.1f) ? _inputValue.normalized : Vector3.forward);
+                Vector3 rawValue = _rawLocalInputMovement.Value;
+                _angle = Vector3.Angle(Vector3.forward, (rawValue != Vector3.zero) ? rawValue.normalized : Vector3.forward);
 
-                if (_angle >= 150)
+                foreach (DodgeData data in _dodgeData)
                 {
-                    _invisibleFrameVariable.Add(new Duration(_backwardsInvisibilityDuration));
+                    if (_angle >= data.Angle)
+                    {
+                        _invisibleFrameVariable.Add(new Duration(data.InvisibilityDuration));
 
-                    AnimatorModifier modifier = new AnimatorModifier(_backwardsAnimation, _backwardsAnimationSpeedMultiplier);
-                    _animatorModifierEvent.Raise(modifier);
+                        AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
+                        _animatorModifierEvent.Raise(modifier);
 
-                    StartCoroutine(DodgeLerp(Vector3.back, _backwardsAnimation.length, _backwardsAnimationSpeedMultiplier, _backwardsForceStrength, _backwarsForceCurve));
-                }
-                else
-                {
-                    _invisibleFrameVariable.Add(new Duration(_forwardsInvisibilityDuration));
+                        StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
 
-                    AnimatorModifier modifier = new AnimatorModifier(_forwardAnimation, _forwardsAnimationSpeedMultiplier);
-                    _animatorModifierEvent.Raise(modifier);
-
-                    StartCoroutine(DodgeLerp(Vector3.forward, _forwardAnimation.length, _forwardsAnimationSpeedMultiplier, _forwardsForceStrength, _forwardsforceCurve));
+                        break;
+                    }
                 }
 
                 _controls.Disable();
@@ -91,13 +89,14 @@ public class DodgeBehaviour : MonoBehaviour
 
     public void OnExitDodge(AnimatorModifierInfo animatorInfo)
     {
-        if (_angle >= 150)
+        foreach (DodgeData data in _dodgeData)
         {
-            _afteRollCooldown = new Duration(_backwardsCooldown);
-        }
-        else
-        {
-            _afteRollCooldown = new Duration(_forwardsCooldown);
+            if (_angle >= data.Angle)
+            {
+                _afteRollCooldown = new Duration(data.Cooldown);
+
+                break;
+            }
         }
 
         _controls.Enable();
@@ -106,6 +105,8 @@ public class DodgeBehaviour : MonoBehaviour
         {
             _moveBehaviour.Controls.Enable();
             _moveBehaviour.IsRotating = true;
+            _moveBehaviour.SmoothInputMovement = Vector3.zero;
+            _rigidbody.velocity /= 4;
         }
     }
     #endregion
