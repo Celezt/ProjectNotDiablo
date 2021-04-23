@@ -121,12 +121,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e7d8d57d3489c041b7ff125cfa72d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
-  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
+  _smoothLocalMotionReference:
+    _usage: 2
+    _value: {x: 0, y: 0, z: 0}
+    _constant: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
+    _variableInstancer: {fileID: 0}
+  _animatorModifierEvent:
+    _usage: 0
+    _event: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+    _eventInstancer: {fileID: 0}
+    _variable: {fileID: 0}
+    _variableInstancer: {fileID: 0}
+  _fallingReference:
+    _usage: 2
+    _value: 0
+    _constant: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
+    _variableInstancer: {fileID: 0}
   _animator: {fileID: 5699960676068550000}
-  IdleBlendSpeed: 0.002
-  MotionBlendMargin: 0.01
 --- !u!114 &583105869144826515
 MonoBehaviour:
   m_ObjectHideFlags: 0
