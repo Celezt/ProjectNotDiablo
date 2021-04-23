@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MoveBehaviour : MonoBehaviour
@@ -60,7 +61,19 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private Transform _cameraPivotTransform;
     [SerializeField] private DodgeBehaviour _dodgeBehaviour;
     [Space(10)]
-    [Header("Atoms")]
+    [Header("Movement Settings")]
+    [SerializeField] private FloatVariable _movementSpeedAtoms;
+    [SerializeField] private float _speedForwardMultiplier = 1.0f;
+    [SerializeField] private float _speedBackwardMultiplier = 0.5f;
+    [SerializeField] private float _speedSideMultiplier = 0.6f;
+    [SerializeField, Range(1, 10)] private float _movementSmoothSpeedStart = 2.0f;
+    [SerializeField, Range(1, 10)] private float _movementSmoothSpeedEnd = 2.0f;
+    [SerializeField, PositiveValueOnly] private float _turnSpeed = 3.0f;
+    [Space(10)]
+    [Header("Fall Setting")]
+    [SerializeField] private LayerMask _fallLayerMask;
+    [SerializeField] private LandData[] _landData;
+    [Foldout("Atoms", true)]
     [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
     [SerializeField] private Vector3Variable _rawLocalInputMovementVariable;
     [SerializeField] private Vector3Variable _pointWorldDirectionVariable;
@@ -71,26 +84,16 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private VoidEvent _movementEnterEvent;
     [SerializeField] private VoidEvent _movementExitEvent;
-    [Space(10)]
-    [Header("Movement Settings")]
-    [SerializeField] private FloatVariable _movementSpeedAtoms;
-    [Space(10)]
-    [SerializeField] private float _speedForwardMultiplier = 1.0f;
-    [SerializeField] private float _speedBackwardMultiplier = 0.5f;
-    [SerializeField] private float _speedSideMultiplier = 0.6f;
-    [Space(10)]
-    [SerializeField, Range(1, 10)] private float _movementSmoothSpeedStart = 2.0f;
-    [SerializeField, Range(1, 10)] private float _movementSmoothSpeedEnd = 2.0f;
-    [Space(10)]
-    [SerializeField, Min(0)] private float _turnSpeed = 3.0f;
-    [Space(10)]
-    [Header("Fall Setting")]
-    [SerializeField] private LayerMask _fallLayerMask;
-    [SerializeField] private float _landAnimationSpeedMultiplier = 2.0f;
-    [SerializeField] private float _heavyLandAnimationSpeedMultiplier = 1.0f;
-    [SerializeField] private float _heavyLandTime = 1.0f;
-    [SerializeField] private AnimationClip _landAnimation;
     #endregion
+
+    [Serializable]
+    private struct LandData
+    {
+        public bool Enable;
+        [ConditionalField(nameof(Enable))] public AnimationClip Animation;
+        [ConditionalField(nameof(Enable))] public float AnimationSpeedMultiplier;
+        [Min(0), Tooltip("timer >= Cooldown")] public float Cooldown;
+    }
 
     private Camera _mainCamera;
     private Rigidbody _rigidbody;
@@ -99,7 +102,7 @@ public class MoveBehaviour : MonoBehaviour
 
     private MovementType _movementType;
 
-    private Duration _heavyLandTimer;
+    private Stopwatch _landStopWatch;
 
     private Vector3 _smoothInputMovement;
     private Vector3 _smoothLocalInputMovement;
@@ -137,26 +140,29 @@ public class MoveBehaviour : MonoBehaviour
     {
         _groundCheckEntered--;
         _fallingVariable.Value = IsFalling;
-        _heavyLandTimer = new Duration(_heavyLandTime);
+        _landStopWatch = new Stopwatch(0);
     }
 
     public void OnLand()
     {
-        float multiplier = 0;
+        foreach (var data in _landData)
+        {
+            if (_landStopWatch.Timer >= data.Cooldown)
+            {
+                if (data.Enable)
+                {
+                    AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
+                    _animatorModifierEvent.Raise(modifier);
 
-        // If it should use heavy or light land animation speed.
-        if (_heavyLandTimer.IsActive)
-            multiplier = _landAnimationSpeedMultiplier;
-        else
-            multiplier = _heavyLandAnimationSpeedMultiplier;
+                    _controls.Disable();
+                    _dodgeBehaviour?.Controls.Disable();
 
-        AnimatorModifier modifier = new AnimatorModifier(_landAnimation, multiplier);
-        _animatorModifierEvent.Raise(modifier);
+                    _smoothInputMovement = Vector3.zero;
+                }
 
-        _controls.Disable();
-        _dodgeBehaviour?.Controls.Disable();
-
-        _smoothInputMovement = Vector3.zero;
+                break;
+            }
+        }
     }
 
     public void OnExitLand(AnimatorModifierInfo animatorInfo)
