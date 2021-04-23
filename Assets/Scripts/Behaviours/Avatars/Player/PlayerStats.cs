@@ -24,10 +24,10 @@ public class PlayerStats : MonoBehaviour
         switch (context.ReadValue<float>())
         {
             case 1:
-                _healthVariable.Value -= 10;
+                //_healthVariable.Value -= 10;
                 break;
             case 2:
-                _healthVariable.Value += 10;
+                //_healthVariable.Value += 10;
                 break;
             case 3:
                 break;
