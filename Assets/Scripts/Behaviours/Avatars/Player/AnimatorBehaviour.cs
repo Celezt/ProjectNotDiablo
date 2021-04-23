@@ -3,30 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityAtoms.BaseAtoms;
 
-public class PlayerAnimation : MonoBehaviour
+public class AnimatorBehaviour : MonoBehaviour
 {
+    public Vector3 SmoothLocalMotion
+    {
+        get => _smoothLocalMotionReference.Value;
+        set => _smoothLocalMotionReference.Value = value;
+    }
+
+    public bool IsFalling
+    {
+        get => _fallingReference.Value;
+        set => _fallingReference.Value = value;
+    }
+
+    public void RaiseAnimatorModifier(AnimatorModifier modifier) => OnAnimationModifierRaised(modifier);
+
     #region Inspector
     [Header("Atoms")]
-    [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
-    [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
-    [SerializeField] private BoolVariable _fallingVariable;
+    [SerializeField] private Vector3Reference _smoothLocalMotionReference;
+    [SerializeField] private AnimatorModifierEventReference _animatorModifierEvent;
+    [SerializeField] private BoolReference _fallingReference;
     [Space(10)]
     [Header("Animations Settings")]
     [SerializeField] private Animator _animator;
-    [Space(10)]
-    public float IdleBlendSpeed = 0.002f;
-    public float MotionBlendMargin = 0.01f;
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
 
-    private float _idleBlend;
-
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
-    private readonly int _idleID = Animator.StringToHash("IdleBlend");
     private readonly int _isFallingID = Animator.StringToHash("IsFalling");
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
+    private readonly int _isWalkingID = Animator.StringToHash("IsWalking");
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
 
     #region Events
@@ -52,36 +61,41 @@ public class PlayerAnimation : MonoBehaviour
 
     private void OnEnable()
     {
-        _animatorModifierEvent.Register(OnAnimationModifierRaised);
-        _fallingVariable.Changed.Register(OnFalling);
+        _animatorModifierEvent?.Event?.Register(OnAnimationModifierRaised);
+
+        if (_fallingReference.Usage >= 2)
+            _fallingReference.GetEvent<BoolEvent>().Register(OnFalling);
     }
 
     private void Update()
     {
+        UpdateFalling();
         UpdateMotionAnimation();
-        UpdateIdleAnimation();
     }
 
     private void OnDisable()
     {
-        _animatorModifierEvent.Unregister(OnAnimationModifierRaised);
-        _fallingVariable.Changed.Unregister(OnFalling);
+        _animatorModifierEvent?.Event?.Unregister(OnAnimationModifierRaised);
+
+        if (_fallingReference.Usage >= 2)
+            _fallingReference.GetEvent<BoolEvent>().Unregister(OnFalling);
     }
     #endregion
 
     private void UpdateMotionAnimation()
     {
-        if (_smoothLocalInputMovementVariable != null)
+        if (_smoothLocalMotionReference != null)
         {
-            Vector3 blend = _smoothLocalInputMovementVariable.Value;
+            Vector3 blend = _smoothLocalMotionReference.Value;
             _animator.SetFloat(_motionZID, blend.z);
             _animator.SetFloat(_motionXID, blend.x);
+            _animator.SetBool(_isWalkingID, blend.magnitude > 0.1f);
         }
     }
 
-    private void UpdateIdleAnimation()
+    private void UpdateFalling()
     {
-        _idleBlend = (_idleBlend + IdleBlendSpeed) % 1;
-        _animator.SetFloat(_idleID, _idleBlend);
+        if (_fallingReference.Usage <= 1)   // If no event is used.
+            _animator.SetBool(_isFallingID, _fallingReference.Value);
     }
 }
