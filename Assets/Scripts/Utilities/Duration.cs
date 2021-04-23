@@ -20,7 +20,7 @@ public struct Duration : IEquatable<Duration>
         get
         {
             if (!_paused)
-                UpdateCooldown();
+                Update();
 
             return _isActive;
         }
@@ -33,7 +33,7 @@ public struct Duration : IEquatable<Duration>
         get
         {
             if (!_paused)
-                UpdateCooldown();
+                Update();
 
             return _timeLeft;
         }
@@ -126,7 +126,7 @@ public struct Duration : IEquatable<Duration>
     public static float operator +(float lhs, Duration rhs) => lhs + rhs.TimeLeft;
     public static float operator -(float lhs, Duration rhs) => lhs - rhs.TimeLeft;
 
-    private void UpdateCooldown()
+    private void Update()
     {
         if (_paused)
             return;

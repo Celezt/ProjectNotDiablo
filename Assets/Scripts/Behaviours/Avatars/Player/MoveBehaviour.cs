@@ -14,6 +14,11 @@ public class MoveBehaviour : MonoBehaviour
         get => _controls;
     }
 
+    public bool IsMoving
+    {
+        get => _isMoving;
+    }
+
     public bool IsFalling
     {
         get => _groundCheckEntered == 0;
@@ -25,7 +30,18 @@ public class MoveBehaviour : MonoBehaviour
         set => _isRotating = value;
     }
 
-    public Vector3 GetCameraDirection
+    public Vector3 Velocity
+    {
+        get => CameraDirection * _movementSpeed * Time.fixedDeltaTime;
+    }
+
+    public Vector3 SmoothInputMovement
+    {
+        get => _smoothInputMovement;
+        set => _smoothInputMovement = value;
+    }
+
+    public Vector3 CameraDirection
     {
         get
         {
@@ -46,12 +62,15 @@ public class MoveBehaviour : MonoBehaviour
     [Space(10)]
     [Header("Atoms")]
     [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
+    [SerializeField] private Vector3Variable _rawLocalInputMovementVariable;
     [SerializeField] private Vector3Variable _pointWorldDirectionVariable;
     [SerializeField] private BoolVariable _fallingVariable;
     [SerializeField] private ColliderEvent _groundCheckEventEnter;
     [SerializeField] private ColliderEvent _groundCheckEventExit;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
+    [SerializeField] private VoidEvent _movementEnterEvent;
+    [SerializeField] private VoidEvent _movementExitEvent;
     [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
@@ -152,6 +171,19 @@ public class MoveBehaviour : MonoBehaviour
 
         _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
         _isMoving = (inputMovement != Vector2.zero);
+
+        if (context.started)
+        {
+            _smoothVelocity = Velocity;
+
+            _movementEnterEvent.Raise();
+        }
+        else if (context.canceled)
+        {
+            _smoothVelocity = Velocity / 2;
+
+            _movementExitEvent.Raise();
+        }
     }
     #endregion
 
@@ -169,6 +201,7 @@ public class MoveBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
+        _controls.Ground.Move.started += OnMove;
         _controls.Ground.Move.performed += OnMove;
         _controls.Ground.Move.canceled += OnMove;
         _movementSpeedAtoms.Changed.Register(OnMovementSpeedChange);
@@ -180,6 +213,8 @@ public class MoveBehaviour : MonoBehaviour
 
     private void Update()
     {
+        UpdateCameraPivot();
+        UpdateRawInputMovement();
         UpdateSmoothInputMovement();
     }
 
@@ -193,6 +228,7 @@ public class MoveBehaviour : MonoBehaviour
 
     private void OnDisable()
     {
+        _controls.Ground.Move.started -= OnMove;
         _controls.Ground.Move.performed -= OnMove;
         _controls.Ground.Move.canceled -= OnMove;
         _movementSpeedAtoms.Changed.Unregister(OnMovementSpeedChange);
@@ -202,6 +238,23 @@ public class MoveBehaviour : MonoBehaviour
         _controls.Disable();
     }
     #endregion
+
+    private void UpdateCameraPivot()
+    {
+        // Transform camera pivot to look away from the camera.
+        Vector3 cameraPosition = _mainCamera.transform.position;
+        Vector3 cameraPivotPosition = _cameraPivotTransform.transform.position;
+        _cameraPivotTransform.rotation =
+            Quaternion.LookRotation(cameraPivotPosition - new Vector3(cameraPosition.x, cameraPivotPosition.y, cameraPosition.z));
+
+    }
+
+    private void UpdateRawInputMovement()
+    {
+        // Transform raw input movement to the game object's local space.
+        _rawLocalInputMovementVariable.Value =
+            transform.InverseTransformDirection(_cameraPivotTransform.TransformDirection(_rawInputMovement));
+    }
 
     private void UpdateSmoothInputMovement()
     {
@@ -218,46 +271,40 @@ public class MoveBehaviour : MonoBehaviour
         _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
                 Time.deltaTime * (_isMoving ? _movementSmoothSpeedStart : _movementSmoothSpeedEnd));
 
-        // Transform camera pivot to look away from the camera.
-        Vector3 cameraPosition = _mainCamera.transform.position;
-        Vector3 cameraPivotPosition = _cameraPivotTransform.transform.position;
-        _cameraPivotTransform.rotation =
-            Quaternion.LookRotation(cameraPivotPosition - new Vector3(cameraPosition.x, cameraPivotPosition.y, cameraPosition.z));
-
         // Transform smooth input movement to the game object's local space.
         _smoothLocalInputMovementVariable.Value = _smoothLocalInputMovement =
             transform.InverseTransformDirection(_cameraPivotTransform.TransformDirection(_smoothInputMovement));
 
         // Get movement type based on the angle of directional movement.
-        float angle = (_rawInputMovement != Vector3.zero) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
+        float angle = (_isMoving) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
 
         _movementType = GetMovementType(angle);
     }
 
     private void FixedUpdateMovement()
     {
-        Vector3 velocity = GetCameraDirection * _movementSpeed * Time.fixedDeltaTime;
+        Vector3 localVelocity = Velocity;
 
         switch (_movementType)
         {
             case MovementType.Forward:
-                velocity *= _speedForwardMultiplier;
+                localVelocity *= _speedForwardMultiplier;
                 break;
             case MovementType.Forward | MovementType.Side:
-                velocity *= (_speedForwardMultiplier + _speedSideMultiplier) / 2;
+                localVelocity *= (_speedForwardMultiplier + _speedSideMultiplier) / 2;
                 break;
             case MovementType.Side:
-                velocity *= _speedSideMultiplier;
+                localVelocity *= _speedSideMultiplier;
                 break;
             case MovementType.Backward | MovementType.Side:
-                velocity *= (_speedBackwardMultiplier + _speedSideMultiplier) / 2;
+                localVelocity *= (_speedBackwardMultiplier + _speedSideMultiplier) / 2;
                 break;
             case MovementType.Backward:
-                velocity *= _speedBackwardMultiplier;
+                localVelocity *= _speedBackwardMultiplier;
                 break;
         }
 
-        _smoothVelocity = Vector3.Lerp(_smoothVelocity, velocity, _movementSpeed * Time.fixedDeltaTime);
+        _smoothVelocity = Vector3.Lerp(_smoothVelocity, localVelocity, _movementSpeed * Time.fixedDeltaTime);
 
         _rigidbody.MovePosition(transform.position + _smoothVelocity);
     }
