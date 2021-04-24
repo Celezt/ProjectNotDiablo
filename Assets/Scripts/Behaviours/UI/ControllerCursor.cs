@@ -10,7 +10,7 @@ using UnityAtoms.InputSystem;
 public class ControllerCursor : MonoBehaviour
 {
     [Header("Atoms")]
-    [SerializeField] private Vector2Variable _cursorScreenPositionVariable;
+    [SerializeField] private Vector2Variable _pointScreenPositionVariable;
     [SerializeField] private PlayerInputEvent _deviceChangedEvent;
 
     private PlayerControls _input;
@@ -52,7 +52,7 @@ public class ControllerCursor : MonoBehaviour
 
     private void Update()
     {
-        transform.position = _cursorScreenPositionVariable.Value;
+        transform.position = _pointScreenPositionVariable.Value;
     }
     private void OnDisable()
     {

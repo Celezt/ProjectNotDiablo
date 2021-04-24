@@ -42,6 +42,17 @@ public class MoveBehaviour : MonoBehaviour
         set => _smoothInputMovement = value;
     }
 
+    public Vector3 PointDirection
+    {
+        get
+        {
+            Vector3 playerPosition = transform.position;
+            Vector3 _pointWorldPosition = _pointWorldPositionVariable.Value;
+
+            return (_pointWorldPosition != Vector3.zero) ? new Vector3(_pointWorldPosition.x - playerPosition.x, 0, _pointWorldPosition.z - playerPosition.z) : Vector3.forward;
+        }
+    }
+
     public Vector3 CameraDirection
     {
         get
@@ -74,9 +85,10 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private LayerMask _fallLayerMask;
     [SerializeField] private LandData[] _landData;
     [Foldout("Atoms", true)]
+    [SerializeField] private Vector3Variable _pointWorldPositionVariable;
+    [SerializeField] private Vector3Variable _worldPositionVariable;
     [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
     [SerializeField] private Vector3Variable _rawLocalInputMovementVariable;
-    [SerializeField] private Vector3Variable _pointWorldDirectionVariable;
     [SerializeField] private BoolVariable _fallingVariable;
     [SerializeField] private ColliderEvent _groundCheckEventEnter;
     [SerializeField] private ColliderEvent _groundCheckEventExit;
@@ -89,10 +101,9 @@ public class MoveBehaviour : MonoBehaviour
     [Serializable]
     private struct LandData
     {
-        public bool Enable;
-        [ConditionalField(nameof(Enable))] public AnimationClip Animation;
-        [ConditionalField(nameof(Enable))] public float AnimationSpeedMultiplier;
-        [Min(0), Tooltip("timer >= Cooldown")] public float Cooldown;
+        public AnimationClip Animation;
+        public float AnimationSpeedMultiplier;
+        [MinMaxRange(0, 4)] public MinMaxFloat Timer;
     }
 
     private Camera _mainCamera;
@@ -147,18 +158,15 @@ public class MoveBehaviour : MonoBehaviour
     {
         foreach (var data in _landData)
         {
-            if (_landStopWatch.Timer >= data.Cooldown)
+            if (_landStopWatch.Timer >= data.Timer.Min && _landStopWatch.Timer <= data.Timer.Max)
             {
-                if (data.Enable)
-                {
-                    AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
-                    _animatorModifierEvent.Raise(modifier);
+                AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
+                _animatorModifierEvent.Raise(modifier);
 
-                    _controls.Disable();
-                    _dodgeBehaviour?.Controls.Disable();
+                _controls.Disable();
+                _dodgeBehaviour?.Controls.Disable();
 
-                    _smoothInputMovement = Vector3.zero;
-                }
+                _smoothInputMovement = Vector3.zero;
 
                 break;
             }
@@ -227,6 +235,7 @@ public class MoveBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateMovement();
+        FixedUpdateWorldPosition();
 
         if (_isRotating)
             FixedUpdateTurn();
@@ -315,9 +324,14 @@ public class MoveBehaviour : MonoBehaviour
         _rigidbody.MovePosition(transform.position + _smoothVelocity);
     }
 
+    private void FixedUpdateWorldPosition()
+    {
+        _worldPositionVariable.Value = transform.position;
+    }
+
     private void FixedUpdateTurn()
     {
-        Quaternion rotation = Quaternion.Slerp(_rigidbody.rotation, Quaternion.LookRotation(_pointWorldDirectionVariable.Value), _turnSpeed * Time.fixedDeltaTime);
+        Quaternion rotation = Quaternion.Slerp(_rigidbody.rotation, Quaternion.LookRotation(PointDirection), _turnSpeed * Time.fixedDeltaTime);
         _rigidbody.MoveRotation(rotation);
     }
 }

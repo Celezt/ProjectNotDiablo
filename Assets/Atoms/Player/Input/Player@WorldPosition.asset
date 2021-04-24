@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f76a04b727336433cb49bbba3dbe9175, type: 3}
-  m_Name: UI@CursorScreenPosition
+  m_Script: {fileID: 11500000, guid: 2f868f8b3380b47a38cf0b95f42c134b, type: 3}
+  m_Name: Player@WorldPosition
   m_EditorClassIdentifier: 
   _developerDescription: 
   _id: 
-  _value: {x: 0, y: 0}
-  _changed: {fileID: 11400000, guid: d30f07b9caf1b324e9eec5c3a35d0b38, type: 2}
+  _value: {x: 0, y: 0, z: 0}
+  _changed: {fileID: 0}
   _changedWithHistory: {fileID: 0}
   _triggerChangedOnOnEnable: 1
   _triggerChangedWithHistoryOnOnEnable: 0
-  _oldValue: {x: 0, y: 0}
-  _initialValue: {x: 0, y: 0}
+  _oldValue: {x: 0, y: 0, z: 0}
+  _initialValue: {x: 0, y: 0, z: 0}
   _preChangeTransformers: []

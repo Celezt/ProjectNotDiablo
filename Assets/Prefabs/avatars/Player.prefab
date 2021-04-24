@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 5064504266361368092}
   - component: {fileID: 583105869144826515}
   - component: {fileID: 7651242026116013290}
-  - component: {fileID: 5912751637794486405}
   - component: {fileID: 1705030271867529725}
   m_Layer: 6
   m_Name: Player
@@ -165,21 +164,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8209
   _landData:
-  - Enable: 1
-    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+  - Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
     AnimationSpeedMultiplier: 1
-    Cooldown: 1
-  - Enable: 1
-    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
+    Timer:
+      Min: 0.99694806
+      Max: 4
+  - Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
     AnimationSpeedMultiplier: 2
-    Cooldown: 0.2
-  - Enable: 0
-    Animation: {fileID: 7400004, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
-    AnimationSpeedMultiplier: 1
-    Cooldown: 0
+    Timer:
+      Min: 0.20345879
+      Max: 0.99694806
+  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
+  _worldPositionVariable: {fileID: 11400000, guid: 98025c4ec764e3243a77c1a6952799a4, type: 2}
   _smoothLocalInputMovementVariable: {fileID: 11400000, guid: 8848357e6cb5d5a469f73ad2e0c11b8a, type: 2}
   _rawLocalInputMovementVariable: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
-  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
   _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
   _groundCheckEventEnter: {fileID: 11400000, guid: d434d4559c912904fbbe9761d35cd036, type: 2}
   _groundCheckEventExit: {fileID: 11400000, guid: 82d4f1327b1bd424fbaee602564684e9, type: 2}
@@ -202,7 +200,9 @@ MonoBehaviour:
   _moveBehaviour: {fileID: 583105869144826515}
   _dodgeData:
   - Animation: {fileID: 7400002, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
-    Angle: 120
+    Angle:
+      Min: 150
+      Max: 180
     AnimationSpeedMultiplier: 5
     InvisibilityDuration: 0.5
     Cooldown: 0.5
@@ -260,7 +260,9 @@ MonoBehaviour:
       m_RotationOrder: 4
     Direction: {x: 0, y: 0, z: -1}
   - Animation: {fileID: 7400000, guid: 68d04a7b9dcc0fd4b877df82f02d1d61, type: 3}
-    Angle: 0
+    Angle:
+      Min: 0
+      Max: 149
     AnimationSpeedMultiplier: 1
     InvisibilityDuration: 0.8
     Cooldown: 0.5
@@ -312,31 +314,6 @@ MonoBehaviour:
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
   _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
   _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
---- !u!114 &5912751637794486405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2691928546050736854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5e7bddcc043a73448e99af9d29df983, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cameraPivotTransform: {fileID: 1846149191063106641}
-  _deltaCursorSpeedReference:
-    _usage: 0
-    _value: 600
-    _constant: {fileID: 0}
-    _variable: {fileID: 0}
-    _variableInstancer: {fileID: 0}
-  _aimLayerMask:
-    serializedVersion: 2
-    m_Bits: 8209
-  _pointScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
-  _pointWorldDirectionVariable: {fileID: 11400000, guid: 5d59709f8fd9ad84aa235dd62b6da607, type: 2}
-  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
 --- !u!114 &1705030271867529725
 MonoBehaviour:
   m_ObjectHideFlags: 0

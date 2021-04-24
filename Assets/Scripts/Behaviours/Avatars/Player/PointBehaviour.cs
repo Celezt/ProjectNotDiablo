@@ -14,25 +14,12 @@ public class PointBehaviour : MonoBehaviour
         get => _controls;
     }
 
-    public Vector3 GetPointDirection
-    {
-        get
-        {
-            Vector3 playerPosition = transform.position;
-
-            return (_pointWorldPosition != Vector3.zero) ? new Vector3(_pointWorldPosition.x - playerPosition.x, 0, _pointWorldPosition.z - playerPosition.z) : Vector3.forward;
-        }
-    }
-
     #region Inspector
-    [SerializeField] private Transform _cameraPivotTransform;
-    [Space(10)]
     [Header("Settings")]
     [SerializeField, Tooltip("Only for controllers")] private FloatReference _deltaCursorSpeedReference;
     [SerializeField] private LayerMask _aimLayerMask;
     [Foldout("Atoms", true)]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
-    [SerializeField] private Vector3Variable _pointWorldDirectionVariable;
     [SerializeField] private Vector3Variable _pointWorldPositionVariable;
     #endregion
 
@@ -43,7 +30,6 @@ public class PointBehaviour : MonoBehaviour
 
     private Plane _plane = new Plane(Vector3.up, 0);
 
-    private Vector3 _pointWorldPosition;
     private Vector2 _pointScreenPosition;
     private Vector2 _pointDelta;
     private bool _isPointDelta;
@@ -54,9 +40,7 @@ public class PointBehaviour : MonoBehaviour
     {
         Vector2 screenPosition = context.ReadValue<Vector2>();
         if (screenPosition != Vector2.zero)
-            _pointScreenPosition = context.ReadValue<Vector2>();
-
-        _pointScreenPositionVariable.Value = _pointScreenPosition;
+            _pointScreenPosition = _pointScreenPositionVariable.Value = screenPosition;
 
         UpdatePoint();
     }
@@ -121,11 +105,9 @@ public class PointBehaviour : MonoBehaviour
         Ray ray = _mainCamera.ScreenPointToRay(_pointScreenPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _aimLayerMask))
-            _pointWorldPositionVariable.Value = _pointWorldPosition = hit.point;
+            _pointWorldPositionVariable.Value = hit.point;
         else if (_plane.Raycast(ray, out float distance))   // Collide with a plane if no object was collided with.
-            _pointWorldPositionVariable.Value = _pointWorldPosition = ray.GetPoint(distance);
-
-        _pointWorldDirectionVariable.Value = GetPointDirection;
+            _pointWorldPositionVariable.Value = ray.GetPoint(distance);
     }
 
     // Update aim if aiming using a controller.
@@ -133,8 +115,7 @@ public class PointBehaviour : MonoBehaviour
     {
         if (_isPointDelta)
         {
-            _pointScreenPosition += _pointDelta * Time.deltaTime * _deltaCursorSpeedReference.Value;
-            _pointScreenPositionVariable.Value = _pointScreenPosition;
+            _pointScreenPosition = _pointScreenPositionVariable.Value += _pointDelta * Time.deltaTime * _deltaCursorSpeedReference.Value;
 
             UpdatePoint();
         }
