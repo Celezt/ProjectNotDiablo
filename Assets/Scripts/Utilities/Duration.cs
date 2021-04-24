@@ -57,7 +57,7 @@ public struct Duration : IEquatable<Duration>
     public bool Equals(Duration other) => ID == other.ID;
     public override bool Equals(object obj) => (obj != null) ? obj.GetHashCode() == GetHashCode() : false;
     public override int GetHashCode() => ID;
-    public override string ToString() => IsActive.ToString();
+    public override string ToString() => TimeLeft.ToString();
 
     public bool Paused()
     {

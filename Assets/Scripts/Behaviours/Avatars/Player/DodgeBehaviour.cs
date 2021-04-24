@@ -32,7 +32,7 @@ public class DodgeBehaviour : MonoBehaviour
     private struct DodgeData
     {
         public AnimationClip Animation;
-        [Tooltip("Angle >=")] public float Angle;
+        [MinMaxRange(0, 180)] public RangedInt Angle;
         public float AnimationSpeedMultiplier;
         public float InvisibilityDuration;
         [Min(0)] public float Cooldown;
@@ -69,7 +69,7 @@ public class DodgeBehaviour : MonoBehaviour
 
                 foreach (DodgeData data in _dodgeData)
                 {
-                    if (_angle >= data.Angle)
+                    if (_angle >= data.Angle.Min && _angle <= data.Angle.Max)
                     {
                         _invisibleFrameVariable.Add(new Duration(data.InvisibilityDuration));
 
@@ -91,7 +91,7 @@ public class DodgeBehaviour : MonoBehaviour
     {
         foreach (DodgeData data in _dodgeData)
         {
-            if (_angle >= data.Angle)
+            if (_angle >= data.Angle.Min && _angle <= data.Angle.Max)
             {
                 _afteRollCooldown = new Duration(data.Cooldown);
 
