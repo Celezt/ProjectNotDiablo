@@ -10,9 +10,13 @@ public class CustomMotionBehaviour : StateMachineBehaviour
 
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
 
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetBool(_isCustomID, false);
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
+    {
         _animatorModifierInfoEvent.Raise(new AnimatorModifierInfo(controller, stateInfo));
     }
 }

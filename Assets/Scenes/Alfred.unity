@@ -134,7 +134,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43082
+  m_Name: pb_Mesh23894
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -298,7 +298,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43142
+  m_Name: pb_Mesh23954
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4675,7 +4675,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43094
+  m_Name: pb_Mesh23906
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6261,7 +6261,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43160
+  m_Name: pb_Mesh23972
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7222,7 +7222,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43114
+  m_Name: pb_Mesh23926
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7713,6 +7713,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.0034475771
       objectReference: {fileID: 0}
+    - target: {fileID: 5064504266361368092, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 1986176295}
     - target: {fileID: 5064504266361368092, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: _fallingVariable._usage
       value: 2
@@ -8309,6 +8313,10 @@ PrefabInstance:
       propertyPath: _speed
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 7651242026116013290, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
+      propertyPath: _stunMoveList
+      value: 
+      objectReference: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
 --- !u!1 &1109376444
@@ -9227,7 +9235,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43058
+  m_Name: pb_Mesh23870
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9396,7 +9404,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh43178
+  m_Name: pb_Mesh23990
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11099,6 +11107,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4750200524000231279, guid: 2f816dd00b1e37143ba55380ccb4c201, type: 3}
   m_PrefabInstance: {fileID: 966985101}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1986176295 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1371285749837915631, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
+  m_PrefabInstance: {fileID: 1048396528}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2085675726
 GameObject:
   m_ObjectHideFlags: 0
@@ -12214,15 +12227,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.13926283
+      value: 0.13926281
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.017144164
+      value: -0.017144166
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0024113685
+      value: 0.0024113758
       objectReference: {fileID: 0}
     - target: {fileID: 6091474611166655768, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_Targets.Array.size

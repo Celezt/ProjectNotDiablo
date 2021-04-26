@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45f22eef7e056f54294760b93c569db3, type: 3}
+  m_Name: Player@StunDodge
+  m_EditorClassIdentifier: 
+  _developerDescription: 
+  Cleared: {fileID: 0}
+  _startCleared: 0
+  Added: {fileID: 11400000, guid: 03f6771ecbd23fd4a82e48d1f0665624, type: 2}
+  Removed: {fileID: 11400000, guid: 2930a990da072ad43992f6ec46d65994, type: 2}
+  list: []

@@ -34,6 +34,7 @@ public class PointBehaviour : MonoBehaviour
     private Vector2 _pointDelta;
     private bool _isPointDelta;
     private bool _isCameraAngleChanged;
+    private bool _isMovingPointer;
 
     #region Events
     public void OnPointPosition(InputAction.CallbackContext context)
@@ -41,8 +42,6 @@ public class PointBehaviour : MonoBehaviour
         Vector2 screenPosition = context.ReadValue<Vector2>();
         if (screenPosition != Vector2.zero)
             _pointScreenPosition = _pointScreenPositionVariable.Value = screenPosition;
-
-        UpdatePoint();
     }
 
     public void OnPointDelta(InputAction.CallbackContext context)
@@ -75,7 +74,7 @@ public class PointBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        _coroutineUpdateAimOverTime = StartCoroutine(UpdatePointOverTime());
+        _coroutineUpdateAimOverTime = StartCoroutine(updatePoint());
 
         _controls.Ground.Point.performed += OnPointPosition;
         _controls.Ground.Point.canceled += OnPointPosition;
@@ -100,36 +99,31 @@ public class PointBehaviour : MonoBehaviour
     }
     #endregion
 
-    private void UpdatePoint()
-    {
-        Ray ray = _mainCamera.ScreenPointToRay(_pointScreenPosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _aimLayerMask))
-            _pointWorldPositionVariable.Value = hit.point;
-        else if (_plane.Raycast(ray, out float distance))   // Collide with a plane if no object was collided with.
-            _pointWorldPositionVariable.Value = ray.GetPoint(distance);
-    }
-
     // Update aim if aiming using a controller.
     private void UpdatePointDelta()
     {
         if (_isPointDelta)
         {
             _pointScreenPosition = _pointScreenPositionVariable.Value += _pointDelta * Time.deltaTime * _deltaCursorSpeedReference.Value;
-
-            UpdatePoint();
         }
     }
 
     // To prevent loosing aim when not performing any aim movement.
-    private IEnumerator UpdatePointOverTime()
+    private IEnumerator updatePoint()
     {
         yield return new WaitForEndOfFrame();
         while (true)
         {
             yield return new WaitUntil(() => !_isCameraAngleChanged);    // Only update over time if not changing the camera
-            UpdatePoint();
-            yield return new WaitForSeconds(1.0f);
+
+            Ray ray = _mainCamera.ScreenPointToRay(_pointScreenPosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, _aimLayerMask))
+                _pointWorldPositionVariable.Value = hit.point;
+            else if (_plane.Raycast(ray, out float distance))   // Collide with a plane if no object was collided with.
+                _pointWorldPositionVariable.Value = ray.GetPoint(distance);
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
