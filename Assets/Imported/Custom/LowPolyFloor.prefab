@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6894067501821145957}
   - component: {fileID: 7494973055019662528}
   - component: {fileID: 5757721288076609546}
+  - component: {fileID: 3659415526708045786}
   m_Layer: 0
   m_Name: LowPolyFloor
   m_TagString: Untagged
@@ -81,3 +82,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3659415526708045786
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117987748292684255}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4, y: 0.06814107, z: 4}
+  m_Center: {x: 0, y: -0.01459205, z: 0}
