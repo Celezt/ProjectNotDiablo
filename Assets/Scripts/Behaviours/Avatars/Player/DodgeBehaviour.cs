@@ -25,15 +25,18 @@ public class DodgeBehaviour : MonoBehaviour
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private Vector3Variable _rawLocalInputMovement;
+    [SerializeField] private DurationValueList _stunDodgeList;
+    [SerializeField] private DurationValueList _stunMoveList;
 
     #endregion
 
     [Serializable]
     private struct DodgeData
     {
-        public AnimationClip Animation;
         [MinMaxRange(0, 180)] public RangedInt Angle;
+        public AnimationClip Animation;
         public float AnimationSpeedMultiplier;
+        public float StunMultiplier;
         public float InvisibilityDuration;
         [Min(0)] public float Cooldown;
         public float ForceStrength;
@@ -43,6 +46,8 @@ public class DodgeBehaviour : MonoBehaviour
 
     private PlayerControls _controls;
     private Rigidbody _rigidbody;
+
+    private Coroutine _coroutineUpdateStunned;
 
     private float _angle;
 
@@ -59,9 +64,6 @@ public class DodgeBehaviour : MonoBehaviour
                 {
                     if (_moveBehaviour.IsFalling)   // Don't roll if falling.
                         return;
-
-                    _moveBehaviour.Controls.Disable();
-                    _moveBehaviour.IsRotating = false;
                 }
 
                 Vector3 rawValue = _rawLocalInputMovement.Value;
@@ -76,38 +78,23 @@ public class DodgeBehaviour : MonoBehaviour
                         AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
                         _animatorModifierEvent.Raise(modifier);
 
-                        StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
+                         StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
+
+                        _stunMoveList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
+                        _stunDodgeList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier, () => {
+                            _afteRollCooldown = new Duration(data.Cooldown);
+                        }));
 
                         break;
                     }
                 }
-
-                _controls.Disable();
             }
         }
     }
 
     public void OnExitDodge(AnimatorModifierInfo animatorInfo)
     {
-        foreach (DodgeData data in _dodgeData)
-        {
-            if (_angle >= data.Angle.Min && _angle <= data.Angle.Max)
-            {
-                _afteRollCooldown = new Duration(data.Cooldown);
-
-                break;
-            }
-        }
-
-        _controls.Enable();
-
-        if (_moveBehaviour != null)
-        {
-            _moveBehaviour.Controls.Enable();
-            _moveBehaviour.IsRotating = true;
-            _moveBehaviour.SmoothInputMovement = Vector3.zero;
-            _rigidbody.velocity /= 4;
-        }
+        _rigidbody.velocity /= 4;
     }
     #endregion
 
@@ -128,6 +115,8 @@ public class DodgeBehaviour : MonoBehaviour
         _controls.Ground.Roll.canceled += OnDodge;
         _animatorModifierInfoEvent.Register(OnExitDodge);
         _controls.Enable();
+
+        _coroutineUpdateStunned = StartCoroutine(UpdateStunned());
     }
 
     private void OnDisable()
@@ -136,6 +125,8 @@ public class DodgeBehaviour : MonoBehaviour
         _controls.Ground.Roll.canceled -= OnDodge;
         _animatorModifierInfoEvent.Unregister(OnExitDodge);
         _controls.Disable();
+
+        StopCoroutine(_coroutineUpdateStunned);
     }
     #endregion
 
@@ -151,6 +142,33 @@ public class DodgeBehaviour : MonoBehaviour
             _rigidbody?.AddRelativeForce(direction * (_rigidbody?.mass ?? 1.0f) * curve.Evaluate(timer) * strength, ForceMode.Force);
 
             yield return new WaitForFixedUpdate();
+        }
+    }
+
+    private IEnumerator UpdateStunned()
+    {
+        yield return new WaitForFixedUpdate();
+
+        while (true)
+        {
+            for (int i = 0; i < _stunDodgeList.Count; i++)
+            {
+                Duration duration = _stunDodgeList[i];
+
+                if (!duration.IsActive)
+                    _stunDodgeList.Remove(duration);
+            }
+
+            if (_stunDodgeList.Count != 0)
+            {
+                _controls.Disable();
+            }
+            else
+            {
+                _controls.Enable();
+            }
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

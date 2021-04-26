@@ -70,7 +70,6 @@ public class MoveBehaviour : MonoBehaviour
 
     #region Inspector
     [SerializeField] private Transform _cameraPivotTransform;
-    [SerializeField] private DodgeBehaviour _dodgeBehaviour;
     [Space(10)]
     [Header("Movement Settings")]
     [SerializeField] private FloatVariable _movementSpeedAtoms;
@@ -86,7 +85,6 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private LandData[] _landData;
     [Foldout("Atoms", true)]
     [SerializeField] private Vector3Variable _pointWorldPositionVariable;
-    [SerializeField] private Vector3Variable _worldPositionVariable;
     [SerializeField] private Vector3Variable _smoothLocalInputMovementVariable;
     [SerializeField] private Vector3Variable _rawLocalInputMovementVariable;
     [SerializeField] private BoolVariable _fallingVariable;
@@ -96,14 +94,16 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private VoidEvent _movementEnterEvent;
     [SerializeField] private VoidEvent _movementExitEvent;
+    [SerializeField] private DurationValueList _stunMoveList;
     #endregion
 
     [Serializable]
     private struct LandData
     {
+        [MinMaxRange(0, 4)] public MinMaxFloat Timer;
         public AnimationClip Animation;
         public float AnimationSpeedMultiplier;
-        [MinMaxRange(0, 4)] public MinMaxFloat Timer;
+        public float StunMultiplier;
     }
 
     private Camera _mainCamera;
@@ -114,6 +114,8 @@ public class MoveBehaviour : MonoBehaviour
     private MovementType _movementType;
 
     private Stopwatch _landStopWatch;
+
+    private Coroutine _coroutineStunned;
 
     private Vector3 _smoothInputMovement;
     private Vector3 _smoothLocalInputMovement;
@@ -163,8 +165,7 @@ public class MoveBehaviour : MonoBehaviour
                 AnimatorModifier modifier = new AnimatorModifier(data.Animation, data.AnimationSpeedMultiplier);
                 _animatorModifierEvent.Raise(modifier);
 
-                _controls.Disable();
-                _dodgeBehaviour?.Controls.Disable();
+                _stunMoveList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
 
                 _smoothInputMovement = Vector3.zero;
 
@@ -175,8 +176,7 @@ public class MoveBehaviour : MonoBehaviour
 
     public void OnExitLand(AnimatorModifierInfo animatorInfo)
     {
-        _controls.Enable();
-        _dodgeBehaviour?.Controls.Enable();
+
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -215,6 +215,7 @@ public class MoveBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
+        _groundCheckEntered = 0;
         _controls.Ground.Move.started += OnMove;
         _controls.Ground.Move.performed += OnMove;
         _controls.Ground.Move.canceled += OnMove;
@@ -223,6 +224,8 @@ public class MoveBehaviour : MonoBehaviour
         _groundCheckEventExit.Register(OnExitGroundCheck);
         _animatorModifierInfoEvent.Register(OnExitLand);
         _controls.Enable();
+
+        _coroutineStunned = StartCoroutine(UpdateStunned());
     }
 
     private void Update()
@@ -235,7 +238,6 @@ public class MoveBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateMovement();
-        FixedUpdateWorldPosition();
 
         if (_isRotating)
             FixedUpdateTurn();
@@ -251,6 +253,8 @@ public class MoveBehaviour : MonoBehaviour
         _groundCheckEventExit.Unregister(OnExitGroundCheck);
         _animatorModifierInfoEvent.Unregister(OnExitLand);
         _controls.Disable();
+
+        StopCoroutine(_coroutineStunned);
     }
     #endregion
 
@@ -324,14 +328,38 @@ public class MoveBehaviour : MonoBehaviour
         _rigidbody.MovePosition(transform.position + _smoothVelocity);
     }
 
-    private void FixedUpdateWorldPosition()
-    {
-        _worldPositionVariable.Value = transform.position;
-    }
-
     private void FixedUpdateTurn()
     {
         Quaternion rotation = Quaternion.Slerp(_rigidbody.rotation, Quaternion.LookRotation(PointDirection), _turnSpeed * Time.fixedDeltaTime);
         _rigidbody.MoveRotation(rotation);
+    }
+
+    private IEnumerator UpdateStunned()
+    {
+        yield return new WaitForFixedUpdate();
+
+        while (true)
+        {
+            for (int i = 0; i < _stunMoveList.Count; i++)
+            {
+                Duration duration = _stunMoveList[i];
+
+                if (!duration.IsActive)
+                    _stunMoveList.Remove(duration);
+            }
+
+            if (_stunMoveList.Count != 0)
+            {
+                _isRotating = false;
+                _controls.Disable();
+            }
+            else
+            {
+                _isRotating = true;
+                _controls.Enable();
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }
