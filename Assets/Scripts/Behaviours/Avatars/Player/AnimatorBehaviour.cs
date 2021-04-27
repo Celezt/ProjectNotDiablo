@@ -25,9 +25,9 @@ public class AnimatorBehaviour : MonoBehaviour
     [Header("Settings")]
     [SerializeField, MustBeAssigned] private Animator _animator;
     [Foldout("Atoms", true)]
-    [SerializeField] private Vector3Reference _smoothLocalMotionReference;
-    [SerializeField] private AnimatorModifierEventReference _animatorModifierEvent;
-    [SerializeField] private BoolReference _fallingReference;
+    [SerializeField] private Vector3Reference _smoothLocalMotionReference = new Vector3Reference();
+    [SerializeField] private AnimatorModifierEventReference _animatorModifierEvent = new AnimatorModifierEventReference();
+    [SerializeField] private BoolReference _fallingReference = new BoolReference();
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
@@ -85,13 +85,10 @@ public class AnimatorBehaviour : MonoBehaviour
 
     private void UpdateMotionAnimation()
     {
-        if (_smoothLocalMotionReference != null)
-        {
-            Vector3 blend = _smoothLocalMotionReference.Value;
-            _animator.SetFloat(_motionZID, blend.z);
-            _animator.SetFloat(_motionXID, blend.x);
-            _animator.SetBool(_isWalkingID, blend.magnitude > 0.1f);
-        }
+        Vector3 blend = _smoothLocalMotionReference.Value;
+        _animator.SetFloat(_motionZID, blend.z);
+        _animator.SetFloat(_motionXID, blend.x);
+        _animator.SetBool(_isWalkingID, blend.magnitude > 0.1f);
     }
 
     private void UpdateFalling()
