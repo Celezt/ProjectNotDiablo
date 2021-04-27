@@ -34,9 +34,9 @@ public class AnimatorBehaviour : MonoBehaviour
 
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
+    private readonly int _motionMagnitudeID = Animator.StringToHash("MotionMagnitude");
     private readonly int _isFallingID = Animator.StringToHash("IsFalling");
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
-    private readonly int _isWalkingID = Animator.StringToHash("IsWalking");
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
 
     #region Events
@@ -88,7 +88,7 @@ public class AnimatorBehaviour : MonoBehaviour
         Vector3 blend = _smoothLocalMotionReference.Value;
         _animator.SetFloat(_motionZID, blend.z);
         _animator.SetFloat(_motionXID, blend.x);
-        _animator.SetBool(_isWalkingID, blend.magnitude > 0.1f);
+        _animator.SetFloat(_motionMagnitudeID, blend.magnitude);
     }
 
     private void UpdateFalling()
