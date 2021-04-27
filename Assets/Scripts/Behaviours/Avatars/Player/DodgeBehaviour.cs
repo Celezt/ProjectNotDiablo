@@ -80,6 +80,7 @@ public class DodgeBehaviour : MonoBehaviour
 
                          StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
 
+                        _stunMoveList.Clear();
                         _stunMoveList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
                         _stunDodgeList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier, () => {
                             _afteRollCooldown = new Duration(data.Cooldown);
