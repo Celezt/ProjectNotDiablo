@@ -7,14 +7,14 @@ using UnityEngine.Animations;
 [Serializable]
 public struct AnimatorModifierInfo : IEquatable<AnimatorModifierInfo>
 {
-    public AnimatorControllerPlayable Controller { get; }
     public AnimatorStateInfo StateInfo { get; }
+    public AnimatorClipInfo ClipInfo { get; }
 
-    public bool Equals(AnimatorModifierInfo other) => Controller.Equals(other.Controller) && StateInfo.Equals(StateInfo);
+    public bool Equals(AnimatorModifierInfo other) => StateInfo.Equals(other.StateInfo);
 
-    public AnimatorModifierInfo(AnimatorControllerPlayable controller, AnimatorStateInfo stateInfo)
+    public AnimatorModifierInfo(AnimatorStateInfo stateInfo, AnimatorClipInfo clipInfo)
     {
-        Controller = controller;
         StateInfo = stateInfo;
+        ClipInfo = clipInfo;
     }
 }
