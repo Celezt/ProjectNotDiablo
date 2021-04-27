@@ -46,12 +46,14 @@ public class AI : MonoBehaviour
     float ChargeSpeed;
     float chargeAcceleration;
 
+    AnimatorBehaviour animator;
     //Weapon Stats
 
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
         agent.acceleration = baseAcceleration;
@@ -94,7 +96,15 @@ public class AI : MonoBehaviour
         {
             MoveCloser();
         }
-
+        //if (agent.velocity == Vector3.zero)
+        //{
+        //    animator.SmoothLocalMotion = agent.velocity.normalized;
+        //}
+        //else if (agent.velocity != Vector3.zero)
+        //{
+        //}
+        animator.SmoothLocalMotion = agent.velocity.normalized;
+        Debug.Log(agent.velocity.normalized);
 
         distanceToDestination = agent.remainingDistance;
         if (currentState == AiState.Patrolling)

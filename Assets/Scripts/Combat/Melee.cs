@@ -45,19 +45,26 @@ public class Melee : MonoBehaviour
                 FindTargets(180, range);
                 foreach (GameObject item in hitableTargets)
                 {
-                    if (item.GetComponent<TakeDamage>() != null)
+                    if (hitableTargets.Count != 0)
                     {
-                        item.GetComponent<TakeDamage>().ReciveDamage(damage);
-                    }
+                        if (item.GetComponent<TakeDamage>() != null)
+                        {
+                            item.GetComponent<TakeDamage>().ReciveDamage(damage);
+                        }
+                    }  
                 }
             }
             else
             {
                 FindTargets(angle, range);
-                if (hitableTargets[0].GetComponent<TakeDamage>() != null)
+                if (hitableTargets.Count != 0)
                 {
-                    hitableTargets[0].GetComponent<TakeDamage>().ReciveDamage(damage);
+                    if (hitableTargets[0].GetComponent<TakeDamage>() != null)
+                    {
+                        hitableTargets[0].GetComponent<TakeDamage>().ReciveDamage(damage);
+                    }
                 }
+                
             }
             cooldownTimer = cooldown;
         }
