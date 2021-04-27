@@ -17,12 +17,12 @@ public class CustomMotionBehaviour : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
-        //AnimatorStateInfo info = controller.GetCurrentAnimatorStateInfo(layerIndex);
-        //Debug.Log(controller.GetCurrentAnimatorStateInfo(layerIndex).normalizedTime);
-        //if (controller.GetCurrentAnimatorStateInfo(layerIndex).normalizedTime >= 1.0f)
-        //{
-        //   // Debug.Log(controller.GetCurrentAnimatorClipInfo(layerIndex)[0].clip.name);
-        //}
+        AnimatorStateInfo info = controller.GetCurrentAnimatorStateInfo(layerIndex);
+        //Debug.Log(info.normalizedTime);
+        if (controller.GetCurrentAnimatorStateInfo(layerIndex).normalizedTime >= 1.0f)
+        {
+            // Debug.Log(controller.GetCurrentAnimatorClipInfo(layerIndex)[0].clip.name);
+        }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
