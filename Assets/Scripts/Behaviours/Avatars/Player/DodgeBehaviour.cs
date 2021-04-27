@@ -95,7 +95,7 @@ public class DodgeBehaviour : MonoBehaviour
 
     public void OnExitDodge(AnimatorModifierInfo animatorInfo)
     {
-        _rigidbody.velocity /= 4;
+
     }
     #endregion
 

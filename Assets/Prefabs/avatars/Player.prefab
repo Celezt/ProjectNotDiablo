@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5064504266361368092}
   - component: {fileID: 583105869144826515}
   - component: {fileID: 7651242026116013290}
-  - component: {fileID: 1705030271867529725}
+  - component: {fileID: 8042037470972645018}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -222,8 +222,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.047139198
-        value: 0.95351636
+        time: 0.05480674
+        value: 0.95221174
         inSlope: -2.6923518
         outSlope: -2.6923518
         tangentMode: 0
@@ -231,8 +231,8 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.64445925
       - serializedVersion: 3
-        time: 0.08192021
-        value: 0.5150033
+        time: 0.08027226
+        value: 0.5661508
         inSlope: -9.163824
         outSlope: -9.163824
         tangentMode: 0
@@ -240,8 +240,8 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.15304244
       - serializedVersion: 3
-        time: 0.17033906
-        value: 0.13936989
+        time: 0.1610312
+        value: 0.14706032
         inSlope: -0.9706179
         outSlope: -0.9706179
         tangentMode: 0
@@ -283,8 +283,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.18830054
-        value: 0.95545864
+        time: 0.28259987
+        value: 0.9417715
         inSlope: -1.0151179
         outSlope: -1.0151179
         tangentMode: 0
@@ -292,8 +292,8 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.23981719
-        value: 0.32959634
+        time: 0.33082062
+        value: 0.28729898
         inSlope: -1.3456826
         outSlope: -1.3456826
         tangentMode: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
   _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
---- !u!114 &1705030271867529725
+--- !u!114 &8042037470972645018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

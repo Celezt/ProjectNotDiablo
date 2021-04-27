@@ -9,6 +9,10 @@ public class CustomMotionBehaviour : StateMachineBehaviour
     [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
 
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
+    private readonly int hash = Animator.StringToHash("Custom Motion");
+
+    private AnimatorStateInfo _animatorStateInfo;
+    private AnimatorClipInfo _animatorClipInfo;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,16 +21,12 @@ public class CustomMotionBehaviour : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
-        AnimatorStateInfo info = controller.GetCurrentAnimatorStateInfo(layerIndex);
-        //Debug.Log(info.normalizedTime);
-        if (controller.GetCurrentAnimatorStateInfo(layerIndex).normalizedTime >= 1.0f)
-        {
-            // Debug.Log(controller.GetCurrentAnimatorClipInfo(layerIndex)[0].clip.name);
-        }
+        _animatorClipInfo = controller.GetCurrentAnimatorClipInfo(layerIndex)[0];
+        _animatorStateInfo = stateInfo;
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
-        _animatorModifierInfoEvent.Raise(new AnimatorModifierInfo(controller, stateInfo));
+        _animatorModifierInfoEvent.Raise(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo));
     }
 }
