@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
 
     public GameObject hitEffect;
 
+
     AudioClip clip;
     private Vector3 destination;
     public void SetVaribles(float _damage, float _speed, float _radius, Vector3 _destination, float _range)
@@ -92,7 +93,7 @@ public class Projectile : MonoBehaviour
             Vector3 directionToTarget = (targetTansform.position - transform.position).normalized;
             float distanceToTarget = Vector3.Distance(transform.position, targetTansform.position);
 
-            if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer))
+            if (!Physics.Raycast(gameObject.GetComponentInParent<Transform>().position, directionToTarget, distanceToTarget, ignoreLayer))
             {
                 targetsAffected.Add(target);
                 //directLineOfSight = true;

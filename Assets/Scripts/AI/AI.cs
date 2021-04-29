@@ -26,7 +26,7 @@ public class AI : MonoBehaviour
     bool atDestination;
     bool isCharging = false;
     bool enemyVisible;
-    bool PlayerInRange = false;
+    public bool PlayerInRange = false;
 
     PatrolArea selectedPatrolArea;
     NavMeshAgent agent;
@@ -53,7 +53,7 @@ public class AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<AnimatorBehaviour>();
+        animator = gameObject.GetComponentInChildren<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
         agent.acceleration = baseAcceleration;
@@ -104,7 +104,7 @@ public class AI : MonoBehaviour
         //{
         //}
         animator.SmoothLocalMotion = agent.velocity.normalized;
-        Debug.Log(agent.velocity.normalized);
+        //Debug.Log(agent.velocity.normalized);
 
         distanceToDestination = agent.remainingDistance;
         if (currentState == AiState.Patrolling)
@@ -141,7 +141,7 @@ public class AI : MonoBehaviour
             agent.speed = baseSpeed;
         }
 
-        if (weaponRange > distanceToPlayer)
+        if (weaponRange - 1 > distanceToPlayer)
         {
             destination = gameObject.transform.position;
             if (player != null)
@@ -150,7 +150,7 @@ public class AI : MonoBehaviour
                 PlayerInRange = true;
             }
         }
-        else if (weaponRange < distanceToPlayer)
+        else if (weaponRange + 1 < distanceToPlayer)
         {
             destination = player.transform.position;
             PlayerInRange = false;
@@ -166,7 +166,7 @@ public class AI : MonoBehaviour
         }
         if (selectedWeapon.GetComponent<Melee>() != null)
         {
-            selectedWeapon.GetComponent<Melee>().Attack();
+            selectedWeapon.GetComponent<Melee>().Attack(transform);
         }
     }
 

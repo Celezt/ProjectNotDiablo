@@ -96,8 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   cooldown: 1
-  range: 5
+  range: 2.5
   angle: 20
-  cleve: 0
+  cleve: 1
   modifier: 0
   hitableTargets: []

@@ -14,7 +14,7 @@ public class Melee : MonoBehaviour
     [Header("Additional Stats")]
     public bool cleve;
     public bool modifier;
-    
+
     public List<GameObject> hitableTargets = new List<GameObject>();
 
     private float cooldownTimer;
@@ -22,10 +22,12 @@ public class Melee : MonoBehaviour
     LayerMask targetLayer;
     LayerMask ignoreLayer;
 
+    private Transform originPos;
+
     void Start()
     {
         targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
-        ignoreLayer = LayerMask.GetMask("Enviorment");
+        ignoreLayer = LayerMask.GetMask("Ignore Raycast");
         cooldownTimer = 0;
     }
     private void Update()
@@ -36,8 +38,9 @@ public class Melee : MonoBehaviour
         }
     }
 
-    public void Attack()
+    public void Attack(Transform pos)
     {
+        originPos = pos;
         if (cooldownTimer <= 0)
         {
             if (cleve)
@@ -51,7 +54,7 @@ public class Melee : MonoBehaviour
                         {
                             item.GetComponent<TakeDamage>().ReciveDamage(damage);
                         }
-                    }  
+                    }
                 }
             }
             else
@@ -64,7 +67,6 @@ public class Melee : MonoBehaviour
                         hitableTargets[0].GetComponent<TakeDamage>().ReciveDamage(damage);
                     }
                 }
-                
             }
             cooldownTimer = cooldown;
         }
@@ -73,22 +75,21 @@ public class Melee : MonoBehaviour
     void FindTargets(float angle, float range)
     {
         hitableTargets.Clear();
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, range, targetLayer);
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(originPos.position, range, targetLayer);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             GameObject target = targetsInViewRadius[i].gameObject;
             Transform targetTansform = target.GetComponent<Transform>();
-            Vector3 directionToTarget = (targetTansform.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
-            {
-                float distanceToTarget = Vector3.Distance(transform.position, targetTansform.position);
+            Vector3 directionToTarget = (targetTansform.position - originPos.position).normalized;
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer))
-                {
-                    hitableTargets.Add(target);
-                }
+            float distanceToTarget = Vector3.Distance(originPos.position, targetTansform.position);
+
+            if (!Physics.Raycast(originPos.position, directionToTarget, distanceToTarget, ignoreLayer))
+            {
+                hitableTargets.Add(target);
             }
+            Debug.DrawLine(transform.position, targetTansform.position, Color.white, 2.5f);
         }
     }
 
