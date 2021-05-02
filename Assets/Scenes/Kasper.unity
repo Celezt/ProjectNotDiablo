@@ -362,8 +362,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_1x1: {fileID: 4434198775741944397, guid: 90e7bd114f6f1f24b9ed507ad0669c5a, type: 3}
-  minRooms: 4
-  maxRooms: 4
+  minRooms: 9
+  maxRooms: 11
   maxRoomCollisions: 50
   showConnections: 1
   showRoomConnections: 0

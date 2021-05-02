@@ -32,10 +32,12 @@
         room tiles, to make corridors avoid rooms. Also mark tiles that are
         connections.
 
-    4.  [Not implemented] Now that the tile grid is created, we can start 
-        building the corridor layout (in tiles)! From each connection it will
-        run a path-finding algorithm to its target, located on the tile grid.
-        The tiles of the finished path are marked as corridor tiles.
+    4.  Now that the tile grid is created, we can start building the corridor 
+        layout (in tiles)! From each connection it will run a path-finding 
+        algorithm to its target, located on the tile grid. The tiles of the 
+        finished path are marked as corridor tiles. The path the corridors 
+        take are weighted towards existing corridors, creating a more natural 
+        layout.
 
     5.  [Not implemented] After all corridor tiles have been identified, it
         needs to be cleaned up. Corridors that run in parallel must be 
@@ -61,6 +63,10 @@ using Debug = UnityEngine.Debug;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    //----------------------------------------------------------------------//
+    // Utility structs and enums
+    //----------------------------------------------------------------------//
+
     // Represents a tile that needs to be connected.
     // Each doorway in a room must have a connection specified.
     private struct Connection
@@ -93,6 +99,8 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     //----------------------------------------------------------------------//
+    // Editor-exposed members
+    //----------------------------------------------------------------------//
 
     public GameObject tile_1x1;
 
@@ -123,6 +131,8 @@ public class DungeonGenerator : MonoBehaviour
     public bool showTileGrid = false;
 
     //----------------------------------------------------------------------//
+    // Rooms and layout members
+    //----------------------------------------------------------------------//
 
     private List<Room> rooms;
 
@@ -132,11 +142,22 @@ public class DungeonGenerator : MonoBehaviour
     private List<int> connectionEdges;      // Act as corridor graph edges (1:1)
     private List<List<int>> connectedRooms; // Room connection graph; which rooms can be accessed from which
 
-    private int corridorStepIt;
-    private Tile[][] tileGrid;              // A grid where true is a corridor tile, and false is an empty tile.
-    private Vector2Int tileGridSize;        // Size of the tile grid, in tiles.
-    private Vector2Int tileGridOffset;      // Position offset of the tile grid
+    //----------------------------------------------------------------------//
+    // Corridor creation members
+    //----------------------------------------------------------------------//
 
+    private int corridorStepIt;
+    private Tile[][] tileGrid;          // A grid where true is a corridor tile, and false is an empty tile.
+    private Vector2Int tileGridSize;    // Size of the tile grid, in tiles.
+    private Vector2Int tileGridOffset;  // Position offset of the tile grid
+
+    private int[] gCost;                // Distance to start
+    private int[] hCost;                // Heuristic = distance to end
+    private int[] fCost;                // g + h
+    private int[] cameFrom;             // To reconstruct the path of a corridor
+
+    //----------------------------------------------------------------------//
+    // Functions
     //----------------------------------------------------------------------//
 
     void GenerateRoom(Vector2Int position)
@@ -324,13 +345,17 @@ public class DungeonGenerator : MonoBehaviour
 
         tileGridOffset = new Vector2Int(minX - padding, minY - padding);
 
-        Debug.Log($"minX = {minX}\nminY = {minY}\nmaxX = {maxX}\nmaxY = {maxY}");
-
         // Create the tile grid
         tileGrid = new Tile[tileGridSize.x][];
         for (int x = 0; x < tileGridSize.x; x++) {
             tileGrid[x] = new Tile[tileGridSize.y];
         }
+
+        // Create the cost arrays to be used for corridor pathfinding
+        gCost = new int[tileGridSize.x * tileGridSize.y];
+        hCost = new int[tileGridSize.x * tileGridSize.y];
+        fCost = new int[tileGridSize.x * tileGridSize.y];
+        cameFrom = new int[tileGridSize.x * tileGridSize.y];
 
     }
 
@@ -473,14 +498,180 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    // TODO
-    // Steps through one tile in the corridor creation from the given 
-    // connection.
-    // Returns true if the corridor stopped/finished
-    bool CorridorCreationStep(Connection from, Connection to)
+    // Returns an index based on x, y, and the dimensions of the tile grid.
+    // Returns 0 if input was out of bounds.
+    int GetGridTileIndex(int x, int y)
     {
+        if (x < 0 || x >= tileGridSize.x ||
+            y < 0 || y >= tileGridSize.y)
+            return 0;
+
+        return x + y * tileGridSize.x;
+    }
+
+    // Returns the position of the tile based on the index, and the 
+    // dimensions of the tile grid.
+    // Returns {0, 0} if index is out of bounds.
+    Vector2Int GetGridTileByIndex(int index)
+    {
+        if (index >= tileGridSize.x * tileGridSize.y)
+            return new Vector2Int(tileGridSize.x-1, tileGridSize.y-1);
         
-        return true;
+        if (index < 0)
+            return new Vector2Int(0, 0);
+
+        return new Vector2Int(index % tileGridSize.x, index / tileGridSize.x);
+    }
+
+    // Retrieves the index into the tileList that has the smallest f cost.
+    int GetTileWithSmallestF(List<int> tileList)
+    {
+        float curr;
+        float min = float.MaxValue;
+        int minIndex = 0;
+        for (int i = 0; i < tileList.Count; i++) {
+            curr = fCost[tileList[i]];
+            if (curr < min) {
+                min = curr;
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
+    // Use an A* algorithm to find and mark a path between the given 
+    // connections as corridor tiles.
+    // Returns true if a path was found, otherwise false.
+    bool CreateCorridor(Vector2Int start, Vector2Int end)
+    {
+        int current;
+        Vector2Int currPos;
+        List<int> open = new List<int>(); // List of indices into cost members
+        List<int> finishedPath = new List<int>();
+        int finishedCount = 0;
+        int startIndex = GetGridTileIndex(start.x, start.y);
+        int endIndex = GetGridTileIndex(end.x, end.y);
+        bool success = false;
+
+        // Local function for calculating "Manhattan distance"
+        int GetManhattanDistance(Vector2Int fromPos, Vector2Int toPos)
+        {
+            return Mathf.Abs(fromPos.x - toPos.x) + Mathf.Abs(fromPos.y - toPos.y) + 8;
+        }
+
+        // Local function for calculating the cost of a tile, i.e. weighting
+        int GetTileCost(Vector2Int tile)
+        {
+            return tileGrid[tile.x][tile.y] == Tile.CORRIDOR ? 6 : 8;
+        }
+
+        // Local function to determine whether a tile is valid or not
+        bool IsTileValid(int x, int y) 
+        {
+            if (x < 0 || x >= tileGridSize.x ||
+                y < 0 || y >= tileGridSize.y)
+                return false;
+
+            if (tileGrid[x][y] == Tile.ROOM) // Disallow room tiles
+                return false;
+            
+            return true;
+        }
+
+        // Local function to get the tile that has the smallest f cost
+        int GetTileWithSmallestF()
+        {
+            int curr;
+            int min = int.MaxValue;
+            int minIndex = 0;
+            for (int i = 0; i < open.Count; i++) {
+                curr = fCost[open[i]];
+                if (curr < min) {
+                    min = curr;
+                    minIndex = open[i];
+                }
+            }
+
+            return minIndex;
+        }
+
+        // Local function for processing each neighbor in the inner loop
+        void ProcessNeighbor(int neighbor)
+        {
+            Vector2Int neighborPos = GetGridTileByIndex(neighbor);
+            int prelimGScore = gCost[current] + GetTileCost(neighborPos);
+
+            // If this neighbor is a better path
+             if (prelimGScore < gCost[neighbor] || prelimGScore == int.MaxValue) {
+                cameFrom[neighbor] = current;
+
+                // Update costs
+                gCost[neighbor] = prelimGScore;
+                fCost[neighbor] = prelimGScore + GetManhattanDistance(neighborPos, end);
+                    
+                if (!open.Contains(neighbor))
+                    open.Add(neighbor);
+            }
+        }
+
+        // Initialize the g cost of all tiles
+        for (int i = 0; i < tileGridSize.x * tileGridSize.y; i++) {
+            gCost[i] = int.MaxValue;
+            hCost[i] = GetManhattanDistance(GetGridTileByIndex(i), end);
+        }
+
+        // Add the starting tile to the open list
+        open.Add(startIndex);
+        gCost[startIndex] = 0;
+        hCost[startIndex] = GetManhattanDistance(start, end);
+        fCost[startIndex] = hCost[startIndex];
+        cameFrom[startIndex] = startIndex;
+
+        while (open.Count > 0) {
+            current = GetTileWithSmallestF(); // Get tile with least f is open
+            finishedCount = finishedPath.Count;
+            
+            if (current == endIndex) { // The end tile was found!
+                success = true;
+                break;
+            }
+
+            open.Remove(current); // Remove current from the open list
+
+            currPos = GetGridTileByIndex(current);
+
+            // Process neighbors up, down, left, and right
+            if (IsTileValid(currPos.x, currPos.y + 1)) 
+                ProcessNeighbor(GetGridTileIndex(currPos.x, currPos.y + 1));
+
+            if (IsTileValid(currPos.x, currPos.y - 1)) 
+                ProcessNeighbor(GetGridTileIndex(currPos.x, currPos.y - 1));
+
+            if (IsTileValid(currPos.x - 1, currPos.y)) 
+                ProcessNeighbor(GetGridTileIndex(currPos.x - 1, currPos.y));
+
+            if (IsTileValid(currPos.x + 1, currPos.y)) 
+                ProcessNeighbor(GetGridTileIndex(currPos.x + 1, currPos.y));
+        }
+       
+        // Mark all tiles in the finished path
+        int tile = cameFrom[endIndex];
+        while (tile != cameFrom[tile]) {
+            Vector2Int pos = GetGridTileByIndex(tile);
+            if (tileGrid[pos.x][pos.y] == Tile.EMPTY)
+                tileGrid[pos.x][pos.y] = Tile.CORRIDOR;
+            
+            tile = cameFrom[tile];
+        }
+
+        if (success) {
+            return true;
+        }
+
+        // The end was never reached. Should not happen.
+        Debug.Log($"Corridor pathfinding failed: start {start}, end {end}");
+        return false; 
     }
 
     //----------------------------------------------------------------------//
@@ -492,6 +683,7 @@ public class DungeonGenerator : MonoBehaviour
         connectionEdges = new List<int>();
         connectedRooms = new List<List<int>>();
         roomResolveCount = 0;
+
         corridorStepIt = 0;
         tileGridSize = new Vector2Int();
         tileGridOffset = new Vector2Int();
@@ -537,12 +729,11 @@ public class DungeonGenerator : MonoBehaviour
         // DEBUG: For manually stepping through corridor creation
         if (Keyboard.current.cKey.wasReleasedThisFrame) {
             if (corridorStepIt < connections.Count) {
-                if (CorridorCreationStep(connections[corridorStepIt], 
-                    connections[connectionEdges[corridorStepIt]])
-                ) {
-                    Debug.Log("Corridor stopped.");
-                    corridorStepIt++;
-                }
+                Vector2Int start = connections[corridorStepIt].position;
+                Vector2Int end = connections[connectionEdges[corridorStepIt]].position;
+                CreateCorridor(start - tileGridOffset, end - tileGridOffset);
+                
+                corridorStepIt++;
             }
         }
         
