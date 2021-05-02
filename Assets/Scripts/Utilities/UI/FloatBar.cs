@@ -7,8 +7,26 @@ using UnityAtoms.BaseAtoms;
 
 public class FloatBar : MonoBehaviour
 {
-    [SerializeField] private FloatVariable _valueVariable;
-    [SerializeField] private FloatVariable _maxValueVariable;
+    /// <summary>
+    /// Bar progress value. Clamp between 0 and max value.
+    /// </summary>
+    public float Value
+    {
+        get => _valueReference.Value;
+        set => _valueReference.Value = Mathf.Clamp(value, 0, MaxValue);
+    }
+
+    /// <summary>
+    /// Bar progress max value. Min value 0.
+    /// </summary>
+    public float MaxValue
+    {
+        get => _maxValueReference.Value;
+        set => _maxValueReference.Value = Math.Max(0, value);
+    }
+
+    [SerializeField] private FloatReference _valueReference = new FloatReference();
+    [SerializeField] private FloatReference _maxValueReference = new FloatReference();
 
     private Image _valueBarImage;
 
@@ -17,7 +35,7 @@ public class FloatBar : MonoBehaviour
         if (_valueBarImage == null)
             return;
 
-        _valueBarImage.fillAmount = _valueVariable.Value / _maxValueVariable.Value;
+        _valueBarImage.fillAmount = Value / MaxValue;
     }
 
     private void Awake()
@@ -27,13 +45,19 @@ public class FloatBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _valueVariable?.Changed.Register(OnValueChange);
-        _maxValueVariable?.Changed.Register(OnValueChange);
+        if (_valueReference.Usage >= 2)
+            _valueReference.GetEvent<FloatEvent>().Register(OnValueChange);
+
+        if (_maxValueReference.Usage >= 2)
+            _maxValueReference.GetEvent<FloatEvent>().Register(OnValueChange);
     }
 
     private void OnDisable()
     {
-        _valueVariable?.Changed.Unregister(OnValueChange);
-        _maxValueVariable?.Changed.Unregister(OnValueChange);
+        if (_valueReference.Usage >= 2)
+            _valueReference.GetEvent<FloatEvent>().Unregister(OnValueChange);
+
+        if (_maxValueReference.Usage >= 2)
+            _maxValueReference.GetEvent<FloatEvent>().Unregister(OnValueChange);
     }
 }

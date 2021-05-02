@@ -15,14 +15,14 @@ public class MoveBehaviour : MonoBehaviour
         get => _controls;
     }
 
-    public bool IsMoving
-    {
-        get => _isMoving;
-    }
-
     public bool IsFalling
     {
         get => _groundCheckEntered == 0;
+    }
+    public bool IsMoving
+    {
+        get => _isMoving;
+        set => _isMoving = value;
     }
 
     public bool IsRotating
@@ -123,7 +123,7 @@ public class MoveBehaviour : MonoBehaviour
     private Vector3 _smoothVelocity;
     private float _movementSpeed;
     private int _groundCheckEntered;
-    private bool _isMoving;
+    private bool _isMoving = true;
     private bool _isRotating = true;
 
     [Flags]
@@ -184,7 +184,6 @@ public class MoveBehaviour : MonoBehaviour
         Vector2 inputMovement = context.ReadValue<Vector2>();
 
         _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
-        _isMoving = (inputMovement != Vector2.zero);
 
         if (context.started)
         {
@@ -237,7 +236,8 @@ public class MoveBehaviour : MonoBehaviour
 
     private void FixedUpdate()
     {
-        FixedUpdateMovement();
+        if (_isMoving)
+            FixedUpdateMovement();
 
         if (_isRotating)
             FixedUpdateTurn();
@@ -288,14 +288,14 @@ public class MoveBehaviour : MonoBehaviour
         };
 
         _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement,
-                Time.deltaTime * (_isMoving ? _movementSmoothSpeedStart : _movementSmoothSpeedEnd));
+                Time.deltaTime * (_rawInputMovement != Vector3.zero ? _movementSmoothSpeedStart : _movementSmoothSpeedEnd));
 
         // Transform smooth input movement to the game object's local space.
         _smoothLocalInputMovementVariable.Value = _smoothLocalInputMovement =
             transform.InverseTransformDirection(_cameraPivotTransform.TransformDirection(_smoothInputMovement));
 
         // Get movement type based on the angle of directional movement.
-        float angle = (_isMoving) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
+        float angle = (_rawInputMovement != Vector3.zero) ? Vector3.Angle(Vector3.forward, _smoothLocalInputMovement.normalized) : -1.0f;
 
         _movementType = GetMovementType(angle);
     }
