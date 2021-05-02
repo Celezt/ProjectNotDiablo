@@ -251,8 +251,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6567c400639c124fab06968e00f1f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _valueVariable: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
-  _maxValueVariable: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
+  _valueReference:
+    _usage: 2
+    _value: 0
+    _constant: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+    _variableInstancer: {fileID: 0}
+  _maxValueReference:
+    _usage: 2
+    _value: 0
+    _constant: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
+    _variableInstancer: {fileID: 0}
 --- !u!1 &2377622442421649096
 GameObject:
   m_ObjectHideFlags: 0

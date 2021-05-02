@@ -27,6 +27,6 @@ public class CustomMotionBehaviour : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
-        _animatorModifierInfoEvent.Raise(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo));
+        _animatorModifierInfoEvent?.Raise(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo));
     }
 }
