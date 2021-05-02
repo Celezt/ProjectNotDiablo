@@ -39,13 +39,13 @@
         take are weighted towards existing corridors, creating a more natural 
         layout.
 
-    5.  [Not implemented] After all corridor tiles have been identified, it
-        needs to be cleaned up. Corridors that run in parallel must be 
-        removed.
+    5.  After all corridor tiles have been marked, a check is made to ensure
+        the corridor layout is valid. If it is invalid, the dungeon gets
+        destroyed, and restarts from step 1.
 
     6.  [Not implemented] The tile grid is read in order to determine which
         corridor tile to place on each tile. This is inferred by its 
-        surrounding tiles in a 3x3 pattern.
+        surrounding tiles in a 3x3 grid.
 
     7.  [Not implemented] The dungeon layout is complete. The rooms may now 
         spawn their content.
@@ -53,7 +53,6 @@
 */
 //--------------------------------------------------------------------------//
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
@@ -403,7 +402,7 @@ public class DungeonGenerator : MonoBehaviour
         while (ResolveRoomCollision()) {
             if (roomResolveCount > maxRoomCollisions) {
                 Debug.Log("Room collision resolution went through too many iterations "+
-                    "(> "+maxRoomCollisions+"). Aborting...");
+                    "(> "+maxRoomCollisions+"). Destroying dungeon.");
 
                 DestroyDungeon();
                 return false;
@@ -423,6 +422,23 @@ public class DungeonGenerator : MonoBehaviour
         // Mark relevant tiles as room tiles and connection tiles. These are
         // static; they won't change.
         SetStaticTiles();
+
+        //
+        while (corridorStepIt < connections.Count) {
+            Vector2Int start = connections[corridorStepIt].position;
+            Vector2Int end = connections[connectionEdges[corridorStepIt]].position;
+            CreateCorridor(start - tileGridOffset, end - tileGridOffset);
+            
+            corridorStepIt++;
+        }
+
+        // Check the validity of the corridor layout. Abort dungeon generation
+        // if invalid.
+        if (!CheckCorridorLayout()) {
+            DestroyDungeon();
+            Debug.Log("Invalid corridor configuration! Destroying dungeon.");
+            return false;
+        }
 
         return true;
     }
@@ -563,7 +579,8 @@ public class DungeonGenerator : MonoBehaviour
         // Local function for calculating the cost of a tile, i.e. weighting
         int GetTileCost(Vector2Int tile)
         {
-            return tileGrid[tile.x][tile.y] == Tile.CORRIDOR ? 6 : 8;
+            Tile t = tileGrid[tile.x][tile.y];
+            return (t == Tile.CORRIDOR || t == Tile.CONNECTION) ? 2 : 8;
         }
 
         // Local function to determine whether a tile is valid or not
@@ -674,6 +691,42 @@ public class DungeonGenerator : MonoBehaviour
         return false; 
     }
 
+    // Checks whether the corridor layout is valid.
+    // Returns false if any illegal corridor configuration was found,
+    // otherwise true.
+    bool CheckCorridorLayout()
+    {
+        bool c, e, ne, n, nw, w, sw, s, se;
+
+        bool GetIsCorridorTile(int x, int y)
+        {
+            Tile tile = tileGrid[x][y];
+            return tile == Tile.CORRIDOR || tile == Tile.CONNECTION;
+        }
+
+        for (int y = 0; y < tileGridSize.y; y++)
+            for (int x = 0; x < tileGridSize.x; x++) {
+                c = tileGrid[x][y] == Tile.CORRIDOR;
+                if (c) {
+                    e   = GetIsCorridorTile(x+1, y);
+                    ne  = GetIsCorridorTile(x+1, y+1);
+                    n   = GetIsCorridorTile(x, y+1);
+                    nw  = GetIsCorridorTile(x-1, y+1);
+                    w   = GetIsCorridorTile(x-1, y);
+                    sw  = GetIsCorridorTile(x-1, y-1);
+                    s   = GetIsCorridorTile(x, y-1);
+                    se  = GetIsCorridorTile(x+1, y-1);
+
+                    if (ne && n && e) return false;
+                    if (nw && n && w) return false;
+                    if (sw && s && w) return false;
+                    if (se && s && e) return false;
+                }
+            }
+
+        return true;
+    }
+
     //----------------------------------------------------------------------//
 
     DungeonGenerator()
@@ -700,6 +753,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void Update()
     {
+        // DEBUG: Regenerate dungeon
         if (Keyboard.current.dKey.wasReleasedThisFrame) {
             DestroyDungeon();
             Stopwatch stopwatch = new Stopwatch();
@@ -711,33 +765,8 @@ public class DungeonGenerator : MonoBehaviour
             Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
         }
 
-        // DEBUG: For manually stepping through room collision resolution.
-        /*
-        if (Keyboard.current.sKey.wasReleasedThisFrame) {
-            if (ResolveRoomCollision()) {
-                Debug.Log("Room resolve iteration: " + roomResolveCount);
-
-                for (int i = 0; i < rooms.Count; i++)
-                    Debug.Log("Room " + i + ": " + rooms[i].bounds);
-            }
-            else {
-                Debug.Log("Room collision resolved at iteration " + roomResolveCount);
-            }
-        }
-        */
-
-        // DEBUG: For manually stepping through corridor creation
-        if (Keyboard.current.cKey.wasReleasedThisFrame) {
-            if (corridorStepIt < connections.Count) {
-                Vector2Int start = connections[corridorStepIt].position;
-                Vector2Int end = connections[connectionEdges[corridorStepIt]].position;
-                CreateCorridor(start - tileGridOffset, end - tileGridOffset);
-                
-                corridorStepIt++;
-            }
-        }
-        
-        if (showConnections) { // Draw connection edges to their targets
+        // Draw connection edges to their targets
+        if (showConnections) { 
             for (int i = 0; i < connectionEdges.Count; i++) {
                 if (connectionEdges[i] == -1)
                     continue;
@@ -751,7 +780,8 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        if (showRoomConnections) { // Draw room connection graph
+        // Draw room connection graph
+        if (showRoomConnections) { 
             for (int i = 0; i < rooms.Count; i++) {
                 for (int j = 0; j < connectedRooms[i].Count; j++) {       
                     Vector3 start = rooms[i].roomObject.transform.position;
@@ -761,7 +791,8 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        if (showTileGrid) { // Draw tile grid bounds
+        // Draw tile grid bounds
+        if (showTileGrid) { 
             Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y);
             Debug.DrawLine(new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin, 
                 new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin, 
@@ -780,13 +811,6 @@ public class DungeonGenerator : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // Draw rooms
-        // for (int i = 0; i < rooms.Count; i++) {     
-        //     Gizmos.color = Color.HSVToRGB(i*0.05f, 0.8f, 0.8f);
-        //     Gizmos.DrawCube(rooms[i].roomObject.transform.position, 
-        //         new Vector3(rooms[i].bounds.width - 2, 0.5f + i * 0.02f, rooms[i].bounds.height - 2));
-        // }
-
         if (showTileGrid) {
             for (int x = 0; x < tileGridSize.x; x++) {
                 for (int y = 0; y < tileGridSize.y; y++) {
@@ -808,15 +832,6 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-
-        // if (showConnections || showTileGrid) {
-        //     Gizmos.color = Color.green;
-        //     for (int i = 0; i < connections.Count; i++) {
-        //         Vector3 tilePos = new Vector3(connections[i].position.x + 0.5f, 0.5f, 
-        //             connections[i].position.y + 0.5f);
-        //         Gizmos.DrawCube(tilePos, new Vector3(1.0f, 1.0f, 1.0f));
-        //     }
-        // }
     }
 
 }
