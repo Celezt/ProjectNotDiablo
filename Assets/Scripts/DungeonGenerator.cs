@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------//
 /*
     ----- HOW IT WORKS -----
-    Updated: 2021-04-20
+    Updated: 2021-05-02
 
     1.  Randomly picked rooms are placed somewhat randomly, but relatively 
         near each other. This is because we want the rooms to collide somewhat
@@ -43,9 +43,9 @@
         the corridor layout is valid. If it is invalid, the dungeon gets
         destroyed, and restarts from step 1.
 
-    6.  [Not implemented] The tile grid is read in order to determine which
-        corridor tile to place on each tile. This is inferred by its 
-        surrounding tiles in a 3x3 grid.
+    6.  The tile grid is read in order to determine which corridor tile, with
+        which rotation to place on each tile. This is inferred by its 
+        neighboring tiles.
 
     7.  [Not implemented] The dungeon layout is complete. The rooms may now 
         spawn their content.
@@ -65,6 +65,14 @@ public class DungeonGenerator : MonoBehaviour
     //----------------------------------------------------------------------//
     // Utility structs and enums
     //----------------------------------------------------------------------//
+
+    [System.Serializable]
+    public struct TileObject
+    {
+        public GameObject prefab;
+        public Vector3 positionOffset;
+        public Vector3 rotationOffset;
+    }
 
     // Represents a tile that needs to be connected.
     // Each doorway in a room must have a connection specified.
@@ -101,7 +109,6 @@ public class DungeonGenerator : MonoBehaviour
     // Editor-exposed members
     //----------------------------------------------------------------------//
 
-    public GameObject tile_1x1;
 
     [Range(1, 32)]
     public int minRooms = 10;
@@ -115,7 +122,17 @@ public class DungeonGenerator : MonoBehaviour
     [Range(20, 100)]
     public int maxRoomCollisions = 50;
     
+    [Header("Corridor Tiles")]
+
+    public TileObject corridorStraight;
+    public TileObject corridorTurn;
+    public TileObject corridorT;
+    public TileObject corridorX;
+    public TileObject corridorEnd;
+
     [Header("Debug")]
+
+    public GameObject debugTile1x1;
 
     [Tooltip("Visualizes the how the connections connect. An edge indicates "+
         "that the connections are directly connected; you should be able to "+
@@ -128,6 +145,7 @@ public class DungeonGenerator : MonoBehaviour
     [Tooltip("Visualizes the tile grid. Red = room, yellow = corridor, "+
         "green = connection.")]
     public bool showTileGrid = false;
+
 
     //----------------------------------------------------------------------//
     // Rooms and layout members
@@ -171,7 +189,7 @@ public class DungeonGenerator : MonoBehaviour
         
         // Create 1x1 plane and scale it for now.
         // TODO: Instantiate room prefab
-        GameObject roomObject = Object.Instantiate(tile_1x1, roomCenter, Quaternion.identity, transform);
+        GameObject roomObject = Object.Instantiate(debugTile1x1, roomCenter, Quaternion.identity, transform);
         Vector3 scale = new Vector3(roomWidth, 1.0f, roomHeight);     
         roomObject.transform.localScale = scale * 0.1f; // 0.1f temporary magic number for scaling a default plane
         roomObject.name = "Room " + rooms.Count;
@@ -294,8 +312,8 @@ public class DungeonGenerator : MonoBehaviour
 
     void DestroyDungeon()
     {
-        for (int i = 0; i < rooms.Count; i++)
-            Object.Destroy(rooms[i].roomObject);
+        foreach (Transform e in transform)
+            GameObject.Destroy(e.gameObject);
 
         rooms.Clear();
         connections.Clear();
@@ -439,6 +457,8 @@ public class DungeonGenerator : MonoBehaviour
             Debug.Log("Invalid corridor configuration! Destroying dungeon.");
             return false;
         }
+
+        PlaceCorridorTiles();
 
         return true;
     }
@@ -704,7 +724,7 @@ public class DungeonGenerator : MonoBehaviour
             return tile == Tile.CORRIDOR || tile == Tile.CONNECTION;
         }
 
-        for (int y = 0; y < tileGridSize.y; y++)
+        for (int y = 0; y < tileGridSize.y; y++) {
             for (int x = 0; x < tileGridSize.x; x++) {
                 c = tileGrid[x][y] == Tile.CORRIDOR;
                 if (c) {
@@ -723,8 +743,82 @@ public class DungeonGenerator : MonoBehaviour
                     if (se && s && e) return false;
                 }
             }
+        }
 
         return true;
+    }
+
+    void PlaceCorridorTiles()
+    {
+        bool c, e, n, w, s;
+        Tile center;
+
+        bool GetIsCorridorTile(int x, int y)
+        {
+            Tile tile = tileGrid[x][y];
+
+            if (center == Tile.CONNECTION) // Also count room tile if center is a connection
+                return tile == Tile.CORRIDOR || tile == Tile.CONNECTION || 
+                    tile == Tile.ROOM;
+            else
+                return tile == Tile.CORRIDOR || tile == Tile.CONNECTION;
+        }
+
+        void PlaceTile(int x, int y, TileObject tile, float zRot=0.0f)
+        {
+            Vector3 position = new Vector3(x + tileGridOffset.x + 0.5f, 0.0f, 
+                y + tileGridOffset.y + 0.5f);
+            Quaternion rotation = Quaternion.Euler(tile.rotationOffset.x, 
+                tile.rotationOffset.y, tile.rotationOffset.z + zRot);
+
+            GameObject obj = Object.Instantiate(tile.prefab, 
+                position + tile.positionOffset,
+                rotation, 
+                transform);
+        }
+
+        for (int y = 0; y < tileGridSize.y; y++) {
+            for (int x = 0; x < tileGridSize.x; x++) {
+                center = tileGrid[x][y];
+                c = center == Tile.CORRIDOR || center == Tile.CONNECTION;
+
+                if (c) {
+                    e = GetIsCorridorTile(x+1, y);
+                    n = GetIsCorridorTile(x, y+1);
+                    w = GetIsCorridorTile(x-1, y);
+                    s = GetIsCorridorTile(x, y-1);
+
+                    if (e && n && w && s) // X
+                        PlaceTile(x, y, corridorX);
+                    else if (e && n && s) // T
+                        PlaceTile(x, y, corridorT, 0.0f);
+                    else if (w && n && e) // T
+                        PlaceTile(x, y, corridorT, -90.0f);
+                    else if (s && w && n) // T
+                        PlaceTile(x, y, corridorT, -180.0f);
+                    else if (e && s && w) // T
+                        PlaceTile(x, y, corridorT, -270.0f);
+                    else if (e && n) // L
+                        PlaceTile(x, y, corridorTurn, 0.0f);
+                    else if (n && w) // L
+                        PlaceTile(x, y, corridorTurn, -90.0f);
+                    else if (w && s) // L
+                        PlaceTile(x, y, corridorTurn, -180.0f);
+                    else if (s && e) // L
+                        PlaceTile(x, y, corridorTurn, -270.0f);
+                    else if (e && w) // Straight
+                        PlaceTile(x, y, corridorStraight, 0.0f);
+                    else if (n && s) // Straight
+                        PlaceTile(x, y, corridorStraight, 90.0f);
+                    else if (n) // End
+                        PlaceTile(x, y, corridorEnd, 0.0f);
+                    else if (s) // End
+                        PlaceTile(x, y, corridorStraight, 180.0f);
+                    else
+                        Debug.Log("Invalid corridor configuration!");
+                }
+            }
+        }
     }
 
     //----------------------------------------------------------------------//
@@ -744,11 +838,15 @@ public class DungeonGenerator : MonoBehaviour
 
     void Start()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         // Continue trying to generate a new dungeon if room collision 
         // iterations exceed the limit.
         while (!GenerateDungeon());
 
-        Debug.Log("Dungeon created.");
+        stopwatch.Stop();
+        Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
     }
 
     void Update()
