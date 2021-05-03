@@ -39,6 +39,19 @@ public struct Duration : IEquatable<Duration>
         }
     }
     /// <summary>
+    /// How much time is left in unit interval [1,0].
+    /// </summary>
+    public float UnitIntervalTimeLeft
+    {
+        get
+        {
+            if (!_paused)
+                Update();
+
+            return _timeLeft / _initTime;
+        }
+    }
+    /// <summary>
     /// Action to activate when the time has run out. Need to be checked for it to happen.
     /// </summary>
     public Action Action
@@ -54,6 +67,10 @@ public struct Duration : IEquatable<Duration>
     /// Initialized time length.
     /// </summary>
     public float InitTime { get => _initTime; }
+    /// <summary>
+    /// Delta time of the duration. 1 / duration.
+    /// </summary>
+    public float Delta { get => 1 / _initTime; }
 
     private Action _action;
 
@@ -61,8 +78,8 @@ public struct Duration : IEquatable<Duration>
     private float _pauseGameTime;
     [SerializeField] private float _timeLeft;
     [SerializeField] private float _initTime;
-    [SerializeField] private bool _paused;
-    [SerializeField] private bool _isActive;
+    private bool _paused;
+    private bool _isActive;
     private bool _activatedAction;
 
     public bool Equals(Duration other) => ID == other.ID;
@@ -70,7 +87,7 @@ public struct Duration : IEquatable<Duration>
     public override int GetHashCode() => ID;
     public override string ToString() => TimeLeft.ToString();
 
-    public bool Paused()
+    public bool Pause()
     {
         if (!_paused)
             _pauseGameTime = Time.time;
@@ -101,7 +118,7 @@ public struct Duration : IEquatable<Duration>
     public void Done()
     {
         _timeLeft = 0;
-        Paused();
+        Pause();
     }
 
     public void Set(float duration)
