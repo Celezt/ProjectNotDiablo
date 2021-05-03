@@ -3,18 +3,42 @@ using System.Collections.Generic;
 using UnityAtoms.BaseAtoms;
 using UnityEngine;
 
+
 public class ItemPickupScript : MonoBehaviour
 {
 
-    public ItemType itemType;
+    public Item item;
     public FloatVariable health;
+    public Item.ItemType itemType;
+    [SerializeField] public HotbarScript script;
+    /*
     public int healingValue = 25;
     public int speedValue = 5;
     public FloatVariable moveSpeed;
+    */
+    public Inventory inventory;
+
+    
+    void Awake()
+    {
+        item = new Item();
+        item.amount = 1;
+        item.itemType = itemType;
+        inventory = script.GetInventory();
+    }
 
 
     void OnTriggerEnter()
-    {
+    {   
+        if(inventory == null)
+        {
+            inventory = script.GetInventory();
+        }
+        Debug.Log(inventory);
+        Debug.Log(item);
+        bool wasAdded = inventory.AddItem(item);
+
+        /*
         switch (itemType)
         {
            
@@ -34,13 +58,33 @@ public class ItemPickupScript : MonoBehaviour
                 moveSpeed.Value += speedValue;
                 break;
         }
-        Destroy(gameObject);
-    }
+        */
+        if (wasAdded)
+        {
+            Destroy(gameObject);
+        }
+        
+        
 
-    public enum ItemType
+    }
+    void OnTriggerStay()
     {
-        HealthPotion,
-        SpeedPotion
+        if (inventory == null)
+        {
+            inventory = script.GetInventory();
+        }
+        bool wasAdded = inventory.AddItem(item);
+        if (wasAdded)
+        {
+            Destroy(gameObject);
+        }
+
     }
 
+
+
+    public void SetInventory(Inventory inv)
+    {
+        inventory = inv;
+    }
 }
