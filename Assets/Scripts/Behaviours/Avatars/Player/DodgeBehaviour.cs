@@ -23,7 +23,6 @@ public class DodgeBehaviour : MonoBehaviour
     [Foldout("Atoms", true)]
     [SerializeField] private DurationValueList _invisibleFrameVariable;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
-    [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private Vector3Variable _rawLocalInputMovement;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
@@ -92,11 +91,6 @@ public class DodgeBehaviour : MonoBehaviour
             }
         }
     }
-
-    public void OnExitDodge(AnimatorModifierInfo animatorInfo)
-    {
-
-    }
     #endregion
 
     #region Unity Message
@@ -114,7 +108,6 @@ public class DodgeBehaviour : MonoBehaviour
     {
         _controls.Ground.Roll.performed += OnDodge;
         _controls.Ground.Roll.canceled += OnDodge;
-        _animatorModifierInfoEvent.Register(OnExitDodge);
         _controls.Enable();
 
         _coroutineUpdateStunned = StartCoroutine(UpdateStunned());
@@ -124,7 +117,6 @@ public class DodgeBehaviour : MonoBehaviour
     {
         _controls.Ground.Roll.performed -= OnDodge;
         _controls.Ground.Roll.canceled -= OnDodge;
-        _animatorModifierInfoEvent.Unregister(OnExitDodge);
         _controls.Disable();
 
         StopCoroutine(_coroutineUpdateStunned);
@@ -133,14 +125,11 @@ public class DodgeBehaviour : MonoBehaviour
 
     private IEnumerator DodgeLerp(Vector3 direction, float length, float speedMultiplier, float strength, AnimationCurve curve)
     {
-        float duration = length * speedMultiplier;
-        float delta = 1 / duration;
-        float timer = 0;
+        Duration duration = new Duration(length * speedMultiplier);
 
-        while (timer < 1)
+        while (duration.IsActive)
         {
-            timer += delta * Time.fixedDeltaTime;
-            _rigidbody?.AddRelativeForce(direction * (_rigidbody?.mass ?? 1.0f) * curve.Evaluate(timer) * strength, ForceMode.Force);
+            _rigidbody?.AddRelativeForce(direction * (_rigidbody?.mass ?? 1.0f) * curve.Evaluate(1 - duration.UnitIntervalTimeLeft) * strength, ForceMode.Force);
 
             yield return new WaitForFixedUpdate();
         }

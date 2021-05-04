@@ -43,41 +43,42 @@ public class Popup : MonoBehaviour
 
     private IEnumerator CoroutineScale()
     {
-        Duration duration = new Duration(_duration);
-
-        while (duration.IsActive)
+        do
         {
-            float scale = _scaleCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _scaleMultiplier;
-            transform.localScale = new Vector3(scale, scale, scale);
+            Duration duration = new Duration(_duration);
 
-            yield return new WaitForFixedUpdate();
-        }
+            while (duration.IsActive)
+            {
+                float scale = _scaleCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _scaleMultiplier;
+                transform.localScale = new Vector3(scale, scale, scale);
 
-        if (!_enableLifespan)
-            StartCoroutine(CoroutineScale());
+                yield return new WaitForFixedUpdate();
+            }
+
+        } while (!_enableLifespan);
     }
 
     private IEnumerator CoroutineTranslation()
     {
-        Duration duration = new Duration(_duration);
-        Vector3 originPositon = transform.position;
-
-        while (duration.IsActive)
+        do
         {
-            transform.position = new Vector3
+            Duration duration = new Duration(_duration);
+            Vector3 originPositon = transform.position;
+
+            while (duration.IsActive)
             {
-                x = originPositon.x + _translationXCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.x,
-                y = originPositon.y + _translationYCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.y,
-                z = originPositon.z + _translationZCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.z,
-            };
+                transform.position = new Vector3
+                {
+                    x = originPositon.x + _translationXCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.x,
+                    y = originPositon.y + _translationYCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.y,
+                    z = originPositon.z + _translationZCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _translationMultiplier.z,
+                };
 
-            yield return new WaitForFixedUpdate();
-        }
+                yield return new WaitForFixedUpdate();
+            }
 
-        if (!_enableLifespan)
-        {
             transform.position = originPositon;
-            StartCoroutine(CoroutineTranslation());
-        }
+
+        } while (!_enableLifespan);
     }
 }
