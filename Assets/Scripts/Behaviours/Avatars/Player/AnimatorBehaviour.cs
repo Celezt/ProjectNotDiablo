@@ -19,6 +19,8 @@ public class AnimatorBehaviour : MonoBehaviour
         set => _fallingReference.Value = value;
     }
 
+    public bool IsAnimationModifierRunning { get => _isAnimationModifierRunning; }
+
     #region Inspector
 
     [Header("Settings")]
@@ -33,6 +35,8 @@ public class AnimatorBehaviour : MonoBehaviour
 
     private Action<AnimatorModifierInfo> _endCustomAction;
 
+    private bool _isAnimationModifierRunning;
+
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
     private readonly int _motionMagnitudeID = Animator.StringToHash("MotionMagnitude");
@@ -43,6 +47,8 @@ public class AnimatorBehaviour : MonoBehaviour
     #region Events
     public void OnAnimationModifierRaised(AnimatorModifier value)
     {
+        _isAnimationModifierRunning = true;
+
         _animatorOverrideController["Empty Custom Motion"] = value.Clip;
         _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
         _animator.SetBool(_isCustomID, true);
@@ -52,6 +58,8 @@ public class AnimatorBehaviour : MonoBehaviour
 
     public void OnAnimationModifierEnd(AnimatorModifierInfo info)
     {
+        _isAnimationModifierRunning = false;
+
         _endCustomAction?.Invoke(info);
         _endCustomAction = null;
     }
