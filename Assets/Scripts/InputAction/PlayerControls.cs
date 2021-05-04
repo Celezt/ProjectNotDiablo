@@ -65,6 +65,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""528dd101-3b8e-4682-b4aa-7a8e27ec85bd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -549,6 +557,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": ""Scale(factor=10)"",
                     ""groups"": """",
                     ""action"": ""Hotbar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5425c5b-6f8f-44d9-89c8-e49ae526608f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1099,6 +1118,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Ground_Point = m_Ground.FindAction("Point", throwIfNotFound: true);
         m_Ground_PointDelta = m_Ground.FindAction("PointDelta", throwIfNotFound: true);
         m_Ground_Hotbar = m_Ground.FindAction("Hotbar", throwIfNotFound: true);
+        m_Ground_Attack = m_Ground.FindAction("Attack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1166,6 +1186,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Ground_Point;
     private readonly InputAction m_Ground_PointDelta;
     private readonly InputAction m_Ground_Hotbar;
+    private readonly InputAction m_Ground_Attack;
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;
@@ -1176,6 +1197,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Point => m_Wrapper.m_Ground_Point;
         public InputAction @PointDelta => m_Wrapper.m_Ground_PointDelta;
         public InputAction @Hotbar => m_Wrapper.m_Ground_Hotbar;
+        public InputAction @Attack => m_Wrapper.m_Ground_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1203,6 +1225,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Hotbar.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnHotbar;
                 @Hotbar.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnHotbar;
                 @Hotbar.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnHotbar;
+                @Attack.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnAttack;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -1225,6 +1250,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Hotbar.started += instance.OnHotbar;
                 @Hotbar.performed += instance.OnHotbar;
                 @Hotbar.canceled += instance.OnHotbar;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
         }
     }
@@ -1360,6 +1388,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnPoint(InputAction.CallbackContext context);
         void OnPointDelta(InputAction.CallbackContext context);
         void OnHotbar(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
