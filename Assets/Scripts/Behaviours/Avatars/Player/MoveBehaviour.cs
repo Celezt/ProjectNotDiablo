@@ -91,7 +91,6 @@ public class MoveBehaviour : MonoBehaviour
     [SerializeField] private ColliderEvent _groundCheckEventEnter;
     [SerializeField] private ColliderEvent _groundCheckEventExit;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
-    [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
     [SerializeField] private VoidEvent _movementEnterEvent;
     [SerializeField] private VoidEvent _movementExitEvent;
     [SerializeField] private DurationValueList _stunMoveList;
@@ -174,11 +173,6 @@ public class MoveBehaviour : MonoBehaviour
         }
     }
 
-    public void OnExitLand(AnimatorModifierInfo animatorInfo)
-    {
-
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 inputMovement = context.ReadValue<Vector2>();
@@ -221,7 +215,6 @@ public class MoveBehaviour : MonoBehaviour
         _movementSpeedAtoms.Changed.Register(OnMovementSpeedChange);
         _groundCheckEventEnter.Register(OnEnterGroundCheck);
         _groundCheckEventExit.Register(OnExitGroundCheck);
-        _animatorModifierInfoEvent.Register(OnExitLand);
         _controls.Enable();
 
         _coroutineStunned = StartCoroutine(UpdateStunned());
@@ -251,7 +244,6 @@ public class MoveBehaviour : MonoBehaviour
         _movementSpeedAtoms.Changed.Unregister(OnMovementSpeedChange);
         _groundCheckEventEnter.Unregister(OnEnterGroundCheck);
         _groundCheckEventExit.Unregister(OnExitGroundCheck);
-        _animatorModifierInfoEvent.Unregister(OnExitLand);
         _controls.Disable();
 
         StopCoroutine(_coroutineStunned);

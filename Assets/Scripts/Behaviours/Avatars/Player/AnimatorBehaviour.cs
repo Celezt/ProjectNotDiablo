@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,8 +19,6 @@ public class AnimatorBehaviour : MonoBehaviour
         set => _fallingReference.Value = value;
     }
 
-    public void RaiseAnimatorModifier(AnimatorModifier modifier) => OnAnimationModifierRaised(modifier);
-
     #region Inspector
 
     [Header("Settings")]
@@ -31,6 +30,8 @@ public class AnimatorBehaviour : MonoBehaviour
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
+
+    private Action<AnimatorModifierInfo> _endCustomAction;
 
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
@@ -45,6 +46,14 @@ public class AnimatorBehaviour : MonoBehaviour
         _animatorOverrideController["Empty Custom Motion"] = value.Clip;
         _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
         _animator.SetBool(_isCustomID, true);
+
+        _endCustomAction = value.EndAction;
+    }
+
+    public void OnAnimationModifierEnd(AnimatorModifierInfo info)
+    {
+        _endCustomAction?.Invoke(info);
+        _endCustomAction = null;
     }
 
     public void OnFalling(bool value)

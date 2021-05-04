@@ -6,10 +6,7 @@ using UnityAtoms.BaseAtoms;
 
 public class CustomMotionBehaviour : StateMachineBehaviour
 {
-    [SerializeField] private AnimatorModifierInfoEvent _animatorModifierInfoEvent;
-
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
-    private readonly int hash = Animator.StringToHash("Custom Motion");
 
     private AnimatorStateInfo _animatorStateInfo;
     private AnimatorClipInfo _animatorClipInfo;
@@ -27,6 +24,7 @@ public class CustomMotionBehaviour : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
-        _animatorModifierInfoEvent?.Raise(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo));
+        AnimatorBehaviour behaviour = animator.GetComponentInParent<AnimatorBehaviour>();
+        behaviour.OnAnimationModifierEnd(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo, layerIndex));
     }
 }
