@@ -30,6 +30,25 @@ Transform:
   m_Father: {fileID: 2691928546050736874}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6460685998473541276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319900842118134239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213a3f08e62a0a6428640df88bc41f55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  cooldown: 1
+  range: 2
+  angle: 90
+  cleve: 0
+  modifier: 0
+  hitableTargets: []
 --- !u!1 &2691928546050736854
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,6 +64,7 @@ GameObject:
   - component: {fileID: 5064504266361368092}
   - component: {fileID: 583105869144826515}
   - component: {fileID: 7651242026116013290}
+  - component: {fileID: 2881561965629204934}
   - component: {fileID: 8042037470972645018}
   m_Layer: 6
   m_Name: Player
@@ -182,7 +202,6 @@ MonoBehaviour:
   _groundCheckEventEnter: {fileID: 11400000, guid: d434d4559c912904fbbe9761d35cd036, type: 2}
   _groundCheckEventExit: {fileID: 11400000, guid: 82d4f1327b1bd424fbaee602564684e9, type: 2}
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
   _movementEnterEvent: {fileID: 11400000, guid: 38792ab40a52ba543aa1f5b7616b0bd9, type: 2}
   _movementExitEvent: {fileID: 11400000, guid: 384f10e09620e734fb00959718f8bd0e, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
@@ -315,10 +334,24 @@ MonoBehaviour:
     Direction: {x: 0, y: 0, z: 1}
   _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
-  _animatorModifierInfoEvent: {fileID: 11400000, guid: 39fe519cd312683478a70114822c07b3, type: 2}
   _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
+--- !u!114 &2881561965629204934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe9ffd3afb64e8042961937486d34e88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
+  _selectedWeapon: {fileID: 1319900842118134239}
+  _attackClip: {fileID: 7400000, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
 --- !u!114 &8042037470972645018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,5 +556,10 @@ Transform:
 --- !u!95 &1371285749837915631 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95640976257318950, guid: d89ef4b5ddad07745b75fac0592def61, type: 3}
+  m_PrefabInstance: {fileID: 1320682694378448329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1319900842118134239 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1472501257231382, guid: d89ef4b5ddad07745b75fac0592def61, type: 3}
   m_PrefabInstance: {fileID: 1320682694378448329}
   m_PrefabAsset: {fileID: 0}
