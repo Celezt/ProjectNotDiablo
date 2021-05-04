@@ -217,7 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179292c3f13effa44bff6600115e786f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveBehaviour: {fileID: 583105869144826515}
   _dodgeData:
   - Angle:
       Min: 150
@@ -335,6 +334,7 @@ MonoBehaviour:
   _invisibleFrameVariable: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
   _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
   _rawLocalInputMovement: {fileID: 11400000, guid: 5cde553b9b348254a87e8bd421fccc5e, type: 2}
+  _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
 --- !u!114 &2881561965629204934
@@ -349,9 +349,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9ffd3afb64e8042961937486d34e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
   _selectedWeapon: {fileID: 1319900842118134239}
   _attackClip: {fileID: 7400000, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
+  _animationSpeed: 1
+  _stunMoveMultiplier: 0.7
+  _stunDodgeMultiplier: 0.4
+  _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
+  _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
+  _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
 --- !u!114 &8042037470972645018
 MonoBehaviour:
   m_ObjectHideFlags: 0

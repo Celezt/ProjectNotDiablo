@@ -16,7 +16,6 @@ public class DodgeBehaviour : MonoBehaviour
     }
 
     #region Inspector
-    [SerializeField] private MoveBehaviour _moveBehaviour;
     [Space(10)]
     [Header("Settings")]
     [SerializeField] private DodgeData[] _dodgeData;
@@ -24,6 +23,7 @@ public class DodgeBehaviour : MonoBehaviour
     [SerializeField] private DurationValueList _invisibleFrameVariable;
     [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private Vector3Variable _rawLocalInputMovement;
+    [SerializeField] private BoolVariable _fallingVariable;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
 
@@ -59,9 +59,9 @@ public class DodgeBehaviour : MonoBehaviour
         {
             if (!_afteRollCooldown.IsActive)
             {
-                if (_moveBehaviour != null)
+                if (_fallingVariable != null)
                 {
-                    if (_moveBehaviour.IsFalling)   // Don't roll if falling.
+                    if (_fallingVariable.Value)   // Don't roll if falling.
                         return;
                 }
 
@@ -79,7 +79,6 @@ public class DodgeBehaviour : MonoBehaviour
 
                          StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
 
-                        _stunMoveList.Clear();
                         _stunMoveList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
                         _stunDodgeList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier, () => {
                             _afteRollCooldown = new Duration(data.Cooldown);

@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
 public class AttackBehaviour : MonoBehaviour
 {
-    [SerializeField] private Vector3Variable _pointWorldPositionVariable;
-
     [SerializeField] private GameObject _selectedWeapon;
 
     [SerializeField] private AnimationClip _attackClip;
+    [SerializeField] private float _animationSpeed = 1.0f;
+    [SerializeField] private float _stunMoveMultiplier = 1.0f;
+    [SerializeField] private float _stunDodgeMultiplier = 1.0f;
+
+    [Foldout("Atoms", true)]
+    [SerializeField] private Vector3Variable _pointWorldPositionVariable;
+    [SerializeField] private DurationValueList _stunDodgeList;
+    [SerializeField] private DurationValueList _stunMoveList;
 
     private PlayerControls _controls;
 
@@ -29,7 +36,9 @@ public class AttackBehaviour : MonoBehaviour
 
             if (_animatorBehaviour.IsAnimationModifierRunning == false)
             {
-                _animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(_attackClip));
+                _stunDodgeList.Add(new Duration(_attackClip.length / _animationSpeed * _stunDodgeMultiplier));
+                _stunMoveList.Add(new Duration(_attackClip.length / _animationSpeed * _stunMoveMultiplier));
+                _animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(_attackClip, _animationSpeed));
             }
         }
     }
