@@ -32,7 +32,8 @@ public class AttackBehaviour : MonoBehaviour
         }
         if (_selectedWeapon.GetComponent<Melee>() != null)
         {
-            _selectedWeapon.GetComponent<Melee>().Attack(transform);
+            LayerMask selfLayer = LayerMask.GetMask("Player");
+            _selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
 
             if (_animatorBehaviour.IsAnimationModifierRunning == false)
             {

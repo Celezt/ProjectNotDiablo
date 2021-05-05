@@ -47,8 +47,12 @@ public class AI : MonoBehaviour
     float chargeAcceleration;
 
     AnimatorBehaviour animator;
+
+    [SerializeField]
+    AnimationClip clip;
     //Weapon Stats
 
+    LayerMask selfLayer;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +65,7 @@ public class AI : MonoBehaviour
         agent.speed = baseSpeed;
         ChargeSpeed = baseSpeed * 2;
         atDestination = true;
+        selfLayer = LayerMask.NameToLayer("AI");
     }
     
     void OnEnable()
@@ -160,13 +165,19 @@ public class AI : MonoBehaviour
 
     void Attack()
     {
+
         if (selectedWeapon.GetComponent<Ranged>() != null)
         {
             selectedWeapon.GetComponent<Ranged>().Attack(player.transform.position);
         }
         if (selectedWeapon.GetComponent<Melee>() != null)
         {
-            selectedWeapon.GetComponent<Melee>().Attack(transform);
+            selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
+
+            if (animator.IsAnimationModifierRunning == false)
+            {
+                animator.OnAnimationModifierRaised(new AnimatorModifier(clip));
+            }
         }
     }
 
