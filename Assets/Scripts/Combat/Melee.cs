@@ -17,17 +17,17 @@ public class Melee : MonoBehaviour
 
     public List<GameObject> hitableTargets = new List<GameObject>();
 
-    private float cooldownTimer;
+    public float cooldownTimer;
 
     LayerMask targetLayer;
-    LayerMask ignoreLayer;
+    public LayerMask ignoreLayer;
 
     private Transform originPos;
 
     void Start()
     {
         targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
-        ignoreLayer = LayerMask.GetMask("Ignore Raycast");
+        //ignoreLayer = LayerMask.GetMask("Player");
         cooldownTimer = 0;
     }
     private void Update()
@@ -38,8 +38,9 @@ public class Melee : MonoBehaviour
         }
     }
 
-    public void Attack(Transform pos)
+    public void Attack(Transform pos, LayerMask ignoreSelf)
     {
+        ignoreLayer = ignoreSelf;
         originPos = pos;
         if (cooldownTimer <= 0)
         {
@@ -83,13 +84,24 @@ public class Melee : MonoBehaviour
             Transform targetTansform = target.GetComponent<Transform>();
             Vector3 directionToTarget = (targetTansform.position - originPos.position).normalized;
 
-            float distanceToTarget = Vector3.Distance(originPos.position, targetTansform.position);
 
-            if (!Physics.Raycast(originPos.position, directionToTarget, distanceToTarget, ignoreLayer))
+            if (Vector3.Angle(originPos.forward, directionToTarget) < angle / 2)
             {
-                hitableTargets.Add(target);
+                float distanceToTarget = Vector3.Distance(transform.position, targetTansform.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer))
+                {
+                    hitableTargets.Add(target);
+                }
             }
+
+            //if (Physics.Raycast(originPos.position, directionToTarget, distanceToTarget, ignoreLayer))
+            //{
+            //    hitableTargets.Add(target);
+            //}
             Debug.DrawLine(transform.position, targetTansform.position, Color.white, 2.5f);
+
+
         }
     }
 

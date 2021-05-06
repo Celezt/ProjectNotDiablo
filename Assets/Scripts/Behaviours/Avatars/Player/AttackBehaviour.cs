@@ -83,7 +83,11 @@ public class AttackBehaviour : MonoBehaviour
         Ranged ranged = _selectedWeapon.GetComponent<Ranged>();
         if (ranged != null)
         {
+
             ranged.Attack(_pointWorldPositionVariable.Value);
+
+            LayerMask selfLayer = LayerMask.GetMask("Player");
+            _selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
 
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
