@@ -350,10 +350,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectedWeapon: {fileID: 1319900842118134239}
-  _attackClip: {fileID: 7400000, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
-  _animationSpeed: 1
-  _stunMoveMultiplier: 0.7
-  _stunDodgeMultiplier: 0.4
+  _attackCombinationCooldown: 1.3
+  _meleeOrderType: 1
+  _meleeData:
+  - Clip:
+    - {fileID: 7400000, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
+    AnimationSpeedMultiplier: 1
+    StunMoveMultiplier: 0.7
+    StunDodgeMultiplier: 0.4
+  - Clip:
+    - {fileID: 7400002, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
+    AnimationSpeedMultiplier: 1
+    StunMoveMultiplier: 0.7
+    StunDodgeMultiplier: 0.4
+  - Clip:
+    - {fileID: 7400004, guid: 176fac875603d3f419eb970f987aeab5, type: 3}
+    AnimationSpeedMultiplier: 1
+    StunMoveMultiplier: 0.7
+    StunDodgeMultiplier: 0.4
+  _rangedOrderType: 0
+  _rangedData: []
   _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
