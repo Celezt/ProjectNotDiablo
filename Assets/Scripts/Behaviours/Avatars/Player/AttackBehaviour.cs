@@ -50,7 +50,8 @@ public class AttackBehaviour : MonoBehaviour
         Melee melee = _selectedWeapon.GetComponent<Melee>();
         if (melee != null)
         {
-            melee.Attack(transform);
+            LayerMask selfLayer = LayerMask.GetMask("Player");
+            melee.Attack(transform, selfLayer);
 
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
@@ -85,9 +86,6 @@ public class AttackBehaviour : MonoBehaviour
         {
 
             ranged.Attack(_pointWorldPositionVariable.Value);
-
-            LayerMask selfLayer = LayerMask.GetMask("Player");
-            _selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
 
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
