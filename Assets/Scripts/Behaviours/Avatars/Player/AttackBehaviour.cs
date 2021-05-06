@@ -89,7 +89,6 @@ public class AttackBehaviour : MonoBehaviour
             LayerMask selfLayer = LayerMask.GetMask("Player");
             _selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
 
-
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
                 int index = 0;
