@@ -128,6 +128,10 @@ public class AI : MonoBehaviour
         {
             Attack();
         }
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -172,7 +176,7 @@ public class AI : MonoBehaviour
         }
         if (selectedWeapon.GetComponent<Melee>() != null)
         {
-            selectedWeapon.GetComponent<Melee>().Attack(transform, selfLayer);
+            selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
 
             if (animator.IsAnimationModifierRunning == false)
             {
