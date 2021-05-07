@@ -26,6 +26,7 @@ public class DodgeBehaviour : MonoBehaviour
     [SerializeField] private BoolVariable _fallingVariable;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
+    [SerializeField] private DurationValueList _stunAttackList;
 
     #endregion
 
@@ -80,6 +81,7 @@ public class DodgeBehaviour : MonoBehaviour
                          StartCoroutine(DodgeLerp(data.Direction, data.Animation.length, data.AnimationSpeedMultiplier, data.ForceStrength, data.ForceCurve));
 
                         _stunMoveList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
+                        _stunAttackList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier * data.StunMultiplier));
                         _stunDodgeList.Add(new Duration(data.Animation.length / data.AnimationSpeedMultiplier, () => {
                             _afteRollCooldown = new Duration(data.Cooldown);
                         }));

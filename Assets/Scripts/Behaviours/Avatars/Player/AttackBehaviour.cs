@@ -8,6 +8,11 @@ using MyBox;
 
 public class AttackBehaviour : MonoBehaviour
 {
+    public PlayerControls Controls
+    {
+        get => _controls;
+    }
+
     [SerializeField] private GameObject _selectedWeapon;
     [SerializeField] private float _attackCombinationCooldown = 2.0f;
     [Space(10)]
@@ -20,11 +25,12 @@ public class AttackBehaviour : MonoBehaviour
     [SerializeField] private Vector3Variable _pointWorldPositionVariable;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
+    [SerializeField] private DurationValueList _stunAttackList;
 
     private PlayerControls _controls;
-
     private AnimatorBehaviour _animatorBehaviour;
 
+    private Coroutine _coroutineUpdateStunned;
     private Duration _attackCombinationDuration;
 
     private int _attackIndex;
@@ -57,9 +63,9 @@ public class AttackBehaviour : MonoBehaviour
             {
                 int index = 0;
 
-                if (_meleeOrderType == OrderType.Random)
+                if (_meleeOrderType == OrderType.Random)                    // Random index if enabled.
                     index = UnityEngine.Random.Range(0, _meleeData.Length);
-                else if (_meleeOrderType == OrderType.Sequence)
+                else if (_meleeOrderType == OrderType.Sequence)             // Pick animation clip in order.
                 {
                     if (!_attackCombinationDuration.IsActive)
                         _attackIndex = 0;
@@ -91,9 +97,9 @@ public class AttackBehaviour : MonoBehaviour
             {
                 int index = 0;
 
-                if (_rangedOrderType == OrderType.Random)
+                if (_rangedOrderType == OrderType.Random)                   // Random index if enabled.
                     index = UnityEngine.Random.Range(0, _rangedData.Length);
-                else if (_rangedOrderType == OrderType.Sequence)
+                else if (_rangedOrderType == OrderType.Sequence)            // Pick animation clip in order.
                 {
                     if (!_attackCombinationDuration.IsActive)
                         _attackIndex = 0;
@@ -132,12 +138,43 @@ public class AttackBehaviour : MonoBehaviour
     {
         _controls.Ground.Attack.performed += OnAttack;
         _controls.Enable();
+
+        _coroutineUpdateStunned = StartCoroutine(UpdateStunned());
     }
 
     private void OnDisable()
     {
         _controls.Ground.Attack.performed -= OnAttack;
         _controls.Disable();
+
+        StopCoroutine(_coroutineUpdateStunned);
     }
     #endregion
+
+    private IEnumerator UpdateStunned()
+    {
+        yield return new WaitForFixedUpdate();
+
+        while (true)
+        {
+            for (int i = 0; i < _stunAttackList.Count; i++)
+            {
+                Duration duration = _stunAttackList[i];
+
+                if (!duration.IsActive)
+                    _stunAttackList.Remove(duration);
+            }
+
+            if (_stunAttackList.Count != 0)
+            {
+                _controls.Disable();
+            }
+            else
+            {
+                _controls.Enable();
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 }
