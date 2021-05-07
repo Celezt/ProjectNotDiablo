@@ -8,11 +8,6 @@ using MyBox;
 
 public class AttackBehaviour : MonoBehaviour
 {
-    public PlayerControls Controls
-    {
-        get => _controls;
-    }
-
     [SerializeField] private GameObject _selectedWeapon;
     [SerializeField] private float _attackCombinationCooldown = 2.0f;
     [Space(10)]
@@ -23,12 +18,12 @@ public class AttackBehaviour : MonoBehaviour
 
     [Foldout("Atoms", true)]
     [SerializeField] private Vector3Variable _pointWorldPositionVariable;
+    [SerializeField] private AnimatorModifierEvent _animatorModifierEvent;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
     [SerializeField] private DurationValueList _stunAttackList;
 
     private PlayerControls _controls;
-    private AnimatorBehaviour _animatorBehaviour;
 
     private Coroutine _coroutineUpdateStunned;
     private Duration _attackCombinationDuration;
@@ -53,73 +48,54 @@ public class AttackBehaviour : MonoBehaviour
     #region Events
     public void OnAttack(InputAction.CallbackContext context)
     {
-        Melee melee = _selectedWeapon.GetComponent<Melee>();
-
-        if (melee != null && melee.cooldownTimer <= 0)
+        void CustomAnimation(AttackData[] dataBuffer, OrderType type)
         {
-            melee.Attack(transform, gameObject.GetComponent<Collider>());
+            if (dataBuffer.Length == 0)     // Skip if no data was found.
+                return;
 
-            if (!_animatorBehaviour.IsAnimationModifierRunning)
+            int index = 0;
+
+            switch (type)
             {
-                int index = 0;
-
-                if (_meleeOrderType == OrderType.Random)                    // Random index if enabled.
-                    index = UnityEngine.Random.Range(0, _meleeData.Length);
-                else if (_meleeOrderType == OrderType.Sequence)             // Pick animation clip in order.
-                {
+                case OrderType.Random:
+                    index = UnityEngine.Random.Range(0, dataBuffer.Length);
+                    break;
+                case OrderType.Sequence:
                     if (!_attackCombinationDuration.IsActive)
                         _attackIndex = 0;
 
                     index = _attackIndex;
 
-                    _attackIndex = (_attackIndex + 1) % _meleeData.Length;
+                    _attackIndex = (_attackIndex + 1) % dataBuffer.Length;
 
                     _attackCombinationDuration = new Duration(_attackCombinationCooldown);
-                }
-
-                AttackData data = _meleeData[index];
-
-                int clipIndex = UnityEngine.Random.Range(0, data.Clip.Length);  // Pick random clip.
-
-                _stunDodgeList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunDodgeMultiplier));
-                _stunMoveList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunMoveMultiplier));
-                _animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(data.Clip[clipIndex], data.AnimationSpeedMultiplier));
+                    break;
             }
+
+            AttackData data = dataBuffer[index];
+
+            int clipIndex = UnityEngine.Random.Range(0, data.Clip.Length);  // Pick random clip.
+
+            _stunDodgeList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunDodgeMultiplier));
+            _stunMoveList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunMoveMultiplier));
+            _animatorModifierEvent.Raise(new AnimatorModifier(data.Clip[clipIndex], data.AnimationSpeedMultiplier));
+        }
+
+        Melee melee = _selectedWeapon.GetComponent<Melee>();
+        if (melee != null && melee.cooldownTimer <= 0)
+        {
+            melee.Attack(transform, gameObject.GetComponent<Collider>());
+
+
+            CustomAnimation(_meleeData, _meleeOrderType);
         }
 
         Ranged ranged = _selectedWeapon.GetComponent<Ranged>();
         if (ranged != null && ranged.cooldownTimer <= 0)
         {
-
-
-            if (!_animatorBehaviour.IsAnimationModifierRunning)
-            {
-                int index = 0;
-
-                if (_rangedOrderType == OrderType.Random)                   // Random index if enabled.
-                    index = UnityEngine.Random.Range(0, _rangedData.Length);
-                else if (_rangedOrderType == OrderType.Sequence)            // Pick animation clip in order.
-                {
-                    if (!_attackCombinationDuration.IsActive)
-                        _attackIndex = 0;
-
-                    index = _attackIndex;
-
-                    _attackIndex = (_attackIndex + 1) % _rangedData.Length;
-
-                    _attackCombinationDuration = new Duration(_attackCombinationCooldown);
-                }
-
-                AttackData data = _rangedData[index];
-
-                int clipIndex = UnityEngine.Random.Range(0, data.Clip.Length);  // Pick random clip.
-
-                _stunDodgeList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunDodgeMultiplier));
-                _stunMoveList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunMoveMultiplier));
-                _animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(data.Clip[clipIndex], data.AnimationSpeedMultiplier));
-            }
             ranged.Attack(_pointWorldPositionVariable.Value);
 
+            CustomAnimation(_rangedData, _rangedOrderType);
         }
     }
     #endregion
@@ -128,11 +104,6 @@ public class AttackBehaviour : MonoBehaviour
     private void Awake()
     {
         _controls = new PlayerControls();
-    }
-
-    private void Start()
-    {
-        _animatorBehaviour = GetComponent<AnimatorBehaviour>();
     }
 
     private void OnEnable()

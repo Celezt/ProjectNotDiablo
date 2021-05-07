@@ -9,11 +9,6 @@ using MyBox;
 
 public class PointBehaviour : MonoBehaviour
 {
-    public PlayerControls Controls
-    {
-        get => _controls;
-    }
-
     #region Inspector
     [Header("Settings")]
     [SerializeField, Tooltip("Only for controllers")] private FloatReference _deltaCursorSpeedReference;

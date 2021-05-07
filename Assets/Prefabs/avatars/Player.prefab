@@ -50,6 +50,9 @@ MonoBehaviour:
   modifier: 0
   hitableTargets: []
   cooldownTimer: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -376,6 +379,7 @@ MonoBehaviour:
   _rangedOrderType: 0
   _rangedData: []
   _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
+  _animatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
   _stunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}

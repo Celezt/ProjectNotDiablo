@@ -10,11 +10,6 @@ using MyBox;
 [RequireComponent(typeof(Rigidbody))]
 public class MoveBehaviour : MonoBehaviour
 {
-    public PlayerControls Controls
-    {
-        get => _controls;
-    }
-
     public bool IsFalling
     {
         get => _groundCheckEntered == 0;
@@ -113,6 +108,7 @@ public class MoveBehaviour : MonoBehaviour
     private MovementType _movementType;
 
     private Stopwatch _landStopWatch;
+    private Duration _stunDuration;
 
     private Coroutine _coroutineStunned;
 
@@ -143,6 +139,8 @@ public class MoveBehaviour : MonoBehaviour
         {
             OnLand();
             _fallingVariable.Value = false;
+
+            _stunMoveList.Remove(_stunDuration);
         }
 
         _groundCheckEntered++;
@@ -151,7 +149,15 @@ public class MoveBehaviour : MonoBehaviour
     public void OnExitGroundCheck(Collider collider)
     {
         _groundCheckEntered--;
-        _fallingVariable.Value = IsFalling;
+
+        if (IsFalling)
+        {
+            _fallingVariable.Value = true;
+
+            _stunDuration = new Duration(float.MaxValue);
+            _stunMoveList.Add(_stunDuration);
+        }
+
         _landStopWatch = new Stopwatch(0);
     }
 
