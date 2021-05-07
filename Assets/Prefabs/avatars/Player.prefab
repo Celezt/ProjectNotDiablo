@@ -49,6 +49,10 @@ MonoBehaviour:
   cleve: 0
   modifier: 0
   hitableTargets: []
+  cooldownTimer: 0
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &2691928546050736854
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +341,7 @@ MonoBehaviour:
   _fallingVariable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
+  _stunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
 --- !u!114 &2881561965629204934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +378,7 @@ MonoBehaviour:
   _pointWorldPositionVariable: {fileID: 11400000, guid: 3965b663d99fcff4d90231547801bb67, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
+  _stunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
 --- !u!114 &8042037470972645018
 MonoBehaviour:
   m_ObjectHideFlags: 0
