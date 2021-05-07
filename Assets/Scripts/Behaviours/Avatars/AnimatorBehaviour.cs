@@ -35,6 +35,7 @@ public class AnimatorBehaviour : MonoBehaviour
 
     private Action<AnimatorModifierInfo> _endCustomAction;
 
+    private int _customIndex;
     private bool _isAnimationModifierRunning;
 
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
@@ -42,6 +43,7 @@ public class AnimatorBehaviour : MonoBehaviour
     private readonly int _motionMagnitudeID = Animator.StringToHash("MotionMagnitude");
     private readonly int _isFallingID = Animator.StringToHash("IsFalling");
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
+    private readonly int _customIndexID = Animator.StringToHash("CustomIndex");
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
 
     #region Events
@@ -49,11 +51,23 @@ public class AnimatorBehaviour : MonoBehaviour
     {
         _isAnimationModifierRunning = true;
 
-        _animatorOverrideController["Empty Custom Motion"] = value.Clip;
+        switch (_customIndex)
+        {
+            case 0:
+                _animatorOverrideController["Empty Custom Motion 0"] = value.Clip;
+                break;
+            case 1:
+                _animatorOverrideController["Empty Custom Motion 1"] = value.Clip;
+                break;
+        }
+
+        _animator.SetInteger(_customIndexID, _customIndex);
         _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
         _animator.SetBool(_isCustomID, true);
 
         _endCustomAction = value.EndAction;
+
+        _customIndex = (_customIndex + 1) % 2;
     }
 
     public void OnAnimationModifierEnd(AnimatorModifierInfo info)

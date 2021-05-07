@@ -10,11 +10,6 @@ using MyBox;
 
 public class DodgeBehaviour : MonoBehaviour
 {
-    public PlayerControls Controls
-    {
-        get => _controls;
-    }
-
     #region Inspector
     [Space(10)]
     [Header("Settings")]
