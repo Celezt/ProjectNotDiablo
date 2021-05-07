@@ -207,7 +207,7 @@ MonoBehaviour:
   damage: 50
   cooldown: 2
   range: 15
-  areaOfEffectRadius: 3
+  areaOfEffectRadius: 5
   speed: 20
   cleve: 0
   modifier: 0

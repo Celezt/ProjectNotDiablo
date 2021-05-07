@@ -19,15 +19,16 @@ public class Melee : MonoBehaviour
 
     public float cooldownTimer;
 
-    LayerMask targetLayer;
+    public LayerMask targetLayer;
     public LayerMask ignoreLayer;
 
     private Transform originPos;
+    Collider ownCollider;
 
     void Start()
     {
         targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
-        //ignoreLayer = LayerMask.GetMask("Player");
+        ignoreLayer = LayerMask.GetMask("Enviorment");
         cooldownTimer = 0;
     }
     private void Update()
@@ -38,9 +39,9 @@ public class Melee : MonoBehaviour
         }
     }
 
-    public void Attack(Transform pos, LayerMask ignoreSelf)
+    public void Attack(Transform pos, Collider self)
     {
-        ignoreLayer = ignoreSelf;
+        ownCollider = self;
         originPos = pos;
         if (cooldownTimer <= 0)
         {
@@ -89,7 +90,7 @@ public class Melee : MonoBehaviour
             {
                 float distanceToTarget = Vector3.Distance(transform.position, targetTansform.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer))
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer) && targetsInViewRadius[i] != ownCollider)
                 {
                     hitableTargets.Add(target);
                 }

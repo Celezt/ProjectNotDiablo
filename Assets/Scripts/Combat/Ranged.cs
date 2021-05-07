@@ -22,7 +22,7 @@ public class Ranged : MonoBehaviour
 
     private List<GameObject> hitableTargets = new List<GameObject>();
 
-    private float cooldownTimer;
+    public float cooldownTimer;
 
     void Start()
     {
