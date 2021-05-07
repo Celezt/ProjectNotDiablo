@@ -28,13 +28,13 @@ public class Projectile : MonoBehaviour
         range = _range;
     }
 
-    LayerMask targetLayer;
+    public LayerMask targetLayer;
     LayerMask ignoreLayer;
 
 
     void Start()
     {
-        targetLayer = LayerMask.GetMask("Damageble");
+        targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
         ignoreLayer = LayerMask.GetMask("Enviorment");
     }
 
@@ -93,7 +93,7 @@ public class Projectile : MonoBehaviour
             Vector3 directionToTarget = (targetTansform.position - transform.position).normalized;
             float distanceToTarget = Vector3.Distance(transform.position, targetTansform.position);
 
-            if (!Physics.Raycast(gameObject.GetComponentInParent<Transform>().position, directionToTarget, distanceToTarget, ignoreLayer))
+            if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer))
             {
                 targetsAffected.Add(target);
                 //directLineOfSight = true;

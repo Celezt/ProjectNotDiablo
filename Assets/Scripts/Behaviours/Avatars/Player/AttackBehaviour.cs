@@ -48,10 +48,10 @@ public class AttackBehaviour : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         Melee melee = _selectedWeapon.GetComponent<Melee>();
-        if (melee != null)
+
+        if (melee != null && melee.cooldownTimer <= 0)
         {
-            LayerMask selfLayer = LayerMask.GetMask("Player");
-            melee.Attack(transform, selfLayer);
+            melee.Attack(transform, gameObject.GetComponent<Collider>());
 
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
@@ -82,10 +82,9 @@ public class AttackBehaviour : MonoBehaviour
         }
 
         Ranged ranged = _selectedWeapon.GetComponent<Ranged>();
-        if (ranged != null)
+        if (ranged != null && ranged.cooldownTimer <= 0)
         {
 
-            ranged.Attack(_pointWorldPositionVariable.Value);
 
             if (!_animatorBehaviour.IsAnimationModifierRunning)
             {
@@ -113,6 +112,8 @@ public class AttackBehaviour : MonoBehaviour
                 _stunMoveList.Add(new Duration(data.Clip[clipIndex].length / data.AnimationSpeedMultiplier * data.StunMoveMultiplier));
                 _animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(data.Clip[clipIndex], data.AnimationSpeedMultiplier));
             }
+            ranged.Attack(_pointWorldPositionVariable.Value);
+
         }
     }
     #endregion
