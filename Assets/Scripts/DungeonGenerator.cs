@@ -91,7 +91,6 @@ public class DungeonGenerator : MonoBehaviour
 
         public void Move(int x, int y) 
         {
-            roomObject.transform.Translate(x, 0.0f, y);
             bounds.x = bounds.x + x;
             bounds.y = bounds.y + y;
         }
@@ -109,26 +108,29 @@ public class DungeonGenerator : MonoBehaviour
     // Editor-exposed members
     //----------------------------------------------------------------------//
 
-
-    [Range(1, 32)]
+    [Range(2, 100)]
     public int minRooms = 10;
     
-    [Range(1, 32)]
+    [Range(2, 100)]
     public int maxRooms = 12;
 
     [Tooltip("The maximum number of attempts at resolving room collision "+
         "when creating a dungeon. If it exceeds this number, it will start "+
         "over with a new dungeon, scrapping the current one.")]
-    [Range(20, 100)]
+    [Range(30, 200)]
     public int maxRoomCollisions = 50;
     
-    [Header("Corridor Tiles")]
+    [Header("Corridor Prefabs")]
 
     public TileObject corridorStraight;
     public TileObject corridorTurn;
     public TileObject corridorT;
     public TileObject corridorX;
     public TileObject corridorEnd;
+
+    [Header("Room Prefabs")]
+
+    public List<RoomPrefab> roomPrefabs;
 
     [Header("Debug")]
 
@@ -145,7 +147,6 @@ public class DungeonGenerator : MonoBehaviour
     [Tooltip("Visualizes the tile grid. Red = room, yellow = corridor, "+
         "green = connection.")]
     public bool showTileGrid = false;
-
 
     //----------------------------------------------------------------------//
     // Rooms and layout members
@@ -176,6 +177,53 @@ public class DungeonGenerator : MonoBehaviour
     //----------------------------------------------------------------------//
     // Functions
     //----------------------------------------------------------------------//
+
+    void GeneratePrefabRoom(Vector2Int position) 
+    {
+        float rotAngle = Random.Range(0, 4) * 90.0f;
+        Quaternion randRotation = Quaternion.AngleAxis(rotAngle,
+            new Vector3(0.0f, 1.0f, 0.0f));
+
+        int roomIndex = Random.Range(0, roomPrefabs.Count);
+        RoomPrefab roomPrefab = roomPrefabs[roomIndex];
+        Vector2Int roomBounds = roomPrefab.GetRotatedBounds(rotAngle);
+
+        Vector3 roomCenter = new Vector3(roomBounds.x / 2.0f, 0.0f, roomBounds.y / 2.0f);
+        roomCenter.x += position.x;
+        roomCenter.z += position.y;
+
+        GameObject roomObject = Object.Instantiate(roomPrefabs[roomIndex].gameObject, 
+            roomCenter, randRotation, transform);
+        roomObject.name = "Room " + rooms.Count;
+        roomObject.SetActive(true);
+
+        // Create and add a new Room struct to the list.
+        Room room = new Room();
+        room.roomObject = roomObject;
+        room.connections = new List<int>(roomPrefab.connections.Count);
+
+        // Set room to have 1 extra tile of padding, so that rooms must have
+        // at least 1 empty tile between them.
+        room.bounds = new RectInt((int)position.x - 1, (int)position.y - 1, roomBounds.x + 2, roomBounds.y + 2);
+
+        List<Vector2Int> rotatedConns = roomPrefab.GetRotatedConnections(rotAngle);
+        for (int i = 0; i < rotatedConns.Count; i++) {
+                Connection conn = new Connection();
+                conn.position = rotatedConns[i] + position;
+                conn.connected = false;
+                conn.room = rooms.Count;
+
+                connections.Add(conn);
+                room.connections.Add(connections.Count - 1); // Index of the last added connection
+                Debug.Log("Created connection at " + conn.position);
+        }
+
+        rooms.Add(room);
+        connectedRooms.Add(new List<int>());
+
+        Debug.Log("Created room at " + room.bounds);
+
+    }
 
     void GenerateRoom(Vector2Int position)
     {
@@ -413,8 +461,16 @@ public class DungeonGenerator : MonoBehaviour
     bool GenerateDungeon()
     {
         int roomCount = Random.Range(minRooms, maxRooms + 1);
-        for (int i = 0; i < roomCount; i++) {
-            GenerateRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
+
+        if (roomPrefabs.Count > 0) { // Generate rooms from the list of prefabs
+            for (int i = 0; i < roomCount; i++) {
+                GeneratePrefabRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
+            }
+        }
+        else { // Generate random rooms using the 1x1 debug tile prefab
+            for (int i = 0; i < roomCount; i++) {
+                GenerateRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
+            }
         }
         
         while (ResolveRoomCollision()) {
@@ -424,6 +480,26 @@ public class DungeonGenerator : MonoBehaviour
 
                 DestroyDungeon();
                 return false;
+            }
+        }
+
+        // Move room GameObjects to their proper position
+        foreach (Room e in rooms) {
+            e.roomObject.transform.position = new Vector3(e.bounds.center.x, 
+                0.0f, e.bounds.center.y);
+
+            RoomPrefab roomPrefab = e.roomObject.GetComponent<RoomPrefab>();    
+            Vector3 rotAxis;
+            float rotAngle;
+            e.roomObject.transform.rotation.ToAngleAxis(out rotAngle, out rotAxis);
+
+            List<Vector2Int> conns = roomPrefab.GetRotatedConnections(rotAngle);
+            
+            for (int i = 0; i < conns.Count; i++) {
+                Vector3 pos = e.roomObject.transform.position;
+                Connection tmp = connections[e.connections[i]];
+                tmp.position = conns[i] + new Vector2Int((int)(pos.x-0.5f), (int)(pos.z-0.5f));
+                connections[e.connections[i]] = tmp;
             }
         }
 
@@ -775,6 +851,8 @@ public class DungeonGenerator : MonoBehaviour
                 position + tile.positionOffset,
                 rotation, 
                 transform);
+            obj.SetActive(true);
+
         }
 
         for (int y = 0; y < tileGridSize.y; y++) {
@@ -851,8 +929,11 @@ public class DungeonGenerator : MonoBehaviour
 
     void Update()
     {
+        if (Keyboard.current.sKey.wasReleasedThisFrame)
+            ResolveRoomCollision();
+
         // DEBUG: Regenerate dungeon
-        if (Keyboard.current.dKey.wasReleasedThisFrame) {
+        if (Keyboard.current.rKey.wasReleasedThisFrame) {
             DestroyDungeon();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -909,6 +990,14 @@ public class DungeonGenerator : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
+        foreach (Room e in rooms)
+            Gizmos.DrawWireCube(new Vector3(e.bounds.center.x, 0.5f, e.bounds.center.y), new Vector3(e.bounds.width, 1.0f, e.bounds.height));
+        
+        Gizmos.color = Color.cyan;
+        foreach (Connection e in connections)
+            Gizmos.DrawWireCube(new Vector3(e.position.x, 0.5f, e.position.y), new Vector3(1.0f, 1.0f, 1.0f));
+
         if (showTileGrid) {
             for (int x = 0; x < tileGridSize.x; x++) {
                 for (int y = 0; y < tileGridSize.y; y++) {
