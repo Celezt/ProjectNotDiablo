@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  cooldown: 1
+  cooldown: 0.8
   range: 2
   angle: 90
   cleve: 0

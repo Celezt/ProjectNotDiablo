@@ -11,7 +11,7 @@ public class PointBehaviour : MonoBehaviour
 {
     #region Inspector
     [Header("Settings")]
-    [SerializeField, Tooltip("Only for controllers")] private FloatReference _deltaCursorSpeedReference;
+    [SerializeField, Tooltip("Only for controllers")] private IntReference _deltaCursorSpeedReference;
     [SerializeField] private LayerMask _aimLayerMask;
     [Foldout("Atoms", true)]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;

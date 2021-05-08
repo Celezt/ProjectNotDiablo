@@ -6,10 +6,12 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
+using MyBox;
 
-public class ControllerCursor : MonoBehaviour
+public class CursorHandler : MonoBehaviour
 {
-    [Header("Atoms")]
+    [SerializeField] private Sprite _mouseCursorTexture;
+    [Foldout("Atoms")]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
     [SerializeField] private PlayerInputEvent _deviceChangedEvent;
 
@@ -43,6 +45,11 @@ public class ControllerCursor : MonoBehaviour
         _image = GetComponent<Image>();
 
         _deviceChangedEvent.Register(OnDeviceChanged);
+    }
+
+    private void Start()
+    {
+        //Cursor.SetCursor(_mouseCursorTexture.texture, Vector2.zero, CursorMode.ForceSoftware);
     }
 
     private void OnEnable()
