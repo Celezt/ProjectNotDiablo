@@ -463,6 +463,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Hotbar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fd459c5-ab6b-43db-9626-800f07756994"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=11)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1133,7 +1144,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Ground_Point;
     private readonly InputAction m_Ground_PointDelta;
     private readonly InputAction m_Ground_Hotbar;
-
     public struct GroundActions
     {
         private @PlayerControls m_Wrapper;

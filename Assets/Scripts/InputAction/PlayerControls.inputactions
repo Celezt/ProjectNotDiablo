@@ -46,7 +46,6 @@
                     "interactions": ""
                 },
                 {
-
                     "name": "Hotbar",
                     "type": "Button",
                     "id": "513efc08-defa-4656-982a-a5a0c102685f",
@@ -447,6 +446,17 @@
                     "path": "<Keyboard>/0",
                     "interactions": "",
                     "processors": "Scale(factor=10)",
+                    "groups": "",
+                    "action": "Hotbar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fd459c5-ab6b-43db-9626-800f07756994",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "Scale(factor=11)",
                     "groups": "",
                     "action": "Hotbar",
                     "isComposite": false,

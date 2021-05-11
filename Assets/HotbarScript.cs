@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityAtoms.BaseAtoms;
 
 public class HotbarScript : MonoBehaviour
 {
@@ -16,6 +17,25 @@ public class HotbarScript : MonoBehaviour
     [SerializeField] public GameObject slot4;
     [SerializeField] public GameObject slot5;
     [SerializeField] public GameObject baseItemObject;
+    [SerializeField] public FloatVariable health;
+    [SerializeField] public FloatVariable speed;
+    [SerializeField] public GameObject baseGroundObject;
+    private float lastUsedSlot = -1;
+    private bool speedBoosted = false;
+    private System.DateTime speedBostedTime;
+
+
+    void Update()
+    {
+        if (speedBoosted)
+        {
+            if((System.DateTime.Now - speedBostedTime).TotalMilliseconds > 5000)
+            {
+                speedBoosted = false;
+                speed.Value = speed.InitialValue;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -44,6 +64,8 @@ public class HotbarScript : MonoBehaviour
         temp2.transform.SetParent(slot2.transform);
         */
         inventory.SetHotbardScript(this);
+        inventory.SetHealth(health);
+        inventory.SetSpeed(speed);
          
     }
 
@@ -77,6 +99,7 @@ public class HotbarScript : MonoBehaviour
                 case 4:
                 case 5:
                     item = inventory.GetInventory()[(int)inputKey - 1];
+                    UseItemHotbar(inputKey, item);
                     break;
                 case 6:
                     break;
@@ -88,39 +111,88 @@ public class HotbarScript : MonoBehaviour
                     break;
                 case 10:
                     break;
+                case 11:
+                    if(lastUsedSlot != -1)
+                    {
+                        //Debug.Log("deepp");
+                        item = inventory.GetInventory()[(int)lastUsedSlot-1];
+                        DropItem(lastUsedSlot, item);
+                    }
+                    break;
                 default:
                     break;
             }
-            if(item == null)
-            {
-                Debug.Log(item);
-                return;
-            }
-            Debug.Log(item.itemType);
-            if (item.itemType == Item.ItemType.Sword || item.itemType == Item.ItemType.Spell)
-            {
-              
-            }
-            else
-            {
-                Debug.Log(item);
-                bool wasRemoved = inventory.RemoveItem((int)inputKey - 1);
-                GameObject slot = GetSlot((int)inputKey);
-                
-                if (wasRemoved)
-                {
-                    GameObject itemImage = slot.transform.Find("Item(Clone)").gameObject;
-                    Image image = itemImage.GetComponent<Image>();
-                    Debug.Log(itemImage);
-                    Debug.Log(image);
-                    Debug.Log(wasRemoved);
-                    Destroy(itemImage);
-                }
-                
-            }
+            
 
             
         }
+    }
+
+    public void UseItemHotbar(float inputKey, Item item)
+    {
+        if (item == null)
+        {
+            //Debug.Log(item);
+            return;
+        }
+        //Debug.Log(item.itemType);
+        if (item.itemType == Item.ItemType.Sword)
+        {
+            lastUsedSlot = inputKey;
+            inventory.UseItem(item, inputKey);
+            //CHANGE WEAPON TO SWORD?
+        }
+        else if (item.itemType == Item.ItemType.Spell)
+        {
+            lastUsedSlot = inputKey;
+            inventory.UseItem(item, inputKey);
+            //CHANGE WEAPON TO SPELL?
+        }
+        else
+        {
+            //ONLY CONSUMABLE ITEMS LEFT USE ITEM AND REMOVE.
+            bool wasUsed = inventory.UseItem(item, inputKey);
+            //Debug.Log(wasUsed);
+            bool wasRemoved = false;
+            if (wasUsed)
+            {
+                wasRemoved = inventory.RemoveItem((int)inputKey - 1);
+            }
+
+            GameObject slot = GetSlot((int)inputKey);
+
+            if (wasRemoved)
+            {
+                GameObject itemImage = slot.transform.Find("Item(Clone)").gameObject;
+                Image image = itemImage.GetComponent<Image>();
+                //Debug.Log(itemImage);
+                //Debug.Log(image);
+                //Debug.Log(wasRemoved);
+                Destroy(itemImage);
+            }
+
+        }
+    }
+
+    public void DropItem(float inputkey, Item item)
+    {
+        GameObject newObject = baseGroundObject;
+        ItemPickupScript sc = baseGroundObject.GetComponent<ItemPickupScript>();
+        Debug.Log(sc);
+        sc.setItemType(item.itemType);
+        inventory.RemoveItem((int)inputkey - 1);
+        GameObject player = GameObject.Find("Player");
+        var pos = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y+0.5f, player.transform.localPosition.z);
+        Quaternion q = new Quaternion();
+        Instantiate(baseGroundObject,pos,q);
+        GameObject slot = GetSlot((int)lastUsedSlot);
+        GameObject itemImage = slot.transform.Find("Item(Clone)").gameObject;
+        Image image = itemImage.GetComponent<Image>();
+        //Debug.Log(itemImage);
+        //Debug.Log(image);
+        //Debug.Log(wasRemoved);
+        lastUsedSlot = -1;
+        Destroy(itemImage);
     }
 
     public GameObject GetSlot(int i)
@@ -153,5 +225,17 @@ public class HotbarScript : MonoBehaviour
         return inventory;
     }
 
-  
+    public void setBoostedTime(System.DateTime time)
+    {
+        this.speedBostedTime = time;
+    }
+    
+    public void setBoosted(bool b)
+    {
+        this.speedBoosted = b;
+    }
+    public bool getBoosted()
+    {
+        return speedBoosted;
+    }
 }

@@ -13,4 +13,5 @@ public class Item
     }
     public ItemType itemType;
     public int amount;
+
 }

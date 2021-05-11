@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityAtoms.BaseAtoms;
 
 public class Inventory
 {
     private Item[] items;
     public HotbarScript scriptMain;
+    public int healingValue = 25;
+    public int speedBoostValue = 5;
+    public FloatVariable health;
+    public FloatVariable speed;
+    private int maxNumberOfItems = 3;
 
     public Inventory()
     {
@@ -17,6 +23,7 @@ public class Inventory
     {
         int indexFirstNull = -1;
         bool sameItem = false;
+        Debug.Log(item.amount);
         for(int i = 0; i < items.Length; i++)
         {
             if(items[i] == null)
@@ -36,13 +43,18 @@ public class Inventory
         }
         if (sameItem)
         {
-            if(items[indexFirstNull].amount > 0)
+            if(items[indexFirstNull].amount >= maxNumberOfItems)
             {
                 return false;
             } 
             else
             {
+                if(item.itemType == Item.ItemType.Spell || item.itemType == Item.ItemType.Sword)
+                {
+                    return false;
+                }
                 items[indexFirstNull].amount += 1;
+                Debug.Log(items[indexFirstNull].amount);
                 return true;
             }
         }
@@ -56,7 +68,23 @@ public class Inventory
             temp.transform.SetParent(slot.transform);
             Image img = temp.GetComponent<Image>();
             Sprite newSprite = Resources.Load<Sprite>("Items/Potion");
-            Debug.Log(newSprite);
+            switch (item.itemType)
+            {
+                case Item.ItemType.HealthPotion:
+                    break;
+                case Item.ItemType.SpeedPotion:
+                    newSprite = Resources.Load<Sprite>("Items/SpeedPotion");
+                    break;
+                case Item.ItemType.Spell:
+                    newSprite = Resources.Load<Sprite>("Items/Spell");
+                    break;
+                case Item.ItemType.Sword:
+                    newSprite = Resources.Load<Sprite>("Items/Sword");
+                    break;
+
+            }
+            
+            //Debug.Log(newSprite);
             img.sprite = newSprite;
 
             return true;
@@ -67,7 +95,7 @@ public class Inventory
     public bool RemoveItem(int index)
     {
         Item item = items[index];
-        if(item.itemType != Item.ItemType.Spell || item.itemType != Item.ItemType.Sword)
+        if(item.itemType != Item.ItemType.Spell && item.itemType != Item.ItemType.Sword)
         {
             
             if (items[index].amount == 1)
@@ -77,8 +105,69 @@ public class Inventory
             }
             else items[index].amount -= 1;
         }
-        Debug.Log(items[index].itemType);
+        else
+        {
+            Debug.Log("Turn white");
+            GameObject tempSlot = scriptMain.GetSlot(index + 1) ;
+            GameObject tempBorder = tempSlot.transform.Find("Border").gameObject;
+            Image tempImg = tempBorder.GetComponent<Image>();
+            tempImg.color = Color.white;
+            items[index] = null;
+            return true;
+        }
+        //Debug.Log(items[index].itemType);
         Debug.Log(items[index].amount);
+        return false;
+    }
+
+    public bool UseItem(Item item, float inputkey)
+    {
+        if (item.itemType == Item.ItemType.Spell || item.itemType == Item.ItemType.Sword)
+        {
+            for(int i = 1; i < 6; i++)
+            {
+                GameObject tempSlot = scriptMain.GetSlot((int)i);
+                GameObject tempBorder = tempSlot.transform.Find("Border").gameObject;
+                Image tempImg = tempBorder.GetComponent<Image>();
+                tempImg.color = Color.white;
+            }
+            GameObject slot = scriptMain.GetSlot((int)inputkey);
+            GameObject border = slot.transform.Find("Border").gameObject;
+            Image img = border.GetComponent<Image>();
+            img.color = Color.red;
+            
+        }
+        else
+        {
+            switch (item.itemType)
+            {
+                case Item.ItemType.HealthPotion:
+                    if (health.Value + healingValue > health.InitialValue)
+                    {
+                        health.Value = health.InitialValue;
+                    }
+                    else
+                    {
+                        health.Value += healingValue;
+                    }
+                    return true;
+                case Item.ItemType.SpeedPotion:
+                    float val = speed.Value;
+                    if (val != speed.InitialValue && val + speedBoostValue >= (speed.InitialValue + speedBoostValue))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        //Debug.Log("beep");
+                        speed.Value += speedBoostValue;
+                        scriptMain.setBoosted(true);
+                        scriptMain.setBoostedTime(System.DateTime.Now);
+                        return true;
+                    }
+                    break;
+            }
+        }
         return false;
     }
 
@@ -91,5 +180,14 @@ public class Inventory
     public void SetHotbardScript(HotbarScript script)
     {
         scriptMain = script;
+    }
+    
+    public void SetHealth(FloatVariable health)
+    {
+        this.health = health;
+    }
+    public void SetSpeed(FloatVariable speed)
+    {
+        this.speed = speed;
     }
 }

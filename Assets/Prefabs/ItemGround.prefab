@@ -58,9 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0674e776383234e8d7806ab4480d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  health: {fileID: 11400000, guid: a92aaae2b4ea94a4393224636939cca7, type: 2}
-  healingValue: 25
+  health: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  itemType: 2
+  script: {fileID: 0}
 --- !u!1 &8748868421440470952
 GameObject:
   m_ObjectHideFlags: 0

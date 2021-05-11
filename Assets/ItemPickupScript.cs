@@ -17,19 +17,29 @@ public class ItemPickupScript : MonoBehaviour
     public FloatVariable moveSpeed;
     */
     public Inventory inventory;
-
+    public System.DateTime created = System.DateTime.Now;
     
     void Awake()
     {
         item = new Item();
         item.amount = 1;
         item.itemType = itemType;
+        if(script == null)
+        {
+            GameObject temp = GameObject.Find("HotBar/Inventory");
+            script = temp.GetComponent<HotbarScript>();
+        }
         inventory = script.GetInventory();
     }
 
 
     void OnTriggerEnter()
-    {   
+    {
+        System.DateTime currentTime = System.DateTime.Now;
+        if((currentTime-created).TotalMilliseconds < 2000)
+        {
+            return;
+        }
         if(inventory == null)
         {
             inventory = script.GetInventory();
@@ -67,6 +77,7 @@ public class ItemPickupScript : MonoBehaviour
         
 
     }
+    /*
     void OnTriggerStay()
     {
         if (inventory == null)
@@ -80,11 +91,17 @@ public class ItemPickupScript : MonoBehaviour
         }
 
     }
+    */
 
 
 
     public void SetInventory(Inventory inv)
     {
         inventory = inv;
+    }
+
+    public void setItemType(Item.ItemType type)
+    {
+        this.itemType = type;
     }
 }
