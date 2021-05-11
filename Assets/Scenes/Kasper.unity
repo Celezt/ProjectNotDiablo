@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5546794094712560844, guid: 63552a47fbaeab240ab08bea50cadd9a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5546794094712560847, guid: 63552a47fbaeab240ab08bea50cadd9a, type: 3}
       propertyPath: m_RootOrder
@@ -264,6 +264,10 @@ PrefabInstance:
       value: Hallway_Half
       objectReference: {fileID: 0}
     - target: {fileID: 9149294904090100374, guid: a62753c87b044214ebd45797277f54ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149294904090100374, guid: a62753c87b044214ebd45797277f54ad, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -360,7 +364,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &809920687 stripped
 GameObject:
@@ -377,6 +381,10 @@ PrefabInstance:
     - target: {fileID: 6132252501610809884, guid: ea89d7821ddb211478ce5ff6f3ea064d, type: 3}
       propertyPath: m_Name
       value: Hallway_Curve_Short
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132252501610809884, guid: ea89d7821ddb211478ce5ff6f3ea064d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6132252501610809884, guid: ea89d7821ddb211478ce5ff6f3ea064d, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -609,6 +617,10 @@ PrefabInstance:
       value: Hallway_TCrossing
       objectReference: {fileID: 0}
     - target: {fileID: 2603595325513756431, guid: 345c8a49d7186274cbb629bef82b473c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2603595325513756431, guid: 345c8a49d7186274cbb629bef82b473c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -764,8 +776,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ca80b7e9fd3a54cae658af6348e85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minRooms: 6
-  maxRooms: 6
+  minRooms: 10
+  maxRooms: 12
   maxRoomCollisions: 50
   corridorStraight:
     prefab: {fileID: 809920687}
@@ -805,7 +817,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1838776787
 PrefabInstance:
@@ -875,6 +887,10 @@ PrefabInstance:
       value: Hallway_Crossing
       objectReference: {fileID: 0}
     - target: {fileID: 8470551897066888681, guid: d8a87367ce3dea34381d129ffade9174, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8470551897066888681, guid: d8a87367ce3dea34381d129ffade9174, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -894,7 +910,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9149294904089943734, guid: a62753c87b044214ebd45797277f54ad, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9149294904089943734, guid: a62753c87b044214ebd45797277f54ad, type: 3}
       propertyPath: m_LocalScale.x
@@ -953,6 +969,10 @@ PrefabInstance:
       value: Hallway_End
       objectReference: {fileID: 0}
     - target: {fileID: 9149294904090100374, guid: a62753c87b044214ebd45797277f54ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149294904090100374, guid: a62753c87b044214ebd45797277f54ad, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -990,3 +1010,9 @@ MonoBehaviour:
   connections:
   - {x: 0, y: 5}
   - {x: 0, y: -5}
+  monsterSpawnPoints:
+  - position: {x: 2.22, y: 0.01, z: -3}
+    rotation: {x: 0, y: 153.41, z: 0}
+  - position: {x: 3, y: 0.01, z: 0}
+    rotation: {x: 0, y: 55.3, z: 0}
+  monsterSpawnMesh: {fileID: -2432090755550338912, guid: 2ca87a2fa6218224c851f3ada78ebccc, type: 3}

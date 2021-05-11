@@ -41,7 +41,8 @@
 
     5.  After all corridor tiles have been marked, a check is made to ensure
         the corridor layout is valid. If it is invalid, the dungeon gets
-        destroyed, and restarts from step 1.
+        destroyed, and restarts from step 1. The weighting explained in step 4
+        attempts to minimize invalid layouts.
 
     6.  The tile grid is read in order to determine which corridor tile, with
         which rotation to place on each tile. This is inferred by its 
@@ -180,7 +181,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void GeneratePrefabRoom(Vector2Int position) 
     {
-        float rotAngle = Random.Range(0, 4) * 90.0f;
+        float rotAngle = Random.Range(0, 4) * 90.0f - 180.0f;
         Quaternion randRotation = Quaternion.AngleAxis(rotAngle,
             new Vector3(0.0f, 1.0f, 0.0f));
 
@@ -929,9 +930,6 @@ public class DungeonGenerator : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.sKey.wasReleasedThisFrame)
-            ResolveRoomCollision();
-
         // DEBUG: Regenerate dungeon
         if (Keyboard.current.rKey.wasReleasedThisFrame) {
             DestroyDungeon();
@@ -990,13 +988,13 @@ public class DungeonGenerator : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        foreach (Room e in rooms)
-            Gizmos.DrawWireCube(new Vector3(e.bounds.center.x, 0.5f, e.bounds.center.y), new Vector3(e.bounds.width, 1.0f, e.bounds.height));
+        // Gizmos.color = Color.red;
+        // foreach (Room e in rooms)
+        //     Gizmos.DrawWireCube(new Vector3(e.bounds.center.x, 0.5f, e.bounds.center.y), new Vector3(e.bounds.width, 1.0f, e.bounds.height));
         
-        Gizmos.color = Color.cyan;
-        foreach (Connection e in connections)
-            Gizmos.DrawWireCube(new Vector3(e.position.x, 0.5f, e.position.y), new Vector3(1.0f, 1.0f, 1.0f));
+        // Gizmos.color = Color.cyan;
+        // foreach (Connection e in connections)
+        //     Gizmos.DrawWireCube(new Vector3(e.position.x+0.5f, 0.5f, e.position.y+0.5f), new Vector3(1.0f, 1.0f, 1.0f));
 
         if (showTileGrid) {
             for (int x = 0; x < tileGridSize.x; x++) {
