@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityAtoms.BaseAtoms;
 
-public class VirtualScreen : MonoBehaviour
+public class VirtualScreen : Singleton<MonoBehaviour>
 {
     [SerializeField] private Vector2Variable _virualScreenSizeVariable;
 

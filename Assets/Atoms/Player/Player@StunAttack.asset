@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _developerDescription: 
   Cleared: {fileID: 0}
-  _startCleared: 0
+  _startCleared: 1
   Added: {fileID: 11400000, guid: 25c4bae59724a814da1b3f9f2ee07443, type: 2}
   Removed: {fileID: 11400000, guid: 44048f87660dc4346950aa55f5e3b143, type: 2}
-  list: []
+  list:
+  - _timeLeft: 3.4028235e+38
+    _initTime: 3.4028235e+38

@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2509769839494629607}
   - component: {fileID: 6968855386745679691}
   m_Layer: 0
-  m_Name: Health@Frame
+  m_Name: Health - Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4222591449832511731}
   - component: {fileID: 1386914184611669701}
   m_Layer: 5
-  m_Name: Health@Label
+  m_Name: Health - Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 8690092642678783062}
   - component: {fileID: 6564238197423133056}
   m_Layer: 0
-  m_Name: Health@Fill
+  m_Name: Health - Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

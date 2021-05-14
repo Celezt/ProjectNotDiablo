@@ -29,7 +29,6 @@ public class PointBehaviour : MonoBehaviour
     private Vector2 _pointDelta;
     private bool _isPointDelta;
     private bool _isCameraAngleChanged;
-    private bool _isMovingPointer;
 
     #region Events
     public void OnPointPosition(InputAction.CallbackContext context)

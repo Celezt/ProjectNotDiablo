@@ -4,7 +4,7 @@ using UnityEngine;
 using MyBox;
 
 [ExecuteAlways]
-public class UITarget : MonoBehaviour
+public class UIBillboard : MonoBehaviour
 {
 	public Transform FacedObject;
 	public bool ScaleDistance = true;
