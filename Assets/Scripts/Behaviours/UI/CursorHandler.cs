@@ -8,13 +8,13 @@ using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
 using MyBox;
 
-public class CursorHandler : MonoBehaviour
+public class CursorHandler : Singleton<MonoBehaviour>
 {
     [Foldout("Atoms")]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
     [SerializeField] private PlayerInputEvent _deviceChangedEvent;
 
-    private PlayerControls _input;
+    private PlayerControls _controls;
     private Image _image;
 
     #region Events
@@ -22,13 +22,13 @@ public class CursorHandler : MonoBehaviour
     {
         InputControlScheme scheme = input.user.controlScheme.Value;
 
-        if (scheme == _input.GamepadScheme)
+        if (scheme == _controls.GamepadScheme)
         {
             enabled = true;
             _image.enabled = true;
             Cursor.visible = false;
         }
-        else if (scheme == _input.KeyboardAndMouseScheme)
+        else if (scheme == _controls.KeyboardAndMouseScheme)
         {
             enabled = false;
             _image.enabled = false;
@@ -40,7 +40,7 @@ public class CursorHandler : MonoBehaviour
     #region Unity Message
     private void Awake()
     {
-        _input = new PlayerControls();
+        _controls = new PlayerControls();
         _image = GetComponent<Image>();
 
         _deviceChangedEvent.Register(OnDeviceChanged);
@@ -48,7 +48,7 @@ public class CursorHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.Enable();
+        _controls.Enable();
     }
 
     private void Update()
@@ -57,7 +57,7 @@ public class CursorHandler : MonoBehaviour
     }
     private void OnDisable()
     {
-        _input.Disable();
+        _controls.Disable();
     }
 
     private void OnDestroy()
