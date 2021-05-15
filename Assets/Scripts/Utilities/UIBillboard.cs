@@ -11,6 +11,10 @@ public class UIBillboard : MonoBehaviour
 	[ConditionalField(nameof(ScaleDistance))]
 	public float Multiplier = 1.0f;
 
+	private Vector3 _initialScale;
+
+	private static Camera _camera;
+
 	private Transform ActiveFacedObject
 	{
 		get
@@ -22,19 +26,25 @@ public class UIBillboard : MonoBehaviour
 			return _camera == null ? null : _camera.transform;
 		}
 	}
-	private static Camera _camera;
 
-	private void LateUpdate()
+    private void Start()
+    {
+		_initialScale = transform.localScale;
+	}
+
+    private void LateUpdate()
     {
 		if (ActiveFacedObject == null)
 			return;
 
-		transform.rotation = ActiveFacedObject.rotation;
-
 		if (ScaleDistance)
         {
-			float scale = Vector3.Distance(ActiveFacedObject.position, transform.position) * 0.01f * Multiplier;
-			transform.localScale = new Vector3(scale, scale, scale);
+			Transform cameraTransform = _camera.transform;
+			Plane plane = new Plane(cameraTransform.forward, cameraTransform.position);
+			float distance = plane.GetDistanceToPoint(transform.position);
+			transform.localScale = _initialScale * distance * Multiplier;
 		}
+
+		transform.rotation = ActiveFacedObject.rotation;
     }
 }
