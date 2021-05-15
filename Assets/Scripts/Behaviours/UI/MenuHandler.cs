@@ -2,14 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using UnityAtoms.BaseAtoms;
 using MyBox;
 
 public class MenuHandler : Singleton<MenuHandler>
 {
+    public bool IsMenuActive => _isMenuActive;
+
     private PlayerControls _controls;
 
     [SerializeField] private GameObject _menuContent;
+    [SerializeField] private GameObject _firstButton;
+    [SerializeField] private CursorHandler _cursorHandler;
 
     [Foldout("Atoms", true)]
     [SerializeField] private DurationValueList _stunAttackList;
@@ -17,10 +22,9 @@ public class MenuHandler : Singleton<MenuHandler>
     [SerializeField] private DurationValueList _stunMoveList;
     [SerializeField] private DurationValueList _invisibilityFrameList;
 
-    private Duration _stunAttack;
-    private Duration _stunDodge;
-    private Duration _stunMove;
-    private Duration _invisibilityFrame;
+    private Duration _EmptyDuration;
+
+    private bool _isMenuActive;
 
     #region Events
     /// <summary>
@@ -38,19 +42,21 @@ public class MenuHandler : Singleton<MenuHandler>
     /// <summary>
     /// Return back to the game.
     /// </summary>
-    public void OnReturn() => SwapMode();
+    public void OnReturn() => ToggleMenuActive();
 
     /// <summary>
     /// Enable or Disable menu.
     /// </summary>
     /// <param name="context"></param>
-    public void OnMenu(InputAction.CallbackContext context) => SwapMode();
+    public void OnMenu(InputAction.CallbackContext context) => ToggleMenuActive();
     #endregion
 
     #region Unity Message
     private void Awake()
     {
         _controls = new PlayerControls();
+
+        _menuContent.SetActive(false);  // Disable menu on start.
     }
 
     private void OnEnable()
@@ -66,37 +72,54 @@ public class MenuHandler : Singleton<MenuHandler>
     }
     #endregion
 
-    private void SwapMode()
+    private void ToggleMenuActive()
     {
         PlayerInput playerInput = PlayerInput.GetPlayerByIndex(0);
 
         if (playerInput == null)
             return;
 
-        if (playerInput.currentActionMap.name == _controls.Ground.Get().name)
-        {
-            Duration duration = new Duration(float.MaxValue);
-            _stunAttackList?.Add(_stunAttack = duration);
-            _stunDodgeList?.Add(_stunDodge = duration);
-            _stunMoveList?.Add(_stunMove = duration);
-            _invisibilityFrameList?.Add(_invisibilityFrame = duration);
+        string currentActionMap = playerInput.currentActionMap.name;
+        if (currentActionMap == "Ground")
+            ToggleMenu(playerInput);
+        else if (currentActionMap == "UI")
+            ToggleGameplay(playerInput);
+    }
 
-            _menuContent.SetActive(true);
+    private void ToggleMenu(PlayerInput playerInput)
+    {
+        _isMenuActive = true;
 
-            Time.timeScale = 0.0f;
-            playerInput.SwitchCurrentActionMap(_controls.UI.Get().name);
-        }
-        else if (playerInput.currentActionMap.name == _controls.UI.Get().name)
-        {
-            _stunAttackList?.Remove(_stunAttack);
-            _stunDodgeList?.Remove(_stunDodge);
-            _stunMoveList?.Remove(_stunMove);
-            _invisibilityFrameList?.Remove(_invisibilityFrame);
+        _EmptyDuration = Duration.Empty;
+        _stunAttackList?.Add(_EmptyDuration);
+        _stunDodgeList?.Add(_EmptyDuration);
+        _stunMoveList?.Add(_EmptyDuration);
+        _invisibilityFrameList?.Add(_EmptyDuration);
 
-            _menuContent.SetActive(false);
+        _cursorHandler.DisableAll();
 
-            Time.timeScale = 1.0f;
-            playerInput.SwitchCurrentActionMap(_controls.Ground.Get().name);
-        }
+        _menuContent.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(_firstButton);
+
+        Time.timeScale = 0.0f;
+        playerInput.SwitchCurrentActionMap("UI");
+    }
+
+    private void ToggleGameplay(PlayerInput playerInput)
+    {
+        _isMenuActive = false;
+
+        _stunAttackList?.Remove(_EmptyDuration);
+        _stunDodgeList?.Remove(_EmptyDuration);
+        _stunMoveList?.Remove(_EmptyDuration);
+        _invisibilityFrameList?.Remove(_EmptyDuration);
+
+        _cursorHandler.EnableCursor();
+
+        EventSystem.current.SetSelectedGameObject(null);
+        _menuContent.SetActive(false);
+
+        Time.timeScale = 1.0f;
+        playerInput.SwitchCurrentActionMap("Ground");
     }
 }

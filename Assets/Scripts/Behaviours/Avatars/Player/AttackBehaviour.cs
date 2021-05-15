@@ -146,7 +146,7 @@ public class AttackBehaviour : MonoBehaviour
                 _controls.Enable();
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForUnscaledSeconds(0.1f);
         }
     }
 }

@@ -8,14 +8,17 @@ using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
 using MyBox;
 
-public class CursorHandler : Singleton<MonoBehaviour>
+public class CursorHandler : Singleton<CursorHandler>
 {
+    #region Inspector
+    [SerializeField] private MenuHandler _menuHandler;
+
     [Foldout("Atoms")]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
-    [SerializeField] private PlayerInputEvent _deviceChangedEvent;
 
     private PlayerControls _controls;
     private Image _image;
+    #endregion
 
     #region Events
     public void OnDeviceChanged(PlayerInput input)
@@ -24,18 +27,38 @@ public class CursorHandler : Singleton<MonoBehaviour>
 
         if (scheme == _controls.GamepadScheme)
         {
-            enabled = true;
-            _image.enabled = true;
-            Cursor.visible = false;
+            if (_menuHandler.IsMenuActive)
+                DisableAll();
+            else
+                EnableCursor();
         }
         else if (scheme == _controls.KeyboardAndMouseScheme)
         {
-            enabled = false;
-            _image.enabled = false;
-            Cursor.visible = true;
+            DisableCurse();
         }
     }
     #endregion
+
+    public void EnableCursor()
+    {
+        enabled = true;
+        _image.enabled = true;
+        Cursor.visible = false;
+    }
+
+    public void DisableCurse()
+    {
+        enabled = false;
+        _image.enabled = false;
+        Cursor.visible = true;
+    }
+
+    public void DisableAll()
+    {
+        enabled = false;
+        _image.enabled = false;
+        Cursor.visible = false;
+    }
 
     #region Unity Message
     private void Awake()
@@ -43,7 +66,7 @@ public class CursorHandler : Singleton<MonoBehaviour>
         _controls = new PlayerControls();
         _image = GetComponent<Image>();
 
-        _deviceChangedEvent.Register(OnDeviceChanged);
+        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
     }
 
     private void OnEnable()
@@ -53,16 +76,17 @@ public class CursorHandler : Singleton<MonoBehaviour>
 
     private void Update()
     {
-        transform.position = _pointScreenPositionVariable.Value;
+       transform.position = _pointScreenPositionVariable.Value;
     }
     private void OnDisable()
     {
         _controls.Disable();
     }
-
-    private void OnDestroy()
-    {
-        _deviceChangedEvent.Unregister(OnDeviceChanged);
-    }
     #endregion
+
+    public override void Destroy()
+    {
+        if (PlayerInput.GetPlayerByIndex(0) != null)
+            PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
+    }
 }

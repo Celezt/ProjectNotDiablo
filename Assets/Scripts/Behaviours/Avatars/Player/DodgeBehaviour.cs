@@ -123,7 +123,7 @@ public class DodgeBehaviour : MonoBehaviour
     {
         Duration duration = new Duration(length * speedMultiplier);
 
-        while (duration.IsActive)
+        while (duration.IsActive && !_fallingVariable.Value)
         {
             _rigidbody?.AddRelativeForce(direction * (_rigidbody?.mass ?? 1.0f) * curve.Evaluate(1 - duration.UnitIntervalTimeLeft) * strength, ForceMode.Force);
 
@@ -154,7 +154,7 @@ public class DodgeBehaviour : MonoBehaviour
                 _controls.Enable();
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForUnscaledSeconds(0.1f);
         }
     }
 }

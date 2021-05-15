@@ -72,6 +72,8 @@ public struct Duration : IEquatable<Duration>
     /// </summary>
     public float Delta { get => 1 / _initTime; }
 
+    private static int _counter;
+
     private Action _action;
 
     private float _oldGameTime;
@@ -136,7 +138,7 @@ public struct Duration : IEquatable<Duration>
     /// </summary>
     public void Update()
     {
-        if (_paused)
+        if (_paused | float.IsNaN(_timeLeft))
             return;
 
         float currentTime = Time.time;
@@ -164,7 +166,7 @@ public struct Duration : IEquatable<Duration>
 
     public Duration(float duration)
     {
-        ID = Guid.NewGuid().GetHashCode();
+        ID = ++_counter;
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
         _isActive = true;
@@ -177,7 +179,7 @@ public struct Duration : IEquatable<Duration>
 
     public Duration(float duration, Action action)
     {
-        ID = Guid.NewGuid().GetHashCode();
+        ID = ++_counter;
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
         _isActive = true;
@@ -188,6 +190,7 @@ public struct Duration : IEquatable<Duration>
         _activatedAction = false;
     }
 
+    public static Duration Empty => new Duration(float.NaN);
 
     public static bool operator ==(Duration lhs, Duration rhs) => lhs.ID == rhs.ID;
     public static bool operator !=(Duration lhs, Duration rhs) => lhs.ID != rhs.ID;

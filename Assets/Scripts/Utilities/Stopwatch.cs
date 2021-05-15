@@ -36,6 +36,8 @@ public struct Stopwatch : IEquatable<Stopwatch>
     /// </summary>
     public float InitTime { get => _initTime; }
 
+    private static int _counter;
+
     private float _oldGameTime;
     private float _pauseGameTime;
     [SerializeField] private float _timer;
@@ -85,7 +87,7 @@ public struct Stopwatch : IEquatable<Stopwatch>
 
     public Stopwatch(float initTime)
     {
-        ID = Guid.NewGuid().GetHashCode();
+        ID = ++_counter;
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
         _paused = false;
