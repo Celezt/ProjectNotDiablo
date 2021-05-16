@@ -42,14 +42,33 @@ public class MenuHandler : Singleton<MenuHandler>
     /// <summary>
     /// Return back to the game.
     /// </summary>
-    public void OnReturn() => ToggleMenuActive();
+    public void OnReturn() => ToggleGameplay(PlayerInput.GetPlayerByIndex(0));
 
     /// <summary>
     /// Enable or Disable menu.
     /// </summary>
     /// <param name="context"></param>
     public void OnMenu(InputAction.CallbackContext context) => ToggleMenuActive();
+
+    public void OnDeviceChanged(PlayerInput input)
+    {
+        InputControlScheme scheme = input.user.controlScheme.Value;
+
+        if (scheme == _controls.GamepadScheme)
+        {
+            if (_isMenuActive)
+                SelectFirstObject();
+        }
+        else if (scheme == _controls.KeyboardAndMouseScheme)
+        {
+            if (_isMenuActive)
+                DeselectFirstObject();
+        }
+    }
     #endregion
+
+    public void SelectFirstObject() => EventSystem.current.SetSelectedGameObject(_firstButton);
+    public void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
 
     #region Unity Message
     private void Awake()
@@ -63,12 +82,16 @@ public class MenuHandler : Singleton<MenuHandler>
     {
         _controls.Ground.Menu.performed += OnMenu;
         _controls.Enable();
+
+        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
     }
 
     private void OnDisable()
     {
         _controls.Ground.Menu.performed -= OnMenu;
         _controls.Disable();
+
+        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
     }
     #endregion
 
@@ -96,10 +119,13 @@ public class MenuHandler : Singleton<MenuHandler>
         _stunMoveList?.Add(_EmptyDuration);
         _invisibilityFrameList?.Add(_EmptyDuration);
 
-        _cursorHandler.DisableAll();
 
         _menuContent.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(_firstButton);
+
+        if (_cursorHandler.CursorType == CursorHandler.CursorTypes.Controller)
+            SelectFirstObject();
+
+        _cursorHandler.SetCursor(CursorHandler.CursorTypes.None);
 
         Time.timeScale = 0.0f;
         playerInput.SwitchCurrentActionMap("UI");
@@ -114,9 +140,7 @@ public class MenuHandler : Singleton<MenuHandler>
         _stunMoveList?.Remove(_EmptyDuration);
         _invisibilityFrameList?.Remove(_EmptyDuration);
 
-        _cursorHandler.EnableCursor();
-
-        EventSystem.current.SetSelectedGameObject(null);
+        DeselectFirstObject();
         _menuContent.SetActive(false);
 
         Time.timeScale = 1.0f;
