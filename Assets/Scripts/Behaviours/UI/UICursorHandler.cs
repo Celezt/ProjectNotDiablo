@@ -7,16 +7,16 @@ using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
 using MyBox;
+using UnityEngine.Events;
 
-public class CursorHandler : Singleton<CursorHandler>
+public class UICursorHandler : Singleton<UICursorHandler>
 {
     public CursorTypes CursorType => _cursorType;
 
     #region Inspector
-    [SerializeField] private MenuHandler _menuHandler;
-
-    [Foldout("Atoms")]
+    [Foldout("Atoms", true)]
     [SerializeField] private Vector2Variable _pointScreenPositionVariable;
+    [SerializeField] private BoolVariable _isInputVariable;
 
     private PlayerControls _controls;
     private Image _image;
@@ -25,6 +25,12 @@ public class CursorHandler : Singleton<CursorHandler>
     private CursorTypes _cursorType;
 
     public enum CursorTypes
+    {
+        Mouse,
+        Controller,
+    }
+
+    public enum CursorDisplay
     {
         None,
         Mouse,
@@ -38,37 +44,68 @@ public class CursorHandler : Singleton<CursorHandler>
 
         if (scheme == _controls.GamepadScheme)
         {
-            if (_menuHandler.IsMenuActive)
+            _cursorType = CursorTypes.Controller;
+
+            if (_isInputVariable.Value)
             {
-                SetCursor(CursorTypes.None);
+                SetCursor(CursorDisplay.None);
             }
             else
-                SetCursor(CursorTypes.Controller);
+                SetCursor(CursorDisplay.Controller);
         }
         else if (scheme == _controls.KeyboardAndMouseScheme)
         {
-            SetCursor(CursorTypes.Mouse);
+            _cursorType = CursorTypes.Mouse;
+
+            SetCursor(CursorDisplay.Mouse);
+        }
+    }
+
+    public void OnInputChange(bool isInput)
+    {
+        if (isInput)
+        {
+
+            switch (_cursorType)
+            {
+                case CursorTypes.Controller:
+                    SetCursor(CursorDisplay.None);
+                    break;
+                case CursorTypes.Mouse:
+                    SetCursor(CursorDisplay.Mouse);
+                    break;
+            }
+        }
+        else
+        {
+            switch (_cursorType)
+            {
+                case CursorTypes.Controller:
+                    SetCursor(CursorDisplay.Controller);
+                    break;
+                case CursorTypes.Mouse:
+                    SetCursor(CursorDisplay.Mouse);
+                    break;
+            }
         }
     }
     #endregion
 
-    public void SetCursor(CursorTypes type)
+    public void SetCursor(CursorDisplay type)
     {
-        _cursorType = type;
-
         switch (type)
         {
-            case CursorTypes.Mouse:
+            case CursorDisplay.Mouse:
                 enabled = false;
                 _image.enabled = false;
                 Cursor.visible = true;
                 break;
-            case CursorTypes.Controller:
+            case CursorDisplay.Controller:
                 enabled = true;
                 _image.enabled = true;
                 Cursor.visible = false;
                 break;
-            case CursorTypes.None:
+            case CursorDisplay.None:
                 enabled = false;
                 _image.enabled = false;
                 Cursor.visible = false;
@@ -83,6 +120,7 @@ public class CursorHandler : Singleton<CursorHandler>
         _image = GetComponent<Image>();
 
         PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
+        _isInputVariable.Changed.Register(OnInputChange);
     }
 
     private void OnEnable()
@@ -104,5 +142,7 @@ public class CursorHandler : Singleton<CursorHandler>
     {
         if (PlayerInput.GetPlayerByIndex(0) != null)
             PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
+
+        _isInputVariable.Changed.Unregister(OnInputChange);
     }
 }

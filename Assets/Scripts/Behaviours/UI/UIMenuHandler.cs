@@ -6,25 +6,21 @@ using UnityEngine.EventSystems;
 using UnityAtoms.BaseAtoms;
 using MyBox;
 
-public class MenuHandler : Singleton<MenuHandler>
+public class UIMenuHandler : Singleton<UIMenuHandler>
 {
-    public bool IsMenuActive => _isMenuActive;
-
-    private PlayerControls _controls;
-
     [SerializeField] private GameObject _menuContent;
     [SerializeField] private GameObject _firstButton;
-    [SerializeField] private CursorHandler _cursorHandler;
+    [SerializeField] private UICursorHandler _cursorHandler;
 
     [Foldout("Atoms", true)]
+    [SerializeField] private BoolVariable _isInputVariable;
     [SerializeField] private DurationValueList _stunAttackList;
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
     [SerializeField] private DurationValueList _invisibilityFrameList;
 
+    private PlayerControls _controls;
     private Duration _EmptyDuration;
-
-    private bool _isMenuActive;
 
     #region Events
     /// <summary>
@@ -56,12 +52,12 @@ public class MenuHandler : Singleton<MenuHandler>
 
         if (scheme == _controls.GamepadScheme)
         {
-            if (_isMenuActive)
+            if (_isInputVariable.Value)
                 SelectFirstObject();
         }
         else if (scheme == _controls.KeyboardAndMouseScheme)
         {
-            if (_isMenuActive)
+            if (_isInputVariable.Value)
                 DeselectFirstObject();
         }
     }
@@ -111,7 +107,7 @@ public class MenuHandler : Singleton<MenuHandler>
 
     private void ToggleMenu(PlayerInput playerInput)
     {
-        _isMenuActive = true;
+        _isInputVariable.Value = true;
 
         _EmptyDuration = Duration.Empty;
         _stunAttackList?.Add(_EmptyDuration);
@@ -122,10 +118,8 @@ public class MenuHandler : Singleton<MenuHandler>
 
         _menuContent.SetActive(true);
 
-        if (_cursorHandler.CursorType == CursorHandler.CursorTypes.Controller)
+        if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
             SelectFirstObject();
-
-        _cursorHandler.SetCursor(CursorHandler.CursorTypes.None);
 
         Time.timeScale = 0.0f;
         playerInput.SwitchCurrentActionMap("UI");
@@ -133,7 +127,7 @@ public class MenuHandler : Singleton<MenuHandler>
 
     private void ToggleGameplay(PlayerInput playerInput)
     {
-        _isMenuActive = false;
+        _isInputVariable.Value = false;
 
         _stunAttackList?.Remove(_EmptyDuration);
         _stunDodgeList?.Remove(_EmptyDuration);
@@ -146,4 +140,7 @@ public class MenuHandler : Singleton<MenuHandler>
         Time.timeScale = 1.0f;
         playerInput.SwitchCurrentActionMap("Ground");
     }
+
+    private void SelectFirstObject() => EventSystem.current.SetSelectedGameObject(_firstButton);
+    private void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
 }
