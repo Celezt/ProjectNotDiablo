@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityAtoms.BaseAtoms;
+using MyBox;
 
-public class VirtualScreen : Singleton<MonoBehaviour>
+public class UIVirtualScreen : Singleton<MonoBehaviour>
 {
     [SerializeField] private Vector2Variable _virualScreenSizeVariable;
+    [SerializeField] private float _refreshTime = 0.5f;
 
     private Coroutine _coroutineUpdateVirtualScreenSize;
 
@@ -25,7 +27,7 @@ public class VirtualScreen : Singleton<MonoBehaviour>
         {
             _virualScreenSizeVariable.Value = new Vector2(Screen.width, Screen.height);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForUnscaledSeconds(_refreshTime);
         }
     }
 }
