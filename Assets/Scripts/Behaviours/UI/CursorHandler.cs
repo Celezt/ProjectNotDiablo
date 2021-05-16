@@ -10,6 +10,8 @@ using MyBox;
 
 public class CursorHandler : Singleton<CursorHandler>
 {
+    public CursorTypes CursorType => _cursorType;
+
     #region Inspector
     [SerializeField] private MenuHandler _menuHandler;
 
@@ -20,6 +22,15 @@ public class CursorHandler : Singleton<CursorHandler>
     private Image _image;
     #endregion
 
+    private CursorTypes _cursorType;
+
+    public enum CursorTypes
+    {
+        None,
+        Mouse,
+        Controller,
+    }
+
     #region Events
     public void OnDeviceChanged(PlayerInput input)
     {
@@ -28,36 +39,41 @@ public class CursorHandler : Singleton<CursorHandler>
         if (scheme == _controls.GamepadScheme)
         {
             if (_menuHandler.IsMenuActive)
-                DisableAll();
+            {
+                SetCursor(CursorTypes.None);
+            }
             else
-                EnableCursor();
+                SetCursor(CursorTypes.Controller);
         }
         else if (scheme == _controls.KeyboardAndMouseScheme)
         {
-            DisableCurse();
+            SetCursor(CursorTypes.Mouse);
         }
     }
     #endregion
 
-    public void EnableCursor()
+    public void SetCursor(CursorTypes type)
     {
-        enabled = true;
-        _image.enabled = true;
-        Cursor.visible = false;
-    }
+        _cursorType = type;
 
-    public void DisableCurse()
-    {
-        enabled = false;
-        _image.enabled = false;
-        Cursor.visible = true;
-    }
-
-    public void DisableAll()
-    {
-        enabled = false;
-        _image.enabled = false;
-        Cursor.visible = false;
+        switch (type)
+        {
+            case CursorTypes.Mouse:
+                enabled = false;
+                _image.enabled = false;
+                Cursor.visible = true;
+                break;
+            case CursorTypes.Controller:
+                enabled = true;
+                _image.enabled = true;
+                Cursor.visible = false;
+                break;
+            case CursorTypes.None:
+                enabled = false;
+                _image.enabled = false;
+                Cursor.visible = false;
+                break;
+        }
     }
 
     #region Unity Message
