@@ -63,6 +63,9 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     }
     #endregion
 
+    public void SelectFirstObject() => EventSystem.current.SetSelectedGameObject(_firstButton);
+    public void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
+
     #region Unity Message
     private void Awake()
     {
