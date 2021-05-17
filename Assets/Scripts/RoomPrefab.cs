@@ -19,6 +19,9 @@ public class RoomPrefab : MonoBehaviour
 
     [Header("Layout")]
 
+    [Min(0.0f)]
+    public float tileSize = 1.0f;
+
     [Range(3, 64)]
     public int width = 3;
 
@@ -38,10 +41,14 @@ public class RoomPrefab : MonoBehaviour
 
     public Mesh monsterSpawnMesh;
 
+    //----------------------------------------------------------------------//
+
     void OnDrawGizmosSelected()
     {
+        Vector3 tileDimensions = new Vector3(tileSize, tileSize, tileSize);
+
         Vector3 pos = transform.position;
-        pos.y += 0.5f;
+        pos.y += tileSize / 2.0f;
 
         Vector3 rotAxis;
         float rotAngle;
@@ -59,27 +66,27 @@ public class RoomPrefab : MonoBehaviour
 
         // Visualize room bounds
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(pos, new Vector3(w, 1.0f, h));
+        Gizmos.DrawWireCube(pos, new Vector3(w * tileSize, tileSize, h * tileSize));
 
         // Visualize connections        
         Gizmos.color = Color.green;
         for (int i = 0; i < connections.Count; i++) {
             pos = new Vector3(connections[i].x, 0.5f, connections[i].y);
-            pos = transform.position + transform.rotation * pos;
+            pos = transform.position + transform.rotation * pos * tileSize;
 
-            Gizmos.DrawWireCube(pos, new Vector3(1.0f, 1.0f, 1.0f));
+            Gizmos.DrawWireCube(pos, tileDimensions);
         }
 
         // Visualize monster spawn points
         Gizmos.color = Color.red;
         for (int i = 0; i < monsterSpawnPoints.Count; i++) {
-            Quaternion rot = Quaternion.Euler(monsterSpawnPoints[i].rotation);
+            Quaternion rot = Quaternion.Euler(monsterSpawnPoints[i].rotation) * transform.rotation;
             pos = new Vector3(monsterSpawnPoints[i].position.x, 
                 monsterSpawnPoints[i].position.y, 
                 monsterSpawnPoints[i].position.z);
-            pos = transform.position + transform.rotation * pos;
+            pos = transform.position + transform.rotation * pos * tileSize;
 
-            Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, new Vector3(1.0f, 1.0f, 1.0f));
+            Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, tileDimensions);
         }
     }
 

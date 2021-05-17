@@ -109,6 +109,9 @@ public class DungeonGenerator : MonoBehaviour
     // Editor-exposed members
     //----------------------------------------------------------------------//
 
+    [Min(0.0f)]
+    public float tileSize = 1.0f;
+
     [Range(2, 100)]
     public int minRooms = 10;
     
@@ -129,8 +132,7 @@ public class DungeonGenerator : MonoBehaviour
     public TileObject corridorX;
     public TileObject corridorEnd;
 
-    [Header("Room Prefabs")]
-
+    [Space(10)]
     public List<RoomPrefab> roomPrefabs;
 
     [Header("Debug")]
@@ -238,7 +240,7 @@ public class DungeonGenerator : MonoBehaviour
         
         // Create 1x1 plane and scale it for now.
         // TODO: Instantiate room prefab
-        GameObject roomObject = Object.Instantiate(debugTile1x1, roomCenter, Quaternion.identity, transform);
+        GameObject roomObject = Object.Instantiate(debugTile1x1, roomCenter * tileSize, Quaternion.identity, transform);
         Vector3 scale = new Vector3(roomWidth, 1.0f, roomHeight);     
         roomObject.transform.localScale = scale * 0.1f; // 0.1f temporary magic number for scaling a default plane
         roomObject.name = "Room " + rooms.Count;
@@ -468,10 +470,9 @@ public class DungeonGenerator : MonoBehaviour
                 GeneratePrefabRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
             }
         }
-        else { // Generate random rooms using the 1x1 debug tile prefab
-            for (int i = 0; i < roomCount; i++) {
-                GenerateRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
-            }
+        else {
+            Debug.LogError("No room prefabs in DungeonGenerator!");
+            return true;
         }
         
         while (ResolveRoomCollision()) {
@@ -486,8 +487,8 @@ public class DungeonGenerator : MonoBehaviour
 
         // Move room GameObjects to their proper position
         foreach (Room e in rooms) {
-            e.roomObject.transform.position = new Vector3(e.bounds.center.x, 
-                0.0f, e.bounds.center.y);
+            e.roomObject.transform.position = new Vector3(e.bounds.center.x * tileSize, 
+                0.0f, e.bounds.center.y * tileSize);
 
             RoomPrefab roomPrefab = e.roomObject.GetComponent<RoomPrefab>();    
             Vector3 rotAxis;
@@ -497,7 +498,7 @@ public class DungeonGenerator : MonoBehaviour
             List<Vector2Int> conns = roomPrefab.GetRotatedConnections(rotAngle);
             
             for (int i = 0; i < conns.Count; i++) {
-                Vector3 pos = e.roomObject.transform.position;
+                Vector3 pos = new Vector3(e.bounds.center.x, 0.0f, e.bounds.center.y);
                 Connection tmp = connections[e.connections[i]];
                 tmp.position = conns[i] + new Vector2Int((int)(pos.x-0.5f), (int)(pos.z-0.5f));
                 connections[e.connections[i]] = tmp;
@@ -844,7 +845,7 @@ public class DungeonGenerator : MonoBehaviour
         void PlaceTile(int x, int y, TileObject tile, float zRot=0.0f)
         {
             Vector3 position = new Vector3(x + tileGridOffset.x + 0.5f, 0.0f, 
-                y + tileGridOffset.y + 0.5f);
+                y + tileGridOffset.y + 0.5f) * tileSize;
             Quaternion rotation = Quaternion.Euler(tile.rotationOffset.x, 
                 tile.rotationOffset.y, tile.rotationOffset.z + zRot);
 
@@ -970,18 +971,18 @@ public class DungeonGenerator : MonoBehaviour
 
         // Draw tile grid bounds
         if (showTileGrid) { 
-            Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y);
-            Debug.DrawLine(new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin, 
-                new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin, 
+            Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y) * tileSize;
+            Debug.DrawLine((new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin) * tileSize, 
+                (new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin) * tileSize, 
                 Color.green);
-            Debug.DrawLine(new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin,
-                new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin,
+            Debug.DrawLine((new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin) * tileSize,
+                (new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin) * tileSize,
                 Color.green);
-            Debug.DrawLine(new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin,
-                new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin,
+            Debug.DrawLine((new Vector3(tileGridSize.x, 0.0f, tileGridSize.y) + gridOrigin) * tileSize,
+                (new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin) * tileSize,
                 Color.green);
-            Debug.DrawLine(new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin,
-                new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin,
+            Debug.DrawLine((new Vector3(0.0f, 0.0f, tileGridSize.y) + gridOrigin) * tileSize,
+                (new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin) * tileSize,
                 Color.green);
         }
     }
@@ -999,20 +1000,20 @@ public class DungeonGenerator : MonoBehaviour
         if (showTileGrid) {
             for (int x = 0; x < tileGridSize.x; x++) {
                 for (int y = 0; y < tileGridSize.y; y++) {
-                    Vector3 pos = new Vector3(x + 0.5f + tileGridOffset.x, 
-                        0.5f, y + 0.5f + tileGridOffset.y);
+                    Vector3 pos = new Vector3((x + 0.5f + tileGridOffset.x ) * tileSize, 
+                        tileSize / 2.0f, (y + 0.5f + tileGridOffset.y) * tileSize);
 
                     if (tileGrid[x][y] == Tile.ROOM) {
                         Gizmos.color = Color.red;
-                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                        Gizmos.DrawCube(pos, new Vector3 (tileSize, tileSize, tileSize));
                     }
                     else if (tileGrid[x][y] == Tile.CORRIDOR) {
                         Gizmos.color = Color.yellow;
-                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                        Gizmos.DrawCube(pos, new Vector3 (tileSize, tileSize, tileSize));
                     }
                     else if (tileGrid[x][y] == Tile.CONNECTION) {
                         Gizmos.color = Color.green;
-                        Gizmos.DrawCube(pos, new Vector3 (1.0f, 1.0f, 1.0f));
+                        Gizmos.DrawCube(pos, new Vector3 (tileSize, tileSize, tileSize));
                     }
                 }
             }
