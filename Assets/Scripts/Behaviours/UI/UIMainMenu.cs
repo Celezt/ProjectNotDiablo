@@ -66,7 +66,6 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     {
         _controls.Enable();
 
-
         if (_inputControlSchemeVariable.Value == _controls.GamepadScheme)
             SelectFirstObject();
 
