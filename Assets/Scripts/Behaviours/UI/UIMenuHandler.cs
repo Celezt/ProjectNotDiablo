@@ -34,7 +34,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     /// </summary>
     public void OnQuit()
     {
-        Time.timeScale = 1.0f;
+        ToggleGameplay(PlayerInput.GetPlayerByIndex(0));
         _newStartScreen.LoadScene();
     }
 
