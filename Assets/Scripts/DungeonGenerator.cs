@@ -538,6 +538,16 @@ public class DungeonGenerator : MonoBehaviour
 
         PlaceCorridorTiles();
 
+        // Spawn monsters in each room.
+        foreach (var e in rooms) {
+            Vector3 rotAxis;
+            float rotAngle;
+            e.roomObject.transform.rotation.ToAngleAxis(out rotAngle, out rotAxis);
+
+            e.roomObject.GetComponent<RoomPrefab>()
+                .SpawnMonsters(e.roomObject.transform.position, rotAngle);
+        }
+
         return true;
     }
 
@@ -971,7 +981,7 @@ public class DungeonGenerator : MonoBehaviour
 
         // Draw tile grid bounds
         if (showTileGrid) { 
-            Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y) * tileSize;
+            Vector3 gridOrigin = new Vector3(tileGridOffset.x, 0.0f, tileGridOffset.y);
             Debug.DrawLine((new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin) * tileSize, 
                 (new Vector3(tileGridSize.x, 0.0f, 0.0f) + gridOrigin) * tileSize, 
                 Color.green);

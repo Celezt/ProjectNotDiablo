@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEditor;
 
 // Specifies data needed for a room to be used in the DungeonGenerator.
+[ExecuteInEditMode]
 public class RoomPrefab : MonoBehaviour
 {
     [System.Serializable]
@@ -16,8 +17,6 @@ public class RoomPrefab : MonoBehaviour
         public Vector3 position;
         public Vector3 rotation;
     }
-
-    [Header("Layout")]
 
     [Min(0.0f)]
     public float tileSize = 1.0f;
@@ -30,18 +29,33 @@ public class RoomPrefab : MonoBehaviour
 
     public List<Vector2Int> connections;
 
-    
-    [Header("Content")]
-    [Space(10)]
-
     public List<MonsterSpawnPoint> monsterSpawnPoints;
 
-    [Header("Editor")]
-    [Space(10)]
+    public MonsterPool monsterPool;
 
-    public Mesh monsterSpawnMesh;
+    public int minMonsters;
+
+    public int maxMonsters;
 
     //----------------------------------------------------------------------//
+
+    private Mesh monsterSpawnMesh;
+    private GameObject monstersParent;
+
+    //----------------------------------------------------------------------//
+
+    void Awake()
+    {
+    #if UNITY_EDITOR
+        monsterSpawnMesh = Resources.GetBuiltinResource<Mesh>("New-Capsule.fbx");
+    #endif
+
+        if (monstersParent == null) {
+            monstersParent = GameObject.Find("Monsters");
+            if (monstersParent == null)
+                monstersParent = new GameObject("Monsters");
+        }
+    }
 
     void OnDrawGizmosSelected()
     {
@@ -86,7 +100,7 @@ public class RoomPrefab : MonoBehaviour
                 monsterSpawnPoints[i].position.z);
             pos = transform.position + transform.rotation * pos * tileSize;
 
-            Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, tileDimensions);
+            Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, tileDimensions / 4.0f);
         }
     }
 
@@ -123,6 +137,32 @@ public class RoomPrefab : MonoBehaviour
         }
 
         return ret;
+    }
+
+    // Spawns monsters in the room.
+    public void SpawnMonsters(Vector3 roomPosition, float angle) {
+        if (monsterPool == null ||
+            monsterPool.monsters.Count == 0 || 
+            monsterSpawnPoints.Count == 0)
+            return;
+
+        Quaternion pivotRot = Quaternion.AngleAxis(angle,
+            new Vector3(0.0f, 1.0f, 0.0f));
+
+        int monsterAmount = Random.Range(minMonsters, maxMonsters + 1);
+
+        for (int i = 0; i < monsterAmount; i++) {
+            int pointIndex = Random.Range(0, monsterSpawnPoints.Count);
+            int monIndex = Random.Range(0, monsterPool.monsters.Count);
+            MonsterSpawnPoint spawnPoint = monsterSpawnPoints[pointIndex];
+            
+            Vector3 spawnPos = (pivotRot * spawnPoint.position * tileSize) + roomPosition;
+            Vector3 spawnRot = new Vector3(spawnPoint.rotation.x, 
+                spawnPoint.rotation.y + angle, spawnPoint.rotation.z);
+
+            Object.Instantiate(monsterPool.monsters[monIndex], spawnPos,
+                Quaternion.Euler(spawnRot), monstersParent.transform);
+        }
     }
 
 }
