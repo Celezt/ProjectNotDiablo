@@ -133,7 +133,7 @@ public class UICursorHandler : Singleton<UICursorHandler>
 
         _isInputVariable.Changed.Unregister(OnInputChange);
     }
-    
+
     private void UpdateScheme(InputControlScheme scheme)
     {
         if (scheme == _controls.GamepadScheme)
@@ -175,3 +175,4 @@ public class UICursorHandler : Singleton<UICursorHandler>
             yield return null;
         }
     }
+}
