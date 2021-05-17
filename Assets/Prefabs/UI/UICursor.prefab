@@ -91,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pointScreenPositionVariable: {fileID: 11400000, guid: 5160a2b4d4ff27c47869413d957a24c2, type: 2}
   _isInputVariable: {fileID: 11400000, guid: 58da3bf122009d940a8e7417c12cac7b, type: 2}
+  _inputControlSchemeVariable: {fileID: 11400000, guid: 274c8a6e860aaee4189157a3f7ee7016, type: 2}
 --- !u!114 &8431436679929739838
 MonoBehaviour:
   m_ObjectHideFlags: 0
