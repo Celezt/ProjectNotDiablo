@@ -16,6 +16,7 @@ public class UIMainMenu : Singleton<MonoBehaviour>
 
     [Foldout("Atoms", true)]
     [SerializeField] private BoolVariable _isInputVariable;
+    [SerializeField] private InputControlSchemeVariable _inputControlSchemeVariable;
 
     private PlayerControls _controls;
 
@@ -65,10 +66,15 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     {
         _controls.Enable();
 
+
+        if (_inputControlSchemeVariable.Value == _controls.GamepadScheme)
+            SelectFirstObject();
+
         _isInputVariable.Value = true;
 
-        PlayerInput.GetPlayerByIndex(0).SwitchCurrentActionMap(_controls.UI.Get().name);
-        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
+        PlayerInput playerInput = PlayerInput.GetPlayerByIndex(0);
+        playerInput.SwitchCurrentActionMap(_controls.UI.Get().name);
+        playerInput.controlsChangedEvent.AddListener(OnDeviceChanged);
     }
 
     private void OnDisable()
@@ -77,10 +83,11 @@ public class UIMainMenu : Singleton<MonoBehaviour>
 
         _isInputVariable.Value = false;
 
-        if (PlayerInput.GetPlayerByIndex(0) != null)
+        PlayerInput playerInput = PlayerInput.GetPlayerByIndex(0);
+        if (playerInput != null)
         {
-            PlayerInput.GetPlayerByIndex(0).SwitchCurrentActionMap(_controls.Ground.Get().name);
-            PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
+            playerInput.SwitchCurrentActionMap(_controls.Ground.Get().name);
+            playerInput.controlsChangedEvent.RemoveListener(OnDeviceChanged);
         }
     }
     #endregion

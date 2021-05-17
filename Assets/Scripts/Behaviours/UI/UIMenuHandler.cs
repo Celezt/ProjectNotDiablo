@@ -8,6 +8,7 @@ using MyBox;
 
 public class UIMenuHandler : Singleton<UIMenuHandler>
 {
+    [SerializeField] private SceneReference _newStartScreen;
     [SerializeField] private GameObject _menuContent;
     [SerializeField] private GameObject _firstButton;
     [SerializeField] private UICursorHandler _cursorHandler;
@@ -24,9 +25,23 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
     #region Events
     /// <summary>
-    /// Quit the game (works in editor mode).
+    /// Return back to the game.
+    /// </summary>
+    public void OnReturn() => ToggleGameplay(PlayerInput.GetPlayerByIndex(0));
+
+    /// <summary>
+    /// Quit current game session and return to the start screen.
     /// </summary>
     public void OnQuit()
+    {
+        Time.timeScale = 1.0f;
+        _newStartScreen.LoadScene();
+    }
+
+    /// <summary>
+    /// Quit the game (works in editor mode).
+    /// </summary>
+    public void OnQuitGame()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -34,11 +49,6 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         Application.Quit();
 #endif
     }
-
-    /// <summary>
-    /// Return back to the game.
-    /// </summary>
-    public void OnReturn() => ToggleGameplay(PlayerInput.GetPlayerByIndex(0));
 
     /// <summary>
     /// Enable or Disable menu.
@@ -62,9 +72,6 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         }
     }
     #endregion
-
-    public void SelectFirstObject() => EventSystem.current.SetSelectedGameObject(_firstButton);
-    public void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
 
     #region Unity Message
     private void Awake()
