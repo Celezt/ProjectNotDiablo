@@ -180,13 +180,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5546794094712560847}
+  - component: {fileID: 2019880419}
   m_Layer: 13
   m_Name: TEST_ROOM_PREFAB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5546794094712560847
 Transform:
   m_ObjectHideFlags: 0
@@ -194,7 +195,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5546794094712560844}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 89.52084, y: -0.00078463554, z: -15.96081}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -207,6 +208,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2019880419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5546794094712560844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87cbfc767dd509d4e94a332e7f173876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileSize: 4
+  width: 9
+  height: 9
+  connections:
+  - {x: 0, y: 5}
+  - {x: 0, y: -5}
+  monsterSpawnPoints:
+  - position: {x: 2.4398427, y: 0.26644734, z: -3.1979215}
+    rotation: {x: -0, y: 153.41, z: 0}
+  - position: {x: 3.172552, y: 0.30395585, z: 3.3767605}
+    rotation: {x: -0, y: 215.05676, z: 0}
+  - position: {x: 0.8690891, y: 0.92250544, z: 0.15774453}
+    rotation: {x: -0, y: 308.9192, z: 0}
+  monsterPool: {fileID: 11400000, guid: 808429fe2f4afef43bc10bffdbe1a1c9, type: 2}
+  minMonsters: 2
+  maxMonsters: 5
+  playerSpawnPoint:
+    position: {x: -3.0342264, y: 0.31969166, z: 0.066189885}
+    rotation: {x: -0, y: 205.80849, z: 0}
 --- !u!1 &5546794094773162771
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,7 +463,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3415ac7e9801f5a49bd9da11618618a8, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -800,7 +832,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3415ac7e9801f5a49bd9da11618618a8, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15861,7 +15893,7 @@ PrefabInstance:
     - target: {fileID: 3454277780502944015, guid: 7234c83608121694ebb0c6175d854ed0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1a35d0ab33d101e42956e2c17652d5c6, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7234c83608121694ebb0c6175d854ed0, type: 3}
 --- !u!4 &7136556698352663105 stripped

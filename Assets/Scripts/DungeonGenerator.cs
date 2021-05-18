@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------//
 /*
     ----- HOW IT WORKS -----
-    Updated: 2021-05-02
+    Updated: 2021-05-18
 
     1.  Randomly picked rooms are placed somewhat randomly, but relatively 
         near each other. This is because we want the rooms to collide somewhat
@@ -48,8 +48,7 @@
         which rotation to place on each tile. This is inferred by its 
         neighboring tiles.
 
-    7.  [Not implemented] The dungeon layout is complete. The rooms may now 
-        spawn their content.
+    7.  The dungeon layout is complete. The rooms may now spawn their content.
 
 */
 //--------------------------------------------------------------------------//
@@ -57,9 +56,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
 using Debug = UnityEngine.Debug;
 
 public class DungeonGenerator : MonoBehaviour
@@ -110,6 +107,8 @@ public class DungeonGenerator : MonoBehaviour
     // Editor-exposed members
     //----------------------------------------------------------------------//
 
+    public GameObject playerObject;
+
     [Min(0.0f)]
     public float tileSize = 1.0f;
 
@@ -135,6 +134,10 @@ public class DungeonGenerator : MonoBehaviour
 
     [Space(10)]
     public List<RoomPrefab> roomPrefabs;
+    
+    [Tooltip("The room where the dungeon ends. The player will start in the room furthest away" +
+        "from this room.")]
+    public RoomPrefab endRoomPrefab;
 
     [Header("Debug")]
 
@@ -182,22 +185,22 @@ public class DungeonGenerator : MonoBehaviour
     // Functions
     //----------------------------------------------------------------------//
 
-    void GeneratePrefabRoom(Vector2Int position) 
+    void GeneratePrefabRoom(Vector2Int position, bool endRoom) 
     {
         float rotAngle = Random.Range(0, 4) * 90.0f - 180.0f;
         Quaternion randRotation = Quaternion.AngleAxis(rotAngle,
             new Vector3(0.0f, 1.0f, 0.0f));
 
         int roomIndex = Random.Range(0, roomPrefabs.Count);
-        RoomPrefab roomPrefab = roomPrefabs[roomIndex];
+        RoomPrefab roomPrefab = endRoom ? endRoomPrefab : roomPrefabs[roomIndex];
         Vector2Int roomBounds = roomPrefab.GetRotatedBounds(rotAngle);
 
         Vector3 roomCenter = new Vector3(roomBounds.x / 2.0f, 0.0f, roomBounds.y / 2.0f);
         roomCenter.x += position.x;
         roomCenter.z += position.y;
 
-        GameObject roomObject = Object.Instantiate(roomPrefabs[roomIndex].gameObject, 
-            roomCenter, randRotation, transform);
+        GameObject roomObject = Object.Instantiate(roomPrefab.gameObject, roomCenter, 
+            randRotation, transform);
         roomObject.name = "Room " + rooms.Count;
         roomObject.SetActive(true);
 
@@ -229,6 +232,8 @@ public class DungeonGenerator : MonoBehaviour
 
     }
 
+    // DEPRECATED
+    // Generates rooms with random dimensions and connections.
     void GenerateRoom(Vector2Int position)
     {
         // Generate randomly sized rooms with random connections for now.
@@ -468,7 +473,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if (roomPrefabs.Count > 0) { // Generate rooms from the list of prefabs
             for (int i = 0; i < roomCount; i++) {
-                GeneratePrefabRoom(new Vector2Int(Random.Range(0, 17), Random.Range(0, 17)));
+                Vector2Int pos = new Vector2Int(Random.Range(0, 17), Random.Range(0, 17));
+                GeneratePrefabRoom(pos, i == 0); // Generate end room if it's the first room
             }
         }
         else {
@@ -544,7 +550,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public void BuildNavMesh()
     {
-        NavMeshBuilder.BuildNavMesh();
+        UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
     }
 
     public void SpawnMonsters()
@@ -557,6 +563,29 @@ public class DungeonGenerator : MonoBehaviour
             e.roomObject.GetComponent<RoomPrefab>()
                 .SpawnMonsters(e.roomObject.transform.position, rotAngle);
         }
+    }
+
+    // Spawns the player in the room that is furthest away from the end room
+    public void SpawnPlayer()
+    {
+        int roomIndex = 0;
+        float maxDist = 0.0f;
+
+        // Find the room that is furthest from the end room
+        for (int i = 1; i < rooms.Count; i++) {
+            float dist = (rooms[0].bounds.center - rooms[i].bounds.center).magnitude;
+            if (dist > maxDist) {
+                maxDist = dist;
+                roomIndex = i;
+            }
+        }
+
+        Vector3 rotAxis;
+        float rotAngle;
+        rooms[roomIndex].roomObject.transform.rotation.ToAngleAxis(out rotAngle, out rotAxis);
+
+        rooms[roomIndex].roomObject.GetComponent<RoomPrefab>()
+            .SpawnPlayer(playerObject, rooms[roomIndex].roomObject.transform.position, rotAngle);
     }
 
     //----------------------------------------------------------------------//
@@ -945,6 +974,7 @@ public class DungeonGenerator : MonoBehaviour
 
         BuildNavMesh();
         SpawnMonsters();
+        SpawnPlayer();
 
         stopwatch.Stop();
         Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
@@ -966,6 +996,8 @@ public class DungeonGenerator : MonoBehaviour
         //     stopwatch.Stop();
         //     Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
         // }
+
+#if UNITY_EDITOR
 
         // Draw connection edges to their targets
         if (showConnections) { 
@@ -1009,8 +1041,11 @@ public class DungeonGenerator : MonoBehaviour
                 (new Vector3(0.0f, 0.0f, 0.0f) + gridOrigin) * tileSize,
                 Color.green);
         }
+#endif
+
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         // Gizmos.color = Color.red;
@@ -1043,5 +1078,6 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
+#endif
 
 }

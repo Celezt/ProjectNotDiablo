@@ -13,6 +13,7 @@ public class RoomPrefabEditor : Editor
     SerializedProperty monsterPool;
     SerializedProperty minMonsters;
     SerializedProperty maxMonsters;
+    SerializedProperty playerSpawnPoint;
 
     private bool editMode;
 
@@ -26,6 +27,7 @@ public class RoomPrefabEditor : Editor
         monsterPool = serializedObject.FindProperty("monsterPool");
         minMonsters = serializedObject.FindProperty("minMonsters");
         maxMonsters = serializedObject.FindProperty("maxMonsters");
+        playerSpawnPoint = serializedObject.FindProperty("playerSpawnPoint");
     }
 
     public override void OnInspectorGUI()
@@ -75,6 +77,10 @@ public class RoomPrefabEditor : Editor
         
         EditorGUILayout.PropertyField(monsterSpawnPoints, new GUIContent("Monster Spawn Points"));
 
+        EditorGUILayout.Space(10.0f);
+
+        EditorGUILayout.PropertyField(playerSpawnPoint, new GUIContent("Player Spawn Point"));
+
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -114,18 +120,16 @@ public class RoomPrefabEditor : Editor
 
         // Monster spawn point handles
 
-        EditorGUI.BeginChangeCheck();
-
-        var spawnPoints = new List<RoomPrefab.MonsterSpawnPoint>(roomPrefab.monsterSpawnPoints.Count);
-
-        for (int i = 0; i < roomPrefab.monsterSpawnPoints.Count; i++) {
+        RoomPrefab.MonsterSpawnPoint 
+        GetTransformedSpawnPoint(RoomPrefab.MonsterSpawnPoint spawnPoint)
+        {
             Vector3 pos = new Vector3(
-                roomPrefab.monsterSpawnPoints[i].position.x * roomPrefab.tileSize,
-                roomPrefab.monsterSpawnPoints[i].position.y * roomPrefab.tileSize,
-                roomPrefab.monsterSpawnPoints[i].position.z * roomPrefab.tileSize);
+                spawnPoint.position.x * roomPrefab.tileSize,
+                spawnPoint.position.y * roomPrefab.tileSize,
+                spawnPoint.position.z * roomPrefab.tileSize);
             pos += roomPrefab.transform.position;
             
-            Quaternion rot = Quaternion.Euler(roomPrefab.monsterSpawnPoints[i].rotation);
+            Quaternion rot = Quaternion.Euler(spawnPoint.rotation);
             Vector3 scale = new Vector3(1.0f, 1.0f, 1.0f);
 
             Handles.TransformHandle(ref pos, ref rot, ref scale);
@@ -136,16 +140,30 @@ public class RoomPrefabEditor : Editor
             point.position = pos;
             point.rotation = rot.eulerAngles;
 
+            return point;
+        }
+
+        EditorGUI.BeginChangeCheck();
+
+        var spawnPoints = new List<RoomPrefab.MonsterSpawnPoint>(roomPrefab.monsterSpawnPoints.Count);
+        var playerSpawnPoint = new RoomPrefab.MonsterSpawnPoint();
+
+        for (int i = 0; i < roomPrefab.monsterSpawnPoints.Count; i++) {            
+            var point = GetTransformedSpawnPoint(roomPrefab.monsterSpawnPoints[i]);
             spawnPoints.Add(point);
         }
+
+        playerSpawnPoint = GetTransformedSpawnPoint(roomPrefab.playerSpawnPoint);
         
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(roomPrefab, "Move monster spawn point");
 
-            if (roomPrefab.transform.rotation == Quaternion.identity)
+            if (roomPrefab.transform.rotation == Quaternion.identity) {
                 roomPrefab.monsterSpawnPoints = spawnPoints;
+                roomPrefab.playerSpawnPoint = playerSpawnPoint;
+            }
             else
-                Debug.LogWarning("Connections can't be edited while rotated.");
+                Debug.LogWarning("Spawn points can't be edited while rotated.");
         }
 
     }

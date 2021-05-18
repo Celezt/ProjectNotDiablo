@@ -36,6 +36,8 @@ public class RoomPrefab : MonoBehaviour
     public int minMonsters;
 
     public int maxMonsters;
+    
+    public MonsterSpawnPoint playerSpawnPoint;
 
     //----------------------------------------------------------------------//
 
@@ -47,7 +49,7 @@ public class RoomPrefab : MonoBehaviour
     void Awake()
     {
     #if UNITY_EDITOR
-        monsterSpawnMesh = Resources.GetBuiltinResource<Mesh>("New-Capsule.fbx");
+        monsterSpawnMesh = AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Meshes/Editor/SpawnPoint.obj");
     #endif
 
         if (monstersParent == null) {
@@ -102,6 +104,15 @@ public class RoomPrefab : MonoBehaviour
 
             Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, tileDimensions / 4.0f);
         }
+
+        Gizmos.color = Color.yellow;
+        Quaternion rotation = Quaternion.Euler(playerSpawnPoint.rotation) * transform.rotation;
+        pos = new Vector3(playerSpawnPoint.position.x, 
+            playerSpawnPoint.position.y, 
+            playerSpawnPoint.position.z);
+        pos = transform.position + transform.rotation * pos * tileSize;
+
+        Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rotation, tileDimensions / 4.0f);
     }
 
     // Returns {width, height} rotated by 'angle' degrees.
@@ -163,6 +174,19 @@ public class RoomPrefab : MonoBehaviour
             Object.Instantiate(monsterPool.monsters[monIndex], spawnPos,
                 Quaternion.Euler(spawnRot), monstersParent.transform);
         }
+    }
+
+    // Spawns the player in the room.
+    public void SpawnPlayer(GameObject player, Vector3 roomPosition, float angle) {
+        Quaternion pivotRot = Quaternion.AngleAxis(angle,
+            new Vector3(0.0f, 1.0f, 0.0f));
+            
+        Vector3 spawnPos = (pivotRot * playerSpawnPoint.position * tileSize) + roomPosition;
+        Vector3 spawnRot = new Vector3(playerSpawnPoint.rotation.x, 
+            playerSpawnPoint.rotation.y + angle, playerSpawnPoint.rotation.z);
+
+        GameObject pl = Object.Instantiate(player, spawnPos, Quaternion.Euler(spawnRot));
+        pl.SetActive(true);
     }
 
 }
