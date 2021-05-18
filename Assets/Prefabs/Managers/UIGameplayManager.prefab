@@ -32,8 +32,8 @@ RectTransform:
   m_Children:
   - {fileID: 545949056207009326}
   - {fileID: 7417522007282101129}
-  - {fileID: 8841340264875360720}
   - {fileID: 1545462273268135920}
+  - {fileID: 8841340264875360720}
   m_Father: {fileID: 633606170208622583}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -565,7 +565,7 @@ RectTransform:
   m_Children:
   - {fileID: 696457665055886390}
   m_Father: {fileID: 633606168780372477}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -786,8 +786,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: a0af4c797dfb66a4c9d786493315e51e, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.44705883}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1326,7 +1326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 187006375635524096, guid: ab715f884dbb42a448f2fe32537af1b4, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 187006375635524096, guid: ab715f884dbb42a448f2fe32537af1b4, type: 3}
       propertyPath: m_AnchorMax.x

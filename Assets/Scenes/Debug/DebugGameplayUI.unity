@@ -225,7 +225,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 563135463}
-  - component: {fileID: 563135464}
   m_Layer: 0
   m_Name: CameraTarget
   m_TagString: Untagged
@@ -245,111 +244,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &563135464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 563135462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 7449ea2199aede242a551731e623d4d9, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 991cd16d-deb6-4d2b-81da-2e125a18b1a2
-    m_ActionName: Ground/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 827484eb-d62d-46a8-a0de-aed6b920ff8a
-    m_ActionName: Ground/Camera[/Mouse/scroll,/Keyboard/z,/Keyboard/x,/Keyboard/q,/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 92ca1554-eefa-4747-ab7e-fd1e822a29de
-    m_ActionName: Ground/Roll[/Keyboard/shift]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4d31b998-47a3-43d2-a362-12179cb9de02
-    m_ActionName: Ground/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5eddd8ae-ed07-44b5-8c51-e4868aa71e48
-    m_ActionName: Ground/PointDelta
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 513efc08-defa-4656-982a-a5a0c102685f
-    m_ActionName: Ground/Hotbar[/Keyboard/1,/Keyboard/2,/Keyboard/3,/Keyboard/4,/Keyboard/5,/Keyboard/6,/Keyboard/7,/Keyboard/8,/Keyboard/9,/Keyboard/0]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 528dd101-3b8e-4682-b4aa-7a8e27ec85bd
-    m_ActionName: Ground/Attack[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 94eb75e7-c9f6-4cea-8eee-e305e90b1123
-    m_ActionName: Ground/Menu[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 46274cc8-fa4a-4ec6-9bac-2142511053e9
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 366f085e-601e-4742-849b-033e55141238
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f6bd07d1-3661-406a-8070-42b392b9d6c0
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 24c851eb-283f-495c-8e1e-4999e47868b8
-    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 23d02ee2-0401-4c40-b11f-02ebeb565124
-    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 188d0c7a-6fb2-4b2c-974e-dfd603d4d7f8
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: fd3e8028-d95d-49f8-abf5-53ad0211b16d
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c6b39066-97e5-438f-8482-350de228944b
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b8f9ec18-48c9-4010-ad48-2c4f8329c8e5
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 247041ac-2108-427a-8e4a-6f1bfe8a967e
-    m_ActionName: UI/TrackedDeviceOrientation
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 846a78b4-0c7f-41ad-a2d3-3353ec73ead1
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!1001 &1287210716
+--- !u!1001 &2127922594
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -358,15 +255,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -28.557617
+      value: -16.188951
       objectReference: {fileID: 0}
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -25.906021
+      value: -25.001984
       objectReference: {fileID: 0}
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 495.03424
+      value: 482.8556
       objectReference: {fileID: 0}
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -378,11 +275,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.68724746
+      value: 0.6872475
       objectReference: {fileID: 0}
     - target: {fileID: 1483624374589894865, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.10200159
+      value: -0.102001585
       objectReference: {fileID: 0}
     - target: {fileID: 1788764666328064110, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_Targets.Array.size
@@ -396,13 +293,9 @@ PrefabInstance:
       propertyPath: m_Targets.Array.data[0].weight
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2380106103088202319, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2859990387857574318, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2859990387857574318, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -450,31 +343,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.461039
+      value: 0.0014196241
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.60512185
+      value: -0.0025454168
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.154538
+      value: 0.00865816
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.71650743
+      value: 0.71559566
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.062479492
+      value: 0.062020004
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.6943568
+      value: 0.69534886
       objectReference: {fileID: 0}
     - target: {fileID: 2958501823933086130, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.024129938
+      value: -0.023800958
       objectReference: {fileID: 0}
     - target: {fileID: 4284142699705067180, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -496,9 +389,25 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6393755006556450602, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 78
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6573520806542265786, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -556,23 +465,23 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.10237111
       objectReference: {fileID: 0}
-    - target: {fileID: 8392740500231008487, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 6702053586202470118, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8392740500231008487, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 6702053586202470118, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8392740500231008487, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 6702053586202470118, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8392740500231008487, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 6702053586202470118, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8392740500231008487, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+    - target: {fileID: 6702053586202470118, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
