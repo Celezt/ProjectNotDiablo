@@ -43,12 +43,19 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     /// </summary>
     public void OnNewGame()
     {
-        //for (int i = 0; i < _variableLists.Length; i++)  // Clear all variable lists.
-        //{
-        //    _variableLists[i].Clear();
-        //}
+        if (_variableLists != null)
+        {
+            for (int i = 0; i < _variableLists.Length; i++)  // Clear all variable lists.
+            {
+                _variableLists[i].Clear();
+            }
+        }
 
-        //_playerHealth.Value = _playerMaxHealth.Value;
+        if (_playerHealth != null && _playerMaxHealth != null)
+        {
+            _playerHealth.Value = _playerMaxHealth.Value;
+        }
+
 
         _newGameScene.LoadScene();
     }
