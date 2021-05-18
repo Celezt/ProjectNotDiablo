@@ -24,8 +24,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193588326828249912}
-  m_LocalRotation: {x: -0.1447757, y: 0.0000019669535, z: -0.000000022351744, w: 0.9894645}
-  m_LocalPosition: {x: 0.0066935313, y: -0.7052285, z: 12.113414}
+  m_LocalRotation: {x: -0.14477573, y: 0.0000018477438, z: -0.000000014901159, w: 0.9894645}
+  m_LocalPosition: {x: 0.006704977, y: -0.7052251, z: 12.113468}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8072564653684885559}
@@ -46,10 +46,7 @@ MonoBehaviour:
   m_PositionMode: 0
   m_RotationMode: 1
   m_UpdateMethod: 2
-  m_Targets:
-  - target: {fileID: 0}
-    weight: 1
-    radius: 1
+  m_Targets: []
 --- !u!1 &3024772340678595256
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +283,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -554,8 +551,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6501351758518269975}
-  m_LocalRotation: {x: 0.026655339, y: 0.7722365, z: 0.07343091, w: -0.6305142}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.026692849, y: 0.7723082, z: 0.07348942, w: -0.630418}
+  m_LocalPosition: {x: 0.0000013672538, y: -0.0000010018503, z: 0.0000009496754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 984938286622980696}
@@ -979,8 +976,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9060627299966826336}
-  m_LocalRotation: {x: -0.17053011, y: 0.017058522, z: -0.0029523522, w: 0.9852004}
-  m_LocalPosition: {x: -0.000008398366, y: 0.0000006771171, z: 0.000060516973}
+  m_LocalRotation: {x: -0.17053016, y: 0.01705855, z: -0.0029523666, w: 0.9852004}
+  m_LocalPosition: {x: -0.00000840425, y: 0.00000040389034, z: 0.000059603284}
   m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 8072564653684885559}
@@ -1001,7 +998,4 @@ MonoBehaviour:
   m_PositionMode: 0
   m_RotationMode: 1
   m_UpdateMethod: 2
-  m_Targets:
-  - target: {fileID: 0}
-    weight: 1
-    radius: 1
+  m_Targets: []

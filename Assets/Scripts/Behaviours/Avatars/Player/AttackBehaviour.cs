@@ -8,6 +8,12 @@ using MyBox;
 
 public class AttackBehaviour : MonoBehaviour
 {
+    public GameObject SelectedWeapon
+    {
+        get => _selectedWeapon;
+        set => _selectedWeapon = value;
+    }
+
     [SerializeField] private GameObject _selectedWeapon;
     [SerializeField] private float _attackCombinationCooldown = 2.0f;
     [Space(10)]
@@ -146,7 +152,7 @@ public class AttackBehaviour : MonoBehaviour
                 _controls.Enable();
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForUnscaledSeconds(0.1f);
         }
     }
 }
