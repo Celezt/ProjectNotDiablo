@@ -5,26 +5,18 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityAtoms.BaseAtoms;
 using UnityAtoms.InputSystem;
+using MyBox;
 
 public class UIGameplayManager : Singleton<UIGameplayManager>
 {
-    public PlayerControls Controls
-    {
-        get => _controller;
-    }
-
     #region Inspector
-    [Header("Atoms")]
-    [SerializeField] private FloatEvent _healthEvent;
-    [SerializeField] private PlayerInputEvent _deviceChangedEvent;
-    [Space(10)]
-    [Header("UI Setup")]
     [SerializeField] private Text _controllerLabel;
+
+    [Foldout("Atoms", true)]
+    [SerializeField] private FloatEvent _healthEvent;
     #endregion
 
     private PlayerControls _controller;
-
-    protected UIGameplayManager() { }
 
     #region Events
     public void OnDeviceChanged(PlayerInput input)
@@ -51,13 +43,13 @@ public class UIGameplayManager : Singleton<UIGameplayManager>
     private void OnEnable()
     {
         _controller.Enable();
-        _deviceChangedEvent.Register(OnDeviceChanged);
+        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
     }
 
     private void OnDisable()
     {
         _controller.Disable();
-        _deviceChangedEvent.Unregister(OnDeviceChanged);
+        PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
     }
     #endregion
 }

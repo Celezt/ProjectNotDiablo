@@ -1,5 +1,23 @@
 {
   "dependencies": {
+    "com.autodesk.fbx": {
+      "version": "4.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.domybest.mybox": {
+      "version": "https://github.com/Deadcows/MyBox.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.ai": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0"
+      },
+      "hash": "3239833203ca571b8f495a53301afbb764aeff80"
+    },
     "com.unity-atoms.unity-atoms": {
       "version": "https://github.com/unity-atoms/unity-atoms.git",
       "depth": 0,
@@ -34,6 +52,16 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.formats.fbx": {
+      "version": "4.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.0.0",
+        "com.autodesk.fbx": "4.0.1"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ide.rider": {
       "version": "2.0.7",
       "depth": 0,
@@ -60,10 +88,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.0.2",
+      "version": "1.1.0-pre.5",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {

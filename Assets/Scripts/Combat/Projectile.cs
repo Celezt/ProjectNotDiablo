@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
 
     public GameObject hitEffect;
 
+
     AudioClip clip;
     private Vector3 destination;
     public void SetVaribles(float _damage, float _speed, float _radius, Vector3 _destination, float _range)
@@ -27,13 +28,13 @@ public class Projectile : MonoBehaviour
         range = _range;
     }
 
-    LayerMask targetLayer;
+    public LayerMask targetLayer;
     LayerMask ignoreLayer;
 
 
     void Start()
     {
-        targetLayer = LayerMask.GetMask("Damageble");
+        targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
         ignoreLayer = LayerMask.GetMask("Enviorment");
     }
 

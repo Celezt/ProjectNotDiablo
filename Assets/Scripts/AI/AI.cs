@@ -26,7 +26,7 @@ public class AI : MonoBehaviour
     bool atDestination;
     bool isCharging = false;
     bool enemyVisible;
-    bool PlayerInRange = false;
+    public bool PlayerInRange = false;
 
     PatrolArea selectedPatrolArea;
     NavMeshAgent agent;
@@ -46,12 +46,18 @@ public class AI : MonoBehaviour
     float ChargeSpeed;
     float chargeAcceleration;
 
+    AnimatorBehaviour animator;
+
+    [SerializeField]
+    AnimationClip clip;
     //Weapon Stats
 
+    LayerMask selfLayer;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = gameObject.GetComponentInChildren<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
         agent.acceleration = baseAcceleration;
@@ -59,6 +65,7 @@ public class AI : MonoBehaviour
         agent.speed = baseSpeed;
         ChargeSpeed = baseSpeed * 2;
         atDestination = true;
+        selfLayer = LayerMask.NameToLayer("AI");
     }
     
     void OnEnable()
@@ -94,7 +101,15 @@ public class AI : MonoBehaviour
         {
             MoveCloser();
         }
-
+        //if (agent.velocity == Vector3.zero)
+        //{
+        //    animator.SmoothLocalMotion = agent.velocity.normalized;
+        //}
+        //else if (agent.velocity != Vector3.zero)
+        //{
+        //}
+        animator.SmoothLocalMotion = agent.velocity.normalized;
+        //Debug.Log(agent.velocity.normalized);
 
         distanceToDestination = agent.remainingDistance;
         if (currentState == AiState.Patrolling)
@@ -112,6 +127,10 @@ public class AI : MonoBehaviour
         if (PlayerInRange)
         {
             Attack();
+        }
+        if (health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -131,7 +150,7 @@ public class AI : MonoBehaviour
             agent.speed = baseSpeed;
         }
 
-        if (weaponRange > distanceToPlayer)
+        if (weaponRange - 1 > distanceToPlayer)
         {
             destination = gameObject.transform.position;
             if (player != null)
@@ -140,7 +159,7 @@ public class AI : MonoBehaviour
                 PlayerInRange = true;
             }
         }
-        else if (weaponRange < distanceToPlayer)
+        else if (weaponRange + 1 < distanceToPlayer)
         {
             destination = player.transform.position;
             PlayerInRange = false;
@@ -150,13 +169,19 @@ public class AI : MonoBehaviour
 
     void Attack()
     {
+
         if (selectedWeapon.GetComponent<Ranged>() != null)
         {
             selectedWeapon.GetComponent<Ranged>().Attack(player.transform.position);
         }
         if (selectedWeapon.GetComponent<Melee>() != null)
         {
-            selectedWeapon.GetComponent<Melee>().Attack();
+            selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
+
+            if (animator.IsAnimationModifierRunning == false)
+            {
+                animator.OnAnimationModifierRaised(new AnimatorModifier(clip));
+            }
         }
     }
 

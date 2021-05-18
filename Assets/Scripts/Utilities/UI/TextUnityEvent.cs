@@ -9,23 +9,27 @@ public partial class TextUnityEvent : MonoBehaviour
 {
     private Text _text;
 
-    private void Awake()
-    {
-        _text = GetComponent<Text>();
-    }
-
     public void SetFloat(float value)
     {
+        if (_text == null)
+            _text = GetComponent<Text>();
+
         _text.text = value.ToString();
     }
 
     public void SetInt(int value)
     {
+        if (_text == null)
+            _text = GetComponent<Text>();
+
         _text.text = value.ToString();
     }
 
     public void SetString(string value)
     {
+        if (_text == null)
+            _text = GetComponent<Text>();
+
         _text.text = value;
     }
 }

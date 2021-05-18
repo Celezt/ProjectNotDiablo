@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7684eff5e7ebcab41ba3b4371823a637, type: 3}
+  m_Name: KeyIconAssets
+  m_EditorClassIdentifier: 
+  Xbox:
+    ButtonSouth: {fileID: 0}
+    ButtonNorth: {fileID: 0}
+    ButtonEast: {fileID: 0}
+    ButtonWest: {fileID: 0}
+    StartButton: {fileID: 0}
+    SelectButton: {fileID: 0}
+    LeftTrigger: {fileID: 0}
+    RightTrigger: {fileID: 0}
+    LeftShoulder: {fileID: 0}
+    RightShoulder: {fileID: 0}
+    Dpad: {fileID: 0}
+    DpadUp: {fileID: 0}
+    DpadDown: {fileID: 0}
+    DpadLeft: {fileID: 0}
+    DpadRight: {fileID: 0}
+    LeftStick: {fileID: 0}
+    RightStick: {fileID: 0}
+    LeftStickPress: {fileID: 0}
+    RightStickPress: {fileID: 0}
+  Ps4:
+    ButtonSouth: {fileID: 21300000, guid: 03ff0820c7139514d98ce0326d1a15a4, type: 3}
+    ButtonNorth: {fileID: 0}
+    ButtonEast: {fileID: 0}
+    ButtonWest: {fileID: 0}
+    StartButton: {fileID: 0}
+    SelectButton: {fileID: 0}
+    LeftTrigger: {fileID: 0}
+    RightTrigger: {fileID: 0}
+    LeftShoulder: {fileID: 0}
+    RightShoulder: {fileID: 0}
+    Dpad: {fileID: 0}
+    DpadUp: {fileID: 0}
+    DpadDown: {fileID: 0}
+    DpadLeft: {fileID: 0}
+    DpadRight: {fileID: 0}
+    LeftStick: {fileID: 0}
+    RightStick: {fileID: 0}
+    LeftStickPress: {fileID: 0}
+    RightStickPress: {fileID: 0}
+  Pc:
+    ButtonSouth: {fileID: 21300000, guid: 54700151937aa19488a53b4a9eaf180b, type: 3}
+    ButtonNorth: {fileID: 0}
+    ButtonEast: {fileID: 0}
+    ButtonWest: {fileID: 0}
+    StartButton: {fileID: 0}
+    SelectButton: {fileID: 0}
+    LeftTrigger: {fileID: 0}
+    RightTrigger: {fileID: 0}
+    LeftShoulder: {fileID: 0}
+    RightShoulder: {fileID: 0}
+    Dpad: {fileID: 0}
+    DpadUp: {fileID: 0}
+    DpadDown: {fileID: 0}
+    DpadLeft: {fileID: 0}
+    DpadRight: {fileID: 0}
+    LeftStick: {fileID: 0}
+    RightStick: {fileID: 0}
+    LeftStickPress: {fileID: 0}
+    RightStickPress: {fileID: 0}
