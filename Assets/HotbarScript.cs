@@ -20,6 +20,8 @@ public class HotbarScript : MonoBehaviour
     [SerializeField] public FloatVariable health;
     [SerializeField] public FloatVariable speed;
     [SerializeField] public GameObject baseGroundObject;
+    [SerializeField] public GameObject sword;
+    [SerializeField] public GameObject spellbok;
     private float lastUsedSlot = -1;
     private bool speedBoosted = false;
     private System.DateTime speedBostedTime;
@@ -66,6 +68,8 @@ public class HotbarScript : MonoBehaviour
         inventory.SetHotbardScript(this);
         inventory.SetHealth(health);
         inventory.SetSpeed(speed);
+        inventory.SetSword(sword);
+        inventory.SetSpellBook(spellbok);
          
     }
 

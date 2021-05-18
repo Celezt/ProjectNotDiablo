@@ -104,7 +104,6 @@ GameObject:
   - component: {fileID: 8134364828735638739}
   - component: {fileID: 8134364828732771571}
   - component: {fileID: 8134364828733869619}
-  - component: {fileID: 8134364828736131314}
   - component: {fileID: 8904612081942539736}
   m_Layer: 0
   m_Name: FireballBook
@@ -121,7 +120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8134364828736131315}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 6.972, y: 3.587, z: 10.216}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100.00006, z: 100.00006}
   m_Children:
   - {fileID: 3163273727859844347}
@@ -178,20 +177,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8134364828736131314
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8134364828736131315}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 84c3a15b577df7648905fcbe72f4c5cf, type: 3}
 --- !u!114 &8904612081942539736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,3 +198,4 @@ MonoBehaviour:
   modifier: 0
   pointOfOrigin: {x: 0, y: 0, z: 0}
   projetileModel: {fileID: 1481984781502211652, guid: 7f625491dc7bc3e4c9e82a8554984acf, type: 3}
+  cooldownTimer: 0
