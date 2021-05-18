@@ -965,9 +965,6 @@ public class DungeonGenerator : MonoBehaviour
 
     void Start()
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
         // Continue trying to generate a new dungeon if room collision 
         // iterations exceed the limit.
         while (!GenerateDungeon());
@@ -975,9 +972,6 @@ public class DungeonGenerator : MonoBehaviour
         BuildNavMesh();
         SpawnMonsters();
         SpawnPlayer();
-
-        stopwatch.Stop();
-        Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
     }
 
     void Update()
