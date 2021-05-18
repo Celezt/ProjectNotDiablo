@@ -20,8 +20,12 @@ public class Popup : MonoBehaviour
 
     private Duration _lifespan;
 
+    private Vector3 _initScale;
+
     private void Start()
     {
+        _initScale = transform.localScale;
+
         if (_enableDynamicScale)
             StartCoroutine(CoroutineScale());
 
@@ -50,7 +54,7 @@ public class Popup : MonoBehaviour
             while (duration.IsActive)
             {
                 float scale = _scaleCurve.Evaluate(1 - duration.UnitIntervalTimeLeft) * _scaleMultiplier;
-                transform.localScale = new Vector3(scale, scale, scale);
+                transform.localScale = _initScale * scale;
 
                 yield return new WaitForFixedUpdate();
             }

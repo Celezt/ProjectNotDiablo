@@ -778,12 +778,9 @@ MonoBehaviour:
   _firstButton: {fileID: 443070463}
   _isInputVariable: {fileID: 11400000, guid: 58da3bf122009d940a8e7417c12cac7b, type: 2}
   _inputControlSchemeVariable: {fileID: 11400000, guid: 274c8a6e860aaee4189157a3f7ee7016, type: 2}
-  _variableLists:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _playerHealth: {fileID: 0}
-  _playerMaxHealth: {fileID: 0}
+  _valueLists: []
+  _playerHealth: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  _playerMaxHealth: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
 --- !u!4 &838734300
 Transform:
   m_ObjectHideFlags: 0

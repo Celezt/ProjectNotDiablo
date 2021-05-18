@@ -116,7 +116,6 @@ public class UICursorHandler : Singleton<UICursorHandler>
     {
         _controls.Enable();
 
-        SetStartScheme();
         UpdateScheme(_inputControlSchemeVariable.Value);
     }
 
@@ -152,17 +151,6 @@ public class UICursorHandler : Singleton<UICursorHandler>
             _cursorType = CursorTypes.Mouse;
 
             SetCursor(CursorDisplay.Mouse);
-        }
-    }
-
-    private void SetStartScheme()
-    {
-        if (_inputControlSchemeVariable.Value.name == "")  // Give it a start scheme if none has yet been assigned.
-        {
-            if (Gamepad.all.Count > 0)
-                _inputControlSchemeVariable.Value = _controls.GamepadScheme;
-            else
-                _inputControlSchemeVariable.Value = _controls.KeyboardAndMouseScheme;
         }
     }
 
