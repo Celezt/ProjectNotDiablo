@@ -16,9 +16,8 @@ public class AttackBehaviour : MonoBehaviour
             Transform parentTransform = _selectedWeapon.transform.parent;
 
             Destroy(_selectedWeapon);                                   // Destroy the current weapon.
-            _selectedWeapon = Instantiate(value);                       // Instantiate the new weapon.
-            _selectedWeapon.transform.parent = parentTransform;         // Set new weapon's parent.
-            _selectedWeapon.transform.position = Vector3.zero;          // Reset position.
+            _selectedWeapon = Instantiate(value,parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
+            _selectedWeapon.transform.localScale = value.transform.localScale;
         }
     }
 
