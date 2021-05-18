@@ -27,6 +27,7 @@ public class AI : MonoBehaviour
     bool isCharging = false;
     bool enemyVisible;
     public bool PlayerInRange = false;
+    bool dead;
 
     PatrolArea selectedPatrolArea;
     NavMeshAgent agent;
@@ -49,7 +50,10 @@ public class AI : MonoBehaviour
     AnimatorBehaviour animator;
 
     [SerializeField]
-    AnimationClip clip;
+    AnimationClip attackAnimation;
+    [SerializeField]
+    AnimationClip deathAnimation;
+
     //Weapon Stats
 
     LayerMask selfLayer;
@@ -65,6 +69,7 @@ public class AI : MonoBehaviour
         agent.speed = baseSpeed;
         ChargeSpeed = baseSpeed * 2;
         atDestination = true;
+        dead = false;
         selfLayer = LayerMask.NameToLayer("AI");
     }
     
@@ -85,6 +90,10 @@ public class AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (dead == true)
+        {
+            return;
+        }
         if (fieldOfView.visableTargets.Count != 0)
         {
             player = fieldOfView.visableTargets[0];
@@ -128,10 +137,16 @@ public class AI : MonoBehaviour
         {
             Attack();
         }
-        if (health <= 0)
+        if (health <= 0 && dead != true)
         {
-            Destroy(gameObject);
+            Death();
         }
+    }
+    void Death()
+    {
+        animator.OnAnimationModifierRaised(new AnimatorModifier(deathAnimation));
+        Destroy(gameObject, 5f);
+        dead = true;
     }
 
 
@@ -180,7 +195,7 @@ public class AI : MonoBehaviour
 
             if (animator.IsAnimationModifierRunning == false)
             {
-                animator.OnAnimationModifierRaised(new AnimatorModifier(clip));
+                animator.OnAnimationModifierRaised(new AnimatorModifier(attackAnimation));
             }
         }
     }

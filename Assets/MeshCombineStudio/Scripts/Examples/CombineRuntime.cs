@@ -8,16 +8,11 @@ namespace MeshCombineStudio
 	{
 		public MeshCombiner meshCombiner;
 		public bool useSearchConditions = true;
-		public GameObject[] gos;
+		//public GameObject[] gos;
 
-		void Start()
+		public void Combine()
 		{
-			Combine();
-		}
-
-		void Combine()
-		{
-			meshCombiner.searchOptions.parentGOs = gos;
+			//meshCombiner.searchOptions.parentGOs = gos;
 			meshCombiner.CombineAll(useSearchConditions);
 		}
 	}

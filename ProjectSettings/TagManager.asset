@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - dirt
   layers:
   - Default
   - TransparentFX
@@ -20,9 +21,9 @@ TagManager:
   - AI
   - Enviorment
   - Damageble
-  - 
-  - 
-  - 
+  - RemoveFloor
+  - NoCollider1
+  - NoCollider2
   - 
   - 
   - 
