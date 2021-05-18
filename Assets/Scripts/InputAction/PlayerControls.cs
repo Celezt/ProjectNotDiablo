@@ -557,6 +557,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""dfb2a80a-5d95-4e82-97a2-81de1cf110d4"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""64c74f93-e542-4ccf-88d2-5e64168d3fda"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
