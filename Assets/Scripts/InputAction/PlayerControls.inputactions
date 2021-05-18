@@ -513,6 +513,13 @@
                 },
                 {
                     "name": "",
+                    "id": "8fd459c5-ab6b-43db-9626-800f07756994",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "Scale(factor=11)",
+                    "groups": "",
+                    "action": "Hotbar",
+
                     "id": "f5425c5b-6f8f-44d9-89c8-e49ae526608f",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",

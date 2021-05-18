@@ -535,12 +535,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f5425c5b-6f8f-44d9-89c8-e49ae526608f"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""8fd459c5-ab6b-43db-9626-800f07756994"",
+                    ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard And Mouse"",
-                    ""action"": ""Attack"",
+                    ""processors"": ""Scale(factor=11)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },

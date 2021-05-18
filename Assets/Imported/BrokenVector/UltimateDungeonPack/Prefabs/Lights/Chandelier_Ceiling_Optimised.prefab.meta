@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/New Terrain.asset.meta
+guid: cc9c4ea4a2a675b4a961e8e6a45f3c7a
+NativeFormatImporter:
+=======
 guid: 863800650c6666b42b61d4dc1d8fb0df
 PrefabImporter:
+>>>>>>> origin/main:Assets/Imported/BrokenVector/UltimateDungeonPack/Prefabs/Lights/Chandelier_Ceiling_Optimised.prefab.meta
   externalObjects: {}
+  mainObjectFileID: 15600000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
