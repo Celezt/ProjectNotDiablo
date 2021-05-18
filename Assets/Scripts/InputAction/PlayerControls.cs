@@ -541,13 +541,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": ""Scale(factor=11)"",
                     ""groups"": """",
                     ""action"": ""Hotbar"",
-
-                    ""id"": ""f5425c5b-6f8f-44d9-89c8-e49ae526608f"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard And Mouse"",
-                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
