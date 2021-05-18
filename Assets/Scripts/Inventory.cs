@@ -13,6 +13,8 @@ public class Inventory
     public FloatVariable health;
     public FloatVariable speed;
     private int maxNumberOfItems = 3;
+    public GameObject sword;
+    public GameObject spellbook;
 
     public Inventory()
     {
@@ -135,6 +137,16 @@ public class Inventory
             GameObject border = slot.transform.Find("Border").gameObject;
             Image img = border.GetComponent<Image>();
             img.color = Color.red;
+            AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
+            if(item.itemType == Item.ItemType.Spell)
+            {
+                abScript.SelectedWeapon = spellbook;
+            }
+            else if(item.itemType == Item.ItemType.Sword)
+            {
+                abScript.SelectedWeapon = sword;
+            }
+
             
         }
         else
@@ -189,5 +201,13 @@ public class Inventory
     public void SetSpeed(FloatVariable speed)
     {
         this.speed = speed;
+    }
+    public void SetSword(GameObject obj)
+    {
+        this.sword = obj;
+    }
+    public void SetSpellBook(GameObject obj)
+    {
+        this.spellbook = obj;
     }
 }

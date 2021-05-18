@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2735933650849564389}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.8000016, y: 1.8000013, z: 1.8000015}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -101,3 +101,10 @@ MonoBehaviour:
   cleve: 0
   modifier: 0
   hitableTargets: []
+  cooldownTimer: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 0
