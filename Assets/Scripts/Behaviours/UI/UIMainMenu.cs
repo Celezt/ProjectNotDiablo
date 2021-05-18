@@ -19,7 +19,7 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     [SerializeField] private BoolVariable _isInputVariable;
     [SerializeField] private InputControlSchemeVariable _inputControlSchemeVariable;
 
-    [SerializeField] private BaseAtomValueList[] _variableLists;
+    [SerializeField] private BaseAtomValueList[] _valueLists;
     [SerializeField] private FloatVariable _playerHealth;
     [SerializeField] private FloatVariable _playerMaxHealth;
 
@@ -43,11 +43,11 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     /// </summary>
     public void OnNewGame()
     {
-        if (_variableLists != null)
+        if (_valueLists != null)
         {
-            for (int i = 0; i < _variableLists.Length; i++)  // Clear all variable lists.
+            for (int i = 0; i < _valueLists.Length; i++)  // Clear all variable lists.
             {
-                _variableLists[i].Clear();
+                _valueLists[i].Clear();
             }
         }
 
@@ -55,7 +55,6 @@ public class UIMainMenu : Singleton<MonoBehaviour>
         {
             _playerHealth.Value = _playerMaxHealth.Value;
         }
-
 
         _newGameScene.LoadScene();
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
 
-[ExecuteAlways]
 public class UIBillboard : MonoBehaviour
 {
 	public Transform FacedObject;
@@ -42,7 +41,7 @@ public class UIBillboard : MonoBehaviour
 			Transform cameraTransform = _camera.transform;
 			Plane plane = new Plane(cameraTransform.forward, cameraTransform.position);
 			float distance = plane.GetDistanceToPoint(transform.position);
-			transform.localScale = _initialScale * distance * Multiplier;
+			transform.localScale = _initialScale * 0.1f * distance * Multiplier;
 		}
 
 		transform.rotation = ActiveFacedObject.rotation;
