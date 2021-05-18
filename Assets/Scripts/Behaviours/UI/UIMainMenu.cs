@@ -18,6 +18,10 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     [SerializeField] private BoolVariable _isInputVariable;
     [SerializeField] private InputControlSchemeVariable _inputControlSchemeVariable;
 
+    [SerializeField] private AtomBaseVariableList[] _variableLists;
+    [SerializeField] private FloatVariable _playerHealth;
+    [SerializeField] private FloatVariable _playerMaxHealth;
+
     private PlayerControls _controls;
 
     #region Events
@@ -36,7 +40,17 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     /// <summary>
     /// Start a new game.
     /// </summary>
-    public void OnNewGame() => _newGameScene.LoadScene();
+    public void OnNewGame()
+    {
+        for (int i = 0; i < _variableLists.Length; i++)  // Clear all variable lists.
+        {
+            _variableLists[i].Clear();
+        }
+
+        _playerHealth.Value = _playerMaxHealth.Value;
+
+        _newGameScene.LoadScene();
+    }
 
     public void OnDeviceChanged(PlayerInput input)
     {
