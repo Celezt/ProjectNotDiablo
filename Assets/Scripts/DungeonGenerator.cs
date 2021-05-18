@@ -59,6 +59,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
 using Debug = UnityEngine.Debug;
 
 public class DungeonGenerator : MonoBehaviour
@@ -461,7 +462,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     // Returns true if dungeon was created successfully, otherwise false.
-    bool GenerateDungeon()
+    public bool GenerateDungeon()
     {
         int roomCount = Random.Range(minRooms, maxRooms + 1);
 
@@ -538,7 +539,16 @@ public class DungeonGenerator : MonoBehaviour
 
         PlaceCorridorTiles();
 
-        // Spawn monsters in each room.
+        return true;
+    }
+
+    public void BuildNavMesh()
+    {
+        NavMeshBuilder.BuildNavMesh();
+    }
+
+    public void SpawnMonsters()
+    {
         foreach (var e in rooms) {
             Vector3 rotAxis;
             float rotAngle;
@@ -547,8 +557,6 @@ public class DungeonGenerator : MonoBehaviour
             e.roomObject.GetComponent<RoomPrefab>()
                 .SpawnMonsters(e.roomObject.transform.position, rotAngle);
         }
-
-        return true;
     }
 
     //----------------------------------------------------------------------//
@@ -852,12 +860,12 @@ public class DungeonGenerator : MonoBehaviour
                 return tile == Tile.CORRIDOR || tile == Tile.CONNECTION;
         }
 
-        void PlaceTile(int x, int y, TileObject tile, float zRot=0.0f)
+        void PlaceTile(int x, int y, TileObject tile, float rot=0.0f)
         {
             Vector3 position = new Vector3(x + tileGridOffset.x + 0.5f, 0.0f, 
                 y + tileGridOffset.y + 0.5f) * tileSize;
             Quaternion rotation = Quaternion.Euler(tile.rotationOffset.x, 
-                tile.rotationOffset.y, tile.rotationOffset.z + zRot);
+                tile.rotationOffset.y + rot, tile.rotationOffset.z);
 
             GameObject obj = Object.Instantiate(tile.prefab, 
                 position + tile.positionOffset,
@@ -935,6 +943,9 @@ public class DungeonGenerator : MonoBehaviour
         // iterations exceed the limit.
         while (!GenerateDungeon());
 
+        BuildNavMesh();
+        SpawnMonsters();
+
         stopwatch.Stop();
         Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
     }
@@ -942,16 +953,19 @@ public class DungeonGenerator : MonoBehaviour
     void Update()
     {
         // DEBUG: Regenerate dungeon
-        if (Keyboard.current.rKey.wasReleasedThisFrame) {
-            DestroyDungeon();
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+        // if (Keyboard.current.rKey.wasReleasedThisFrame) {
+        //     DestroyDungeon();
+        //     Stopwatch stopwatch = new Stopwatch();
+        //     stopwatch.Start();
 
-            while (!GenerateDungeon());
-            
-            stopwatch.Stop();
-            Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
-        }
+        //     while (!GenerateDungeon());
+
+        //     BuildNavMesh();
+        //     SpawnMonsters();
+
+        //     stopwatch.Stop();
+        //     Debug.Log("Dungeon generation took: " + stopwatch.ElapsedMilliseconds + "ms");
+        // }
 
         // Draw connection edges to their targets
         if (showConnections) { 
