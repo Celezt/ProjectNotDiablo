@@ -11,6 +11,8 @@ public class CustomMotionBehaviour : StateMachineBehaviour
     private AnimatorStateInfo _animatorStateInfo;
     private AnimatorClipInfo _animatorClipInfo;
 
+    private float _oldNormalizedTime;
+
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetBool(_isCustomID, false);
@@ -25,6 +27,6 @@ public class CustomMotionBehaviour : StateMachineBehaviour
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
         AnimatorBehaviour behaviour = animator.GetComponentInParent<AnimatorBehaviour>();
-        behaviour.OnAnimationModifierEnd(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo, layerIndex));
+        behaviour.OnAnimationModifierExitRaised(new AnimatorModifierInfo(_animatorStateInfo, _animatorClipInfo));
     }
 }

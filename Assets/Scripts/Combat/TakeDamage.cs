@@ -19,7 +19,7 @@ public class TakeDamage : MonoBehaviour
         else if (gameObject.layer == LayerMask.NameToLayer("AI"))
         {
             Debug.Log("CLANG");
-            gameObject.GetComponent<AI>().health -= damage;
+            gameObject.GetComponent<AI>().health.Value -= damage;
         }
         else if (gameObject.layer == LayerMask.NameToLayer("Damageble"))
         {

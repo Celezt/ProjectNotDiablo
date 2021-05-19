@@ -322,7 +322,6 @@ public class MoveBehaviour : MonoBehaviour
         }
 
         _smoothVelocity = Vector3.Lerp(_smoothVelocity, localVelocity, _movementSpeed * Time.fixedDeltaTime);
-
         _rigidbody.MovePosition(transform.position + _smoothVelocity);
     }
 

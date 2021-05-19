@@ -19,10 +19,11 @@ public class AnimatorBehaviour : MonoBehaviour
         set => _fallingReference.Value = value;
     }
 
+    public Animator Animator => _animator;
+
     public bool IsAnimationModifierRunning { get => _isAnimationModifierRunning; }
 
     #region Inspector
-
     [Header("Settings")]
     [SerializeField, MustBeAssigned] private Animator _animator;
     [Foldout("Atoms", true)]
@@ -32,8 +33,7 @@ public class AnimatorBehaviour : MonoBehaviour
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
-
-    private Action<AnimatorModifierInfo> _endCustomAction;
+    private Queue<Action<AnimatorModifierInfo>> _exitCustomActionQueue;
 
     private int _customIndex;
     private bool _isAnimationModifierRunning;
@@ -47,6 +47,9 @@ public class AnimatorBehaviour : MonoBehaviour
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
 
     #region Events
+    /// <summary>
+    /// Raise a new custom animation.
+    /// </summary>
     public void OnAnimationModifierRaised(AnimatorModifier value)
     {
         _isAnimationModifierRunning = true;
@@ -65,17 +68,19 @@ public class AnimatorBehaviour : MonoBehaviour
         _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
         _animator.SetBool(_isCustomID, true);
 
-        _endCustomAction = value.EndAction;
+        _exitCustomActionQueue.Enqueue(value.ExitAction);
 
         _customIndex = (_customIndex + 1) % 2;
     }
 
-    public void OnAnimationModifierEnd(AnimatorModifierInfo info)
+    /// <summary>
+    /// WARNING: should not be called from outside.
+    /// </summary>
+    public void OnAnimationModifierExitRaised(AnimatorModifierInfo info)
     {
         _isAnimationModifierRunning = false;
 
-        _endCustomAction?.Invoke(info);
-        _endCustomAction = null;
+        _exitCustomActionQueue.Dequeue()?.Invoke(info);
     }
 
     public void OnFalling(bool value)
@@ -89,6 +94,8 @@ public class AnimatorBehaviour : MonoBehaviour
     {
         _animatorOverrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
         _animator.runtimeAnimatorController = _animatorOverrideController;
+
+        _exitCustomActionQueue = new Queue<Action<AnimatorModifierInfo>>();
     }
 
     private void OnEnable()

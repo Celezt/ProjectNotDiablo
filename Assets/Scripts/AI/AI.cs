@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityAtoms.BaseAtoms;
 
 public class AI : MonoBehaviour
 {
     //
     [Header("AI Stats")]
 
-    public float health;
-    public float maxHealth;
+    public FloatReference health;
+    public FloatReference maxHealth;
 
     [Space(10)]
 
@@ -20,7 +21,6 @@ public class AI : MonoBehaviour
     [Header("Equiped Weapon")]
     public GameObject selectedWeapon;
     private float cooldownTimer;
-
 
     //Hidden Varibles
     bool atDestination;
@@ -47,12 +47,12 @@ public class AI : MonoBehaviour
     float ChargeSpeed;
     float chargeAcceleration;
 
-    AnimatorBehaviour animator;
+    AnimatorBehaviour animatorModifier;
 
     [SerializeField]
     AnimationClip attackAnimation;
     [SerializeField]
-    AnimationClip deathAnimation;
+    AnimationClip dyingAnimation;
 
     //Weapon Stats
 
@@ -61,7 +61,7 @@ public class AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = gameObject.GetComponentInChildren<AnimatorBehaviour>();
+        animatorModifier = gameObject.GetComponentInChildren<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
         agent.acceleration = baseAcceleration;
@@ -72,7 +72,7 @@ public class AI : MonoBehaviour
         dead = false;
         selfLayer = LayerMask.NameToLayer("AI");
     }
-    
+
     void OnEnable()
     {
         FindPatrolArea();
@@ -84,7 +84,6 @@ public class AI : MonoBehaviour
         {
             weaponRange = selectedWeapon.GetComponent<Melee>().range;
         }
-
     }
 
     // Update is called once per frame
@@ -98,7 +97,7 @@ public class AI : MonoBehaviour
         {
             player = fieldOfView.visableTargets[0];
             currentState = AiState.InCombat;
-            
+
         }
         if (player != null)
         {
@@ -117,7 +116,7 @@ public class AI : MonoBehaviour
         //else if (agent.velocity != Vector3.zero)
         //{
         //}
-        animator.SmoothLocalMotion = agent.velocity.normalized;
+        animatorModifier.SmoothLocalMotion = agent.velocity.normalized;
         //Debug.Log(agent.velocity.normalized);
 
         distanceToDestination = agent.remainingDistance;
@@ -142,9 +141,13 @@ public class AI : MonoBehaviour
             Death();
         }
     }
+
     void Death()
     {
-        animator.OnAnimationModifierRaised(new AnimatorModifier(deathAnimation));
+        animatorModifier.OnAnimationModifierRaised(new AnimatorModifier(dyingAnimation, speedMultiplier: 1.0f, exitAction: info =>
+        {
+            animatorModifier.Animator.SetFloat(Animator.StringToHash("CustomMotionSpeed"), 0);
+        }));
         Destroy(gameObject, 5f);
         dead = true;
     }
@@ -156,7 +159,7 @@ public class AI : MonoBehaviour
         {
             agent.acceleration = chargeAcceleration;
             agent.speed = ChargeSpeed;
-            isCharging = true; 
+            isCharging = true;
         }
         else
         {
@@ -193,9 +196,9 @@ public class AI : MonoBehaviour
         {
             selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
 
-            if (animator.IsAnimationModifierRunning == false)
+            if (animatorModifier.IsAnimationModifierRunning == false)
             {
-                animator.OnAnimationModifierRaised(new AnimatorModifier(attackAnimation));
+                animatorModifier.OnAnimationModifierRaised(new AnimatorModifier(attackAnimation));
             }
         }
     }
