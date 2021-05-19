@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b46c0f62c93543f88d3eb693740d091, type: 3}
-  m_Name: Player@MovementSpeed
+  m_Name: Skeleton@Health
   m_EditorClassIdentifier: 
   _developerDescription: 
   _id: 
-  _value: 8
-  _changed: {fileID: 11400000, guid: 6ead9426445e7374eaf89a3549d9b5cc, type: 2}
+  _value: 100
+  _changed: {fileID: 11400000, guid: 770380973f392b346af801503c383876, type: 2}
   _changedWithHistory: {fileID: 0}
   _triggerChangedOnOnEnable: 1
   _triggerChangedWithHistoryOnOnEnable: 0
-  _oldValue: 8
-  _initialValue: 10
+  _oldValue: 100
+  _initialValue: 50
   _preChangeTransformers: []

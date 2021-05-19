@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &510603097130872331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4764323937526130573}
+  m_Layer: 12
+  m_Name: Skeleton - Data
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4764323937526130573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510603097130872331}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4894422655387262484}
+  - {fileID: 5378240842767607295}
+  m_Father: {fileID: 4454038921776860766}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &698445463603585495
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +65,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
   m_Children:
+  - {fileID: 4764323937526130573}
   - {fileID: 6986557909673790422}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,8 +127,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5be8fdf71eb934d4097ab5407d076123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
+  health:
+    _usage: 3
+    _value: 100
+    _constant: {fileID: 0}
+    _variable: {fileID: 0}
+    _variableInstancer: {fileID: 3202108423240099853}
+  maxHealth:
+    _usage: 3
+    _value: 100
+    _constant: {fileID: 0}
+    _variable: {fileID: 0}
+    _variableInstancer: {fileID: 9071114655509323337}
   baseSpeed: 5
   baseAcceleration: 5
   chargeRange: 0
@@ -103,7 +146,7 @@ MonoBehaviour:
   PlayerInRange: 0
   player: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 2a2ff845dd4f08a4b9f16004cdac1005, type: 3}
-  deathAnimation: {fileID: 7400000, guid: 4dc448ac47a91c6428de3a7af494b625, type: 3}
+  dyingAnimation: {fileID: 7400000, guid: 5c18535ba2b33a34194d075e040ee599, type: 2}
 --- !u!114 &3647866934931321420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +203,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variable: {fileID: 0}
+--- !u!1 &3455767374280311353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5378240842767607295}
+  - component: {fileID: 9071114655509323337}
+  m_Layer: 12
+  m_Name: Skeleton - MaxHealth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5378240842767607295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3455767374280311353}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4764323937526130573}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9071114655509323337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3455767374280311353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347cb615da422499abfc2dd8d5239e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inMemoryCopy: {fileID: 0}
+  _base: {fileID: 11400000, guid: 08c1f654e958c644eafa64e47abb96cd, type: 2}
 --- !u!1 &6980603735416813062
 GameObject:
   m_ObjectHideFlags: 0
@@ -2287,6 +2375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6986557909673790422}
   - component: {fileID: 7041073282867660990}
+  - component: {fileID: 4999725832929942982}
   m_Layer: 0
   m_Name: SkeletonOutlaw_NoArmor - LOD0
   m_TagString: Untagged
@@ -2310,7 +2399,7 @@ Transform:
   - {fileID: 6986327974017125710}
   - {fileID: 6983420336712593316}
   m_Father: {fileID: 4454038921776860766}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7041073282867660990
 Animator:
@@ -2331,6 +2420,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4999725832929942982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981401532572695094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206d4dae2fd65e140a043414a0ec5897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animatorBehaviour: {fileID: 3860246274861885920}
 --- !u!1 &6981403221543216718
 GameObject:
   m_ObjectHideFlags: 0
@@ -2794,6 +2896,51 @@ Transform:
   m_Father: {fileID: 6986720396756834002}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7202965378004121619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4894422655387262484}
+  - component: {fileID: 3202108423240099853}
+  m_Layer: 12
+  m_Name: Skeleton - Health
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4894422655387262484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7202965378004121619}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4764323937526130573}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3202108423240099853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7202965378004121619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347cb615da422499abfc2dd8d5239e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inMemoryCopy: {fileID: 0}
+  _base: {fileID: 11400000, guid: 05b0c08bab5698f458acaecfd423cca0, type: 2}
 --- !u!1001 &3647866933547067247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2892,10 +3039,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6986372835876797746}
     m_Modifications:
+    - target: {fileID: 1386914184611669701, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _eventReference._usage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386914184611669701, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _eventReference._variableInstancer
+      value: 
+      objectReference: {fileID: 3202108423240099853}
     - target: {fileID: 2215005601846358410, guid: c247efd5046d02d44995fc57263b8814, type: 3}
       propertyPath: m_Name
       value: UIHealthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 6564238197423133056, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _valueReference._usage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564238197423133056, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _maxValueReference._usage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564238197423133056, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _valueReference._variableInstancer
+      value: 
+      objectReference: {fileID: 3202108423240099853}
+    - target: {fileID: 6564238197423133056, guid: c247efd5046d02d44995fc57263b8814, type: 3}
+      propertyPath: _maxValueReference._variableInstancer
+      value: 
+      objectReference: {fileID: 9071114655509323337}
     - target: {fileID: 6902866698849078277, guid: c247efd5046d02d44995fc57263b8814, type: 3}
       propertyPath: Multiplier
       value: 1
