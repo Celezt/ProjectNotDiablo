@@ -149,6 +149,7 @@ public class AI : MonoBehaviour
             animatorModifier.Animator.SetFloat(Animator.StringToHash("CustomMotionSpeed"), 0);
         }));
         Destroy(gameObject, 5f);
+        animatorModifier.EnableCustomAnimation = false;
         dead = true;
     }
 
