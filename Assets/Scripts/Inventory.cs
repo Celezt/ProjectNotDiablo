@@ -16,6 +16,7 @@ public class Inventory
     private int maxNumberOfItems = 3;
     public GameObject sword;
     public GameObject spellbook;
+    public GameObject hands = GameObject.Find("HandsWeapon");
 
     public Inventory()
     {
@@ -112,6 +113,7 @@ public class Inventory
             {
                 items[index] = null;
                 return true;
+
             }
             else
             {
@@ -140,6 +142,10 @@ public class Inventory
             Image tempImg = tempBorder.GetComponent<Image>();
             tempImg.color = Color.white;
             items[index] = null;
+            AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
+            Debug.Log(hands);
+            abScript.SelectedWeapon = hands;
+
             return true;
         }
         //Debug.Log(items[index].itemType);
@@ -155,6 +161,10 @@ public class Inventory
 
             AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
             GameObject currentWeapon = abScript.SelectedWeapon;
+            if(currentWeapon == null)
+            {
+                return false;
+            }
             Melee melee = currentWeapon.GetComponent<Melee>();
             if ( melee != null)
             {

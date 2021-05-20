@@ -189,15 +189,21 @@ public class HotbarScript : MonoBehaviour
 
     public void DropItem(float inputkey, Item item)
     {
-        GameObject newObject = baseGroundObject;
+        GameObject newObject = null;
+        if (item.itemType == Item.ItemType.Sword) newObject = sword;
+        else if (item.itemType == Item.ItemType.Spell) newObject = spellbok;
+        /*
         ItemPickupScript sc = baseGroundObject.GetComponent<ItemPickupScript>();
         Debug.Log(sc);
         sc.setItemType(item.itemType);
+        */
         inventory.RemoveItem((int)inputkey - 1);
         GameObject player = GameObject.Find("Player");
-        var pos = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y+0.5f, player.transform.localPosition.z);
+        var pos = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
         Quaternion q = new Quaternion();
-        Instantiate(baseGroundObject,pos,q);
+        newObject.GetComponent<BoxCollider>().enabled = true;
+        newObject.GetComponent<ItemPickupScript>().enabled = true;
+        Instantiate(newObject,pos,q);
         GameObject slot = GetSlot((int)lastUsedSlot);
         GameObject itemImage = slot.transform.Find("Item(Clone)").gameObject;
         Image image = itemImage.GetComponent<Image>();
