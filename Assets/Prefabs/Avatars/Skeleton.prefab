@@ -202,7 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eed7b7f8b0423949aa7c7cbfbd736bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 0}
+  _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
+  _randomPopupOffset: 0.5
+  _offsetPopup: {x: 0, y: 1, z: 0}
 --- !u!1 &3455767374280311353
 GameObject:
   m_ObjectHideFlags: 0
