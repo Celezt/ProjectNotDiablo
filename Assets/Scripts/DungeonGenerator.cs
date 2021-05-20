@@ -202,7 +202,7 @@ public class DungeonGenerator : MonoBehaviour
         GameObject roomObject = Object.Instantiate(roomPrefab.gameObject, roomCenter, 
             randRotation, transform);
         roomObject.name = "Room " + rooms.Count;
-        roomObject.SetActive(true);
+        roomObject.SetActive(false);
 
         // Create and add a new Room struct to the list.
         Room room = new Room();
@@ -544,6 +544,10 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         PlaceCorridorTiles();
+
+        // Activate all rooms.
+        foreach (Room e in rooms)
+            e.roomObject.SetActive(true);
 
         return true;
     }
