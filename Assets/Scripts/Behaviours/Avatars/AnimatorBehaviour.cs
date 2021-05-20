@@ -21,7 +21,13 @@ public class AnimatorBehaviour : MonoBehaviour
 
     public Animator Animator => _animator;
 
-    public bool IsAnimationModifierRunning { get => _isAnimationModifierRunning; }
+    public bool EnableCustomAnimation
+    {
+        get => _enableCustomAnimation;
+        set => _enableCustomAnimation = value;
+    }
+
+    public bool IsAnimationModifierRunning => _isAnimationModifierRunning;
 
     #region Inspector
     [Header("Settings")]
@@ -37,6 +43,7 @@ public class AnimatorBehaviour : MonoBehaviour
 
     private int _customIndex;
     private bool _isAnimationModifierRunning;
+    private bool _enableCustomAnimation = true;
 
     private readonly int _motionZID = Animator.StringToHash("MotionZ");
     private readonly int _motionXID = Animator.StringToHash("MotionX");
@@ -52,25 +59,28 @@ public class AnimatorBehaviour : MonoBehaviour
     /// </summary>
     public void OnAnimationModifierRaised(AnimatorModifier value)
     {
-        _isAnimationModifierRunning = true;
-
-        switch (_customIndex)
+        if (_enableCustomAnimation)
         {
-            case 0:
-                _animatorOverrideController["Empty Custom Motion 0"] = value.Clip;
-                break;
-            case 1:
-                _animatorOverrideController["Empty Custom Motion 1"] = value.Clip;
-                break;
+            _isAnimationModifierRunning = true;
+
+            switch (_customIndex)
+            {
+                case 0:
+                    _animatorOverrideController["Empty Custom Motion 0"] = value.Clip;
+                    break;
+                case 1:
+                    _animatorOverrideController["Empty Custom Motion 1"] = value.Clip;
+                    break;
+            }
+
+            _animator.SetInteger(_customIndexID, _customIndex);
+            _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
+            _animator.SetBool(_isCustomID, true);
+
+            _exitCustomActionQueue.Enqueue(value.ExitAction);
+
+            _customIndex = (_customIndex + 1) % 2;
         }
-
-        _animator.SetInteger(_customIndexID, _customIndex);
-        _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
-        _animator.SetBool(_isCustomID, true);
-
-        _exitCustomActionQueue.Enqueue(value.ExitAction);
-
-        _customIndex = (_customIndex + 1) % 2;
     }
 
     /// <summary>
@@ -78,9 +88,8 @@ public class AnimatorBehaviour : MonoBehaviour
     /// </summary>
     public void OnAnimationModifierExitRaised(AnimatorModifierInfo info)
     {
-        _isAnimationModifierRunning = false;
-
         _exitCustomActionQueue.Dequeue()?.Invoke(info);
+        _isAnimationModifierRunning = (_exitCustomActionQueue.Count > 0);
     }
 
     public void OnFalling(bool value)

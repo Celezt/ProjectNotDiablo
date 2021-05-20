@@ -202,6 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eed7b7f8b0423949aa7c7cbfbd736bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damageable: 2
+  _takeDamageClip: {fileID: 7400000, guid: e263228e6d15f8e4c91604a4e0af284d, type: 3}
+  _hasPopup: 1
   _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
   _randomPopupOffset: 0.5
   _offsetPopup: {x: 0, y: 1, z: 0}
