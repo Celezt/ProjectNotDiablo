@@ -142,14 +142,23 @@ public class HotbarScript : MonoBehaviour
         //Debug.Log(item.itemType);
         if (item.itemType == Item.ItemType.Sword)
         {
-            lastUsedSlot = inputKey;
-            inventory.UseItem(item, inputKey);
+
+            bool success = inventory.UseItem(item, inputKey);
+            if (success)
+            {
+                lastUsedSlot = inputKey;
+            }
+
             //CHANGE WEAPON TO SWORD?
         }
         else if (item.itemType == Item.ItemType.Spell)
         {
-            lastUsedSlot = inputKey;
-            inventory.UseItem(item, inputKey);
+
+            bool success = inventory.UseItem(item, inputKey);
+            if (success)
+            {
+                lastUsedSlot = inputKey;
+            }
             //CHANGE WEAPON TO SPELL?
         }
         else
