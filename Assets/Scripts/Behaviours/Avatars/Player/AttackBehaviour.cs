@@ -19,13 +19,15 @@ public class AttackBehaviour : MonoBehaviour
             {
                 value.GetComponent<BoxCollider>().enabled = false;
                 value.GetComponent<ItemPickupScript>().enabled = false;
+                if (!_selectedWeapon.name.Contains("HandsWeapon"))
+                {
+                    Destroy(_selectedWeapon);
+
+                }
+                _selectedWeapon = Instantiate(value, parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
+                _selectedWeapon.transform.localScale = value.transform.localScale;
             }
-            Destroy(_selectedWeapon);
-            _selectedWeapon = Instantiate(value, parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
-            _selectedWeapon.transform.localScale = value.transform.localScale;
-           
-            
-                                               // Destroy the current weapon.
+                              // Destroy the current weapon.
             
         }
     }
