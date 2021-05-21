@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityAtoms.BaseAtoms;
+using TMPro;
 
 public class Inventory
 {
@@ -15,6 +16,7 @@ public class Inventory
     private int maxNumberOfItems = 3;
     public GameObject sword;
     public GameObject spellbook;
+    public GameObject hands = GameObject.Find("HandsWeapon");
 
     public Inventory()
     {
@@ -56,6 +58,13 @@ public class Inventory
                     return false;
                 }
                 items[indexFirstNull].amount += 1;
+                Transform amountText = scriptMain.GetSlot(indexFirstNull + 1).transform.Find("Border").transform.Find("Amount");
+                Debug.Log(amountText);
+                if(amountText != null)
+                {
+                    TextMeshProUGUI uiText = amountText.GetComponent<TextMeshProUGUI>();
+                    uiText.SetText(items[indexFirstNull].amount.ToString());
+                }
                 Debug.Log(items[indexFirstNull].amount);
                 return true;
             }
@@ -99,13 +108,31 @@ public class Inventory
         Item item = items[index];
         if(item.itemType != Item.ItemType.Spell && item.itemType != Item.ItemType.Sword)
         {
-            
+
             if (items[index].amount == 1)
             {
                 items[index] = null;
                 return true;
+
             }
-            else items[index].amount -= 1;
+            else
+            {
+
+                int newAmount = items[index].amount -= 1;
+                Transform amountText = scriptMain.GetSlot(index + 1).transform.Find("Border").transform.Find("Amount");
+                Debug.Log(amountText);
+                if (amountText != null)
+                {
+
+                    TextMeshProUGUI uiText = amountText.GetComponent<TextMeshProUGUI>();
+                    if (newAmount == 1)
+                    {
+                        uiText.SetText("");
+                    }
+                    else uiText.SetText(newAmount.ToString());
+                }
+                
+            }
         }
         else
         {
@@ -115,6 +142,10 @@ public class Inventory
             Image tempImg = tempBorder.GetComponent<Image>();
             tempImg.color = Color.white;
             items[index] = null;
+            AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
+            Debug.Log(hands);
+            abScript.SelectedWeapon = hands;
+
             return true;
         }
         //Debug.Log(items[index].itemType);
@@ -126,7 +157,33 @@ public class Inventory
     {
         if (item.itemType == Item.ItemType.Spell || item.itemType == Item.ItemType.Sword)
         {
-            for(int i = 1; i < 6; i++)
+
+
+            AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
+            GameObject currentWeapon = abScript.SelectedWeapon;
+            if(currentWeapon == null)
+            {
+                return false;
+            }
+            Melee melee = currentWeapon.GetComponent<Melee>();
+            if ( melee != null)
+            {
+                if(melee.cooldownTimer > 0)
+                {
+                    return false;
+                }
+            }
+            Ranged ranged = currentWeapon.GetComponent<Ranged>();
+            if(ranged != null)
+            {
+                if (ranged.cooldownTimer > 0)
+                {
+                    return false;
+                }
+            }
+                
+
+            for (int i = 1; i < 6; i++)
             {
                 GameObject tempSlot = scriptMain.GetSlot((int)i);
                 GameObject tempBorder = tempSlot.transform.Find("Border").gameObject;
@@ -137,7 +194,7 @@ public class Inventory
             GameObject border = slot.transform.Find("Border").gameObject;
             Image img = border.GetComponent<Image>();
             img.color = Color.red;
-            AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
+            
             if(item.itemType == Item.ItemType.Spell)
             {
                 abScript.SelectedWeapon = spellbook;
@@ -146,6 +203,7 @@ public class Inventory
             {
                 abScript.SelectedWeapon = sword;
             }
+            return true;
 
             
         }

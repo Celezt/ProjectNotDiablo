@@ -15,9 +15,25 @@ public class AttackBehaviour : MonoBehaviour
         {
             Transform parentTransform = _selectedWeapon.transform.parent;
 
-            Destroy(_selectedWeapon);                                   // Destroy the current weapon.
-            _selectedWeapon = Instantiate(value,parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
-            _selectedWeapon.transform.localScale = value.transform.localScale;
+            if (!value.name.Contains("HandsWeapon"))
+            {
+                value.GetComponent<BoxCollider>().enabled = false;
+                value.GetComponent<ItemPickupScript>().enabled = false;
+                if (!_selectedWeapon.name.Contains("HandsWeapon"))
+                {
+                    Destroy(_selectedWeapon);
+
+                }
+                _selectedWeapon = Instantiate(value, parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
+                _selectedWeapon.transform.localScale = value.transform.localScale;
+            }
+            else
+            {
+                Destroy(_selectedWeapon);
+                _selectedWeapon = value;
+            }
+                              // Destroy the current weapon.
+            
         }
     }
 

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2735933650849564384}
   - component: {fileID: 2735933650849564391}
   - component: {fileID: 2735933650849564390}
+  - component: {fileID: 6614854974143584545}
+  - component: {fileID: -2873954311993002837}
   m_Layer: 6
   m_Name: Starting_Sword
   m_TagString: Untagged
@@ -94,17 +96,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213a3f08e62a0a6428640df88bc41f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
-  cooldown: 0.5
-  range: 4
-  angle: 15
+  damage: 10
+  cooldown: 0.8
+  range: 2
+  angle: 90
   cleve: 0
   modifier: 0
   hitableTargets: []
-  cooldownTimer: 0
+  cooldownTimer: 0.8
   targetLayer:
     serializedVersion: 2
     m_Bits: 0
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!65 &6614854974143584545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735933650849564389}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 0.2, z: 1.2}
+  m_Center: {x: -0.11037635, y: 0.034799695, z: 0.3528437}
+--- !u!114 &-2873954311993002837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735933650849564389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0674e776383234e8d7806ab4480d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  itemType: 0
+  script: {fileID: 0}

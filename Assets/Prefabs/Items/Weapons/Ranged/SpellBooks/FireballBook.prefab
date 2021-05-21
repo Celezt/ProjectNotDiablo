@@ -105,6 +105,8 @@ GameObject:
   - component: {fileID: 8134364828732771571}
   - component: {fileID: 8134364828733869619}
   - component: {fileID: 8904612081942539736}
+  - component: {fileID: 4623041013816106630}
+  - component: {fileID: 3218456502440881759}
   m_Layer: 0
   m_Name: FireballBook
   m_TagString: Untagged
@@ -199,3 +201,31 @@ MonoBehaviour:
   pointOfOrigin: {x: 0, y: 0, z: 0}
   projetileModel: {fileID: 1481984781502211652, guid: 7f625491dc7bc3e4c9e82a8554984acf, type: 3}
   cooldownTimer: 0
+--- !u!114 &4623041013816106630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8134364828736131315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0674e776383234e8d7806ab4480d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  itemType: 1
+  script: {fileID: 0}
+--- !u!65 &3218456502440881759
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8134364828736131315}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.005, y: 0.005, z: 0.005}
+  m_Center: {x: 0, y: 0, z: 0.002}
