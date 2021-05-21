@@ -96,10 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213a3f08e62a0a6428640df88bc41f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
-  cooldown: 0.5
-  range: 4
-  angle: 15
+  damage: 10
+  cooldown: 0.8
+  range: 2
+  angle: 90
   cleve: 0
   modifier: 0
   hitableTargets: []

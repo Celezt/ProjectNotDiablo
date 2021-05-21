@@ -445,7 +445,7 @@ PrefabInstance:
     - target: {fileID: 2881561965629204934, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
       propertyPath: _selectedWeapon
       value: 
-      objectReference: {fileID: 1907680709}
+      objectReference: {fileID: 1867420078}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
 --- !u!1 &80047335
@@ -1978,6 +1978,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4416730990054907437, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4522338768722788390, guid: 101c296a5111d9c42a1f3ae9201a101c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3201,10 +3205,10 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785928557}
   m_CullTransparentMesh: 1
---- !u!1 &1907680709 stripped
+--- !u!1 &1867420078 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1319900842118134239, guid: 07671fb665d41034cb4c1fe64df37660, type: 3}
-  m_PrefabInstance: {fileID: 69094280}
+  m_CorrespondingSourceObject: {fileID: 339293491919912904, guid: 8ed03651e2eb5fe418cb023bf7a2bad5, type: 3}
+  m_PrefabInstance: {fileID: 2098783718}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1951142533
 PrefabInstance:
