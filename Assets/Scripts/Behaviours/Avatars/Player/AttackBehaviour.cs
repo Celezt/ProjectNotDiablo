@@ -27,6 +27,11 @@ public class AttackBehaviour : MonoBehaviour
                 _selectedWeapon = Instantiate(value, parentTransform.position, parentTransform.rotation, parentTransform); // Instantiate the new weapon.
                 _selectedWeapon.transform.localScale = value.transform.localScale;
             }
+            else
+            {
+                Destroy(_selectedWeapon);
+                _selectedWeapon = value;
+            }
                               // Destroy the current weapon.
             
         }
