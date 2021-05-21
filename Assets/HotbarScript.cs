@@ -70,6 +70,10 @@ public class HotbarScript : MonoBehaviour
         inventory.SetSpeed(speed);
         inventory.SetSword(sword);
         inventory.SetSpellBook(spellbok);
+        Item isword = new Item();
+        isword.itemType = Item.ItemType.Sword;
+        isword.amount = 1;
+        inventory.AddItem(isword);
          
     }
 
