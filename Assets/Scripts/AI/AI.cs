@@ -27,7 +27,7 @@ public class AI : MonoBehaviour
     bool isCharging = false;
     bool enemyVisible;
     public bool PlayerInRange = false;
-    bool dead;
+    public bool dead;
 
     PatrolArea selectedPatrolArea;
     NavMeshAgent agent;
@@ -89,10 +89,16 @@ public class AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (health <= 0 && dead != true)
+        {
+            Death();
+            enabled = false;
+        }
         if (dead == true)
         {
             return;
         }
+
         if (fieldOfView.visableTargets.Count != 0)
         {
             player = fieldOfView.visableTargets[0];
@@ -136,10 +142,7 @@ public class AI : MonoBehaviour
         {
             Attack();
         }
-        if (health <= 0 && dead != true)
-        {
-            Death();
-        }
+
     }
 
     void Death()
@@ -149,8 +152,13 @@ public class AI : MonoBehaviour
             {
                 info.AnimatorBehaviour.SetMotionSpeed(0);
         }));
+<<<<<<< Updated upstream
         animatorBehaviour.EnableCustomAnimation = false;
         Destroy(gameObject, 5f);
+=======
+        gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        Destroy(gameObject, 2f);
+>>>>>>> Stashed changes
         dead = true;
     }
 
@@ -238,7 +246,7 @@ public class AI : MonoBehaviour
     }
     void Alert()
     {
-        Collider[] listeners = Physics.OverlapSphere(transform.position, 40, LayerMask.GetMask("AI"));
+        Collider[] listeners = Physics.OverlapSphere(transform.position, 20, LayerMask.GetMask("AI"));
         foreach (Collider listner in listeners)
         {
             listner.gameObject.GetComponent<AI>().player = player;

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DefaultMonsterPool
   m_EditorClassIdentifier: 
   monsters:
-  - {fileID: 1123618707017018826, guid: 62436f5d85ffb8b4eb16183a96d29c5b, type: 3}
+  - {fileID: 698445463603585495, guid: fc750c71075b69b4aadec389964389ae, type: 3}

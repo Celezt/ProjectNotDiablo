@@ -971,11 +971,11 @@ public class DungeonGenerator : MonoBehaviour
     {
         // Continue trying to generate a new dungeon if room collision 
         // iterations exceed the limit.
-        while (!GenerateDungeon());
+        //while (!GenerateDungeon());
 
-        BuildNavMesh();
-        SpawnMonsters();
-        SpawnPlayer();
+        //BuildNavMesh();
+        //SpawnMonsters();
+        //SpawnPlayer();
     }
 
     void Update()

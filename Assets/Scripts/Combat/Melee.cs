@@ -92,7 +92,10 @@ public class Melee : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ignoreLayer) && targetsInViewRadius[i] != ownCollider)
                 {
-                    hitableTargets.Add(target);
+                    if (target.layer != ownCollider.gameObject.layer)
+                    {
+                        hitableTargets.Add(target);
+                    }
                 }
             }
 
