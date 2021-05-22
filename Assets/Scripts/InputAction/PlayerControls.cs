@@ -415,7 +415,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""61fc1688-48f6-4275-9013-5c35a56f3291"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": ""Scale(factor=2)"",
                     ""groups"": ""Gamepad"",
@@ -459,7 +459,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dd25abd8-65fd-47d7-afd3-7198923a13ea"",
-                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""path"": ""<Gamepad>/dpad/down"",
                     ""interactions"": """",
                     ""processors"": ""Scale(factor=4)"",
                     ""groups"": ""Gamepad"",
@@ -474,6 +474,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""Scale(factor=5)"",
                     ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Hotbar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21c8baed-c956-4962-8726-caaa3b9cc41c"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Hotbar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
