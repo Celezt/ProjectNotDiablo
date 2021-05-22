@@ -95,6 +95,8 @@ public struct Stopwatch : IEquatable<Stopwatch>
         _initTime = initTime;
     }
 
+    public static Stopwatch Initialize() => new Stopwatch(0);
+
     public static bool operator ==(Stopwatch lhs, Stopwatch rhs) => lhs.ID == rhs.ID;
     public static bool operator !=(Stopwatch lhs, Stopwatch rhs) => lhs.ID != rhs.ID;
     public static bool operator >(Stopwatch lhs, Stopwatch rhs) => lhs.Timer > rhs.Timer;

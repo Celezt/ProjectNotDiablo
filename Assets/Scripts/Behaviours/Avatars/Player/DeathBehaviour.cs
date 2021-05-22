@@ -27,6 +27,7 @@ public class DeathBehaviour : MonoBehaviour
             exitAction: info =>
             {
                 info.AnimatorBehaviour.SetMotionSpeed(0);
+                _data.DieEvent.Raise();
             }));
         }
     }

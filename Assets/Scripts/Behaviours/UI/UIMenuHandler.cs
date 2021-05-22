@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,16 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityAtoms.BaseAtoms;
 using MyBox;
+using UnityEngine.UI;
 
 public class UIMenuHandler : Singleton<UIMenuHandler>
 {
     [SerializeField] private SceneReference _newStartScreen;
     [SerializeField] private GameObject _menuContent;
-    [SerializeField] private GameObject _firstButton;
+    [SerializeField] private Text _timeText;
+    [SerializeField] private GameObject _deathMenuContent;
+    [SerializeField] private GameObject _firstMenuButton;
+    [SerializeField] private GameObject _firstDeathMenuButton;
     [SerializeField] private UICursorHandler _cursorHandler;
 
     [Foldout("Atoms", true)]
@@ -19,9 +24,20 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     [SerializeField] private DurationValueList _stunDodgeList;
     [SerializeField] private DurationValueList _stunMoveList;
     [SerializeField] private DurationValueList _invisibilityFrameList;
+    [SerializeField] private VoidEvent _dieEvent;
 
     private PlayerControls _controls;
     private Duration _EmptyDuration;
+    private Stopwatch _gameplayTimer;
+
+    private MenuState _menuState;
+
+    private enum MenuState
+    {
+        None,
+        Menu,
+        DeathMenu,
+    }
 
     #region Events
     /// <summary>
@@ -56,14 +72,53 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     /// <param name="context"></param>
     public void OnMenu(InputAction.CallbackContext context) => ToggleMenuActive();
 
+    /// <summary>
+    /// Enable death menu.
+    /// </summary>
+    public void OnDeathMenu()
+    {
+        _menuState = MenuState.DeathMenu;
+
+        _controls.Disable();
+
+        TimeSpan timeSpan = TimeSpan.FromSeconds(_gameplayTimer.Timer);
+        _gameplayTimer.Paused();
+        _timeText.text = "Play Time: " + timeSpan.ToString(@"hh\:mm\:ss");
+
+        _isInputVariable.Value = true;
+
+        _EmptyDuration = Duration.Infinity;
+        _stunAttackList?.Add(_EmptyDuration);
+        _stunDodgeList?.Add(_EmptyDuration);
+        _stunMoveList?.Add(_EmptyDuration);
+        _invisibilityFrameList?.Add(_EmptyDuration);
+
+        _deathMenuContent.SetActive(true);
+
+        if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
+            SelectFirstObject(_firstDeathMenuButton);
+
+        Time.timeScale = 0.0f;
+        PlayerInput.GetPlayerByIndex(0).SwitchCurrentActionMap("UI");
+    }
+
     public void OnDeviceChanged(PlayerInput input)
     {
         InputControlScheme scheme = input.user.controlScheme.Value;
 
         if (scheme == _controls.GamepadScheme)
         {
-            if (_isInputVariable.Value)
-                SelectFirstObject();
+            switch (_menuState)
+            {
+                case MenuState.Menu:
+                    SelectFirstObject(_firstMenuButton);
+                    break;
+                case MenuState.DeathMenu:
+                    SelectFirstObject(_firstDeathMenuButton);
+                    break;
+                default:
+                    break;
+            }
         }
         else if (scheme == _controls.KeyboardAndMouseScheme)
         {
@@ -79,6 +134,12 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         _controls = new PlayerControls();
 
         _menuContent.SetActive(false);  // Disable menu on start.
+        _deathMenuContent.SetActive(false);
+    }
+
+    private void Start()
+    {
+        _gameplayTimer = Stopwatch.Initialize();
     }
 
     private void OnEnable()
@@ -86,6 +147,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         _controls.Ground.Menu.performed += OnMenu;
         _controls.Enable();
 
+        _dieEvent.Register(OnDeathMenu);
         PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.AddListener(OnDeviceChanged);
     }
 
@@ -94,6 +156,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         _controls.Ground.Menu.performed -= OnMenu;
         _controls.Disable();
 
+        _dieEvent.Unregister(OnDeathMenu);
         PlayerInput.GetPlayerByIndex(0).controlsChangedEvent.RemoveListener(OnDeviceChanged);
     }
     #endregion
@@ -104,6 +167,8 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
         if (playerInput == null)
             return;
+
+        _menuState = MenuState.Menu;
 
         string currentActionMap = playerInput.currentActionMap.name;
         if (currentActionMap == "Ground")
@@ -126,7 +191,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         _menuContent.SetActive(true);
 
         if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
-            SelectFirstObject();
+            SelectFirstObject(_firstMenuButton);
 
         Time.timeScale = 0.0f;
         playerInput.SwitchCurrentActionMap("UI");
@@ -134,6 +199,8 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
     private void ToggleGameplay(PlayerInput playerInput)
     {
+        _menuState = MenuState.None;
+
         _isInputVariable.Value = false;
 
         _stunAttackList?.Remove(_EmptyDuration);
@@ -148,6 +215,6 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         playerInput.SwitchCurrentActionMap("Ground");
     }
 
-    private void SelectFirstObject() => EventSystem.current.SetSelectedGameObject(_firstButton);
+    private void SelectFirstObject(GameObject firstButton) => EventSystem.current.SetSelectedGameObject(firstButton);
     private void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
 }

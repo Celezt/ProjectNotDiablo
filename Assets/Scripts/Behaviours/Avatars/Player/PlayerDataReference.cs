@@ -17,4 +17,5 @@ public class PlayerDataReference : MonoBehaviour
     public DurationValueList InvisibilityFrameList;
     [Header("Events")]
     public AnimatorModifierEvent AnimatorModifierEvent;
+    public VoidEvent DieEvent;
 }

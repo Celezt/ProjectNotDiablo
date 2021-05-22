@@ -20,8 +20,7 @@ public class UIMainMenu : Singleton<MonoBehaviour>
     [SerializeField] private InputControlSchemeVariable _inputControlSchemeVariable;
 
     [SerializeField] private BaseAtomValueList[] _valueLists;
-    [SerializeField] private FloatVariable _playerHealth;
-    [SerializeField] private FloatVariable _playerMaxHealth;
+    [SerializeField] private FloatVariable[] _floatVariables;
 
     private PlayerControls _controls;
 
@@ -51,9 +50,12 @@ public class UIMainMenu : Singleton<MonoBehaviour>
             }
         }
 
-        if (_playerHealth != null && _playerMaxHealth != null)
+        if (_floatVariables != null)
         {
-            _playerHealth.Value = _playerMaxHealth.Value;
+            for (int i = 0; i < _floatVariables.Length; i++)  // Clear all variable lists.
+            {
+                _floatVariables[i].Value = _floatVariables[i].InitialValue;
+            }
         }
 
         _newGameScene.LoadScene();
