@@ -67,6 +67,8 @@ public class UIKeyIcon : MonoBehaviour
         _text = GetComponentInChildren<Text>();
 
         SetText();
+
+        OnDeviceChanged(PlayerInput.GetPlayerByIndex(0));
     }
 
     private void OnEnable()
@@ -95,19 +97,19 @@ public class UIKeyIcon : MonoBehaviour
         switch (_alignment)
         {
             case TextAlignment.Left:
-                _text.transform.localPosition = new Vector3(-transform.localScale.x * 60, 0, 0);
+                _text.transform.localPosition = new Vector3(-transform.localScale.x * 70, 0, 0);
                 _text.alignment = TextAnchor.UpperRight;
                 break;
             case TextAlignment.Right:
-                _text.transform.localPosition = new Vector3(transform.localScale.x * 60, 0, 0);
+                _text.transform.localPosition = new Vector3(transform.localScale.x * 70, 0, 0);
                 _text.alignment = TextAnchor.UpperLeft;
                 break;
             case TextAlignment.Up:
-                _text.transform.localPosition = new Vector3(0, transform.localScale.y * 60, 0);
+                _text.transform.localPosition = new Vector3(0, transform.localScale.y * 70, 0);
                 _text.alignment = TextAnchor.UpperCenter;
                 break;
             case TextAlignment.Down:
-                _text.transform.localPosition = new Vector3(0, -transform.localScale.y * 60, 0);
+                _text.transform.localPosition = new Vector3(0, -transform.localScale.y * 70, 0);
                 _text.alignment = TextAnchor.UpperCenter;
                 break;
         }
