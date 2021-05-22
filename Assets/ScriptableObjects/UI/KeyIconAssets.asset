@@ -13,45 +13,47 @@ MonoBehaviour:
   m_Name: KeyIconAssets
   m_EditorClassIdentifier: 
   Xbox:
-    ButtonSouth: {fileID: 0}
-    ButtonNorth: {fileID: 0}
-    ButtonEast: {fileID: 0}
-    ButtonWest: {fileID: 0}
-    StartButton: {fileID: 0}
-    SelectButton: {fileID: 0}
-    LeftTrigger: {fileID: 0}
-    RightTrigger: {fileID: 0}
-    LeftShoulder: {fileID: 0}
-    RightShoulder: {fileID: 0}
-    Dpad: {fileID: 0}
-    DpadUp: {fileID: 0}
-    DpadDown: {fileID: 0}
-    DpadLeft: {fileID: 0}
-    DpadRight: {fileID: 0}
-    LeftStick: {fileID: 0}
-    RightStick: {fileID: 0}
-    LeftStickPress: {fileID: 0}
-    RightStickPress: {fileID: 0}
+    ButtonSouth: {fileID: 21300000, guid: f6c5cc72e6050cc41acbcd4f3fc38664, type: 3}
+    ButtonNorth: {fileID: 21300000, guid: 09a682e2242186f4680156d74f00aa5a, type: 3}
+    ButtonEast: {fileID: 21300000, guid: 4c8c9986f0db5e44289945cf30e5eac4, type: 3}
+    ButtonWest: {fileID: 21300000, guid: 45309ae2527569047a2c788897318ec5, type: 3}
+    StartButton: {fileID: 21300000, guid: 2c2ea460889df2242accad84941b65e0, type: 3}
+    SelectButton: {fileID: 21300000, guid: c8fa7fa72654e994992cd01386f95246, type: 3}
+    LeftTrigger: {fileID: 21300000, guid: 0bfe06b0e3bea074b90e37cd908e51f2, type: 3}
+    RightTrigger: {fileID: 21300000, guid: 47fc3eda95a1ff041a9b68dda59c3a4d, type: 3}
+    LeftShoulder: {fileID: 21300000, guid: 9a2471ae1486a3c48801c19e11ea131a, type: 3}
+    RightShoulder: {fileID: 21300000, guid: 5d8b23375d954364eab92abe04fa6169, type: 3}
+    Dpad: {fileID: 21300000, guid: 5ec4e115ee08e634080e56058a20f15b, type: 3}
+    DpadUp: {fileID: 21300000, guid: be1ef372cbdeb5842aa59b1339ab6437, type: 3}
+    DpadDown: {fileID: 21300000, guid: 797e6d1f95a5fb64a9d8cbf495114582, type: 3}
+    DpadLeft: {fileID: 21300000, guid: 183e89d1d670db74bbc8a3e67cb1fb74, type: 3}
+    DpadRight: {fileID: 21300000, guid: 31c874ee24bb10142ad1e5ad13f5b36c, type: 3}
+    LeftStick: {fileID: 21300000, guid: 494f395c7859f87479bbd0c91431b67b, type: 3}
+    RightStick: {fileID: 21300000, guid: 62fb35e6f57aedb4798ac26ce833b336, type: 3}
+    LeftStickPress: {fileID: 21300000, guid: 327f6fb5e61d0b24781eafa070c3bd14, type: 3}
+    RightStickPress: {fileID: 21300000, guid: f3e2a47fbf99f4147bb2881807cc4446, type: 3}
+    Empty: {fileID: 21300000, guid: daa7d737012a1ee4c83608b1a2077925, type: 3}
   Ps4:
     ButtonSouth: {fileID: 21300000, guid: 03ff0820c7139514d98ce0326d1a15a4, type: 3}
-    ButtonNorth: {fileID: 0}
-    ButtonEast: {fileID: 0}
-    ButtonWest: {fileID: 0}
-    StartButton: {fileID: 0}
-    SelectButton: {fileID: 0}
-    LeftTrigger: {fileID: 0}
-    RightTrigger: {fileID: 0}
-    LeftShoulder: {fileID: 0}
-    RightShoulder: {fileID: 0}
-    Dpad: {fileID: 0}
-    DpadUp: {fileID: 0}
-    DpadDown: {fileID: 0}
-    DpadLeft: {fileID: 0}
-    DpadRight: {fileID: 0}
-    LeftStick: {fileID: 0}
-    RightStick: {fileID: 0}
-    LeftStickPress: {fileID: 0}
-    RightStickPress: {fileID: 0}
+    ButtonNorth: {fileID: 21300000, guid: 304b391053be93446b7f136903762e2e, type: 3}
+    ButtonEast: {fileID: 21300000, guid: f7fc343136fea3e499b3363520111fdd, type: 3}
+    ButtonWest: {fileID: 21300000, guid: d18cc07006f93e84a9b302eb8b16f74e, type: 3}
+    StartButton: {fileID: 21300000, guid: fe6209733e850f64489d060ade8bd455, type: 3}
+    SelectButton: {fileID: 21300000, guid: 83bf275fc037ef64dab081e7bdaf41a5, type: 3}
+    LeftTrigger: {fileID: 21300000, guid: ec05544fdf1ed1d4c82bdb99362df1dd, type: 3}
+    RightTrigger: {fileID: 21300000, guid: 3fd95f5d8bcc9184ab0d08a709e6efe1, type: 3}
+    LeftShoulder: {fileID: 21300000, guid: 0d9e7c67deeefe8459a97fdd4fdab789, type: 3}
+    RightShoulder: {fileID: 21300000, guid: 4f55d9d388c8ba04d95cdcd14cd5b687, type: 3}
+    Dpad: {fileID: 21300000, guid: 7e0d443402a5a1047bdf3d80ad047a0c, type: 3}
+    DpadUp: {fileID: 21300000, guid: d1e55cc5c68e4ec49aa98f69b616b40b, type: 3}
+    DpadDown: {fileID: 21300000, guid: e035da5017e6bcb4688f959a6fdf1853, type: 3}
+    DpadLeft: {fileID: 21300000, guid: 6ab2c4d53a0d4974a8cc2734c5071536, type: 3}
+    DpadRight: {fileID: 21300000, guid: bc1c537e90d43c445a7fb2c76f4de551, type: 3}
+    LeftStick: {fileID: 21300000, guid: 1c513539aad759946b56fa5d1ee527ab, type: 3}
+    RightStick: {fileID: 21300000, guid: e98de441d8097f94a9d91eaa547438e2, type: 3}
+    LeftStickPress: {fileID: 21300000, guid: 2976f7c51f37fb748a177c039efa7cd4, type: 3}
+    RightStickPress: {fileID: 21300000, guid: 6256011ffa9e4b6488c260a33c66c5ef, type: 3}
+    Empty: {fileID: 21300000, guid: daa7d737012a1ee4c83608b1a2077925, type: 3}
   Pc:
     ButtonSouth: {fileID: 21300000, guid: 54700151937aa19488a53b4a9eaf180b, type: 3}
     ButtonNorth: {fileID: 0}
@@ -59,10 +61,10 @@ MonoBehaviour:
     ButtonWest: {fileID: 0}
     StartButton: {fileID: 0}
     SelectButton: {fileID: 0}
-    LeftTrigger: {fileID: 0}
-    RightTrigger: {fileID: 0}
-    LeftShoulder: {fileID: 0}
-    RightShoulder: {fileID: 0}
+    LeftTrigger: {fileID: 21300000, guid: 9920d7ba838f82840a41b92b040f8c31, type: 3}
+    RightTrigger: {fileID: 21300000, guid: 2935f0a7bc71fc94193ee88d68c10e5e, type: 3}
+    LeftShoulder: {fileID: 21300000, guid: fd81bbbb59db8e942aa173b8c18a9e16, type: 3}
+    RightShoulder: {fileID: 21300000, guid: 11a429187bfb9d9498cc59fff2360150, type: 3}
     Dpad: {fileID: 0}
     DpadUp: {fileID: 0}
     DpadDown: {fileID: 0}
@@ -71,4 +73,5 @@ MonoBehaviour:
     LeftStick: {fileID: 0}
     RightStick: {fileID: 0}
     LeftStickPress: {fileID: 0}
-    RightStickPress: {fileID: 0}
+    RightStickPress: {fileID: 21300000, guid: fd9966b162cc7d7498614056d178854f, type: 3}
+    Empty: {fileID: 21300000, guid: daa7d737012a1ee4c83608b1a2077925, type: 3}

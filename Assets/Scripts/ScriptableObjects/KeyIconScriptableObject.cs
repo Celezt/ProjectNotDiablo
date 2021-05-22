@@ -37,6 +37,7 @@ public class KeyIconScriptableObject : ScriptableObject
         public Sprite RightStick;
         public Sprite LeftStickPress;
         public Sprite RightStickPress;
+        public Sprite Empty;
 
         public Sprite GetSprite(string controlPath)
         {
@@ -63,7 +64,7 @@ public class KeyIconScriptableObject : ScriptableObject
                 case "rightStick": return RightStick;
                 case "leftStickPress": return LeftStickPress;
                 case "rightStickPress": return RightStickPress;
-                default: return null;
+                default: return Empty;
             }
         }
 
@@ -92,7 +93,7 @@ public class KeyIconScriptableObject : ScriptableObject
                 case Keys.RightStick: return RightStick;
                 case Keys.LeftStickPress: return LeftStickPress;
                 case Keys.RightStickPress: return RightStickPress;
-                default: return null;
+                default: return Empty;
             }
         }
 
