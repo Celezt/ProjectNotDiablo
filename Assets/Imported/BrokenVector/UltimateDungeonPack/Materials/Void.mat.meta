@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Assets/ScriptableObjects/Enemy/Skeleton@ClampHealth.asset.meta
+guid: 6b668d558a22ed14d8cfea05c8cb989d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+=======
+guid: 2e6e7dc1d9375394084dbf144012b6ff
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+>>>>>>> main:Assets/Imported/BrokenVector/UltimateDungeonPack/Materials/Void.mat.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
