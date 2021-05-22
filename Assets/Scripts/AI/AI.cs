@@ -152,13 +152,11 @@ public class AI : MonoBehaviour
             {
                 info.AnimatorBehaviour.SetMotionSpeed(0);
         }));
-<<<<<<< Updated upstream
+
         animatorBehaviour.EnableCustomAnimation = false;
-        Destroy(gameObject, 5f);
-=======
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         Destroy(gameObject, 2f);
->>>>>>> Stashed changes
+
         dead = true;
     }
 
