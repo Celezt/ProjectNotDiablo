@@ -93,7 +93,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 5e2b04e93ec2bd244b5b6bdb83d405fa, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 2e6e7dc1d9375394084dbf144012b6ff, type: 2}
+      objectReference: {fileID: 2100000, guid: a1c45cc85da45344399ab1b582015afc, type: 2}
     - target: {fileID: 919132149155446097, guid: 5e2b04e93ec2bd244b5b6bdb83d405fa, type: 3}
       propertyPath: m_Name
       value: Corridor_End

@@ -28,6 +28,7 @@ public class TakeDamage : MonoBehaviour
 
     public void ReciveDamage(float damage)
     {
+
         if (gameObject.layer == LayerMask.NameToLayer("Player"))    // Player hit logic.
         {
             PlayerDataReference data = gameObject.GetComponent<PlayerDataReference>();
@@ -44,6 +45,9 @@ public class TakeDamage : MonoBehaviour
         else if (gameObject.layer == LayerMask.NameToLayer("AI"))   // AI hit logic.
         {
             AI ai = gameObject.GetComponent<AI>();
+            AudioSource source = gameObject.GetComponent<AudioSource>();
+            AudioClip clip = gameObject.GetComponent<AI>().hitSoundClip;
+            source.Play();
             ai.health.Value -= damage;
 
             if (ai.health.Value > 0)

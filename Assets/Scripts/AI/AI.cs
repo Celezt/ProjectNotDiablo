@@ -24,6 +24,7 @@ public class AI : MonoBehaviour
 
     //Hidden Varibles
     bool atDestination;
+    bool hasAlerted = false;
     bool isCharging = false;
     bool enemyVisible;
     public bool PlayerInRange = false;
@@ -54,6 +55,12 @@ public class AI : MonoBehaviour
     [SerializeField]
     AnimationClip dyingAnimation;
 
+    AudioSource audio;
+    [SerializeField]
+    AudioClip deathClip;
+    [SerializeField]
+    AudioClip spottedClip;
+    public AudioClip hitSoundClip;
     //Weapon Stats
 
     LayerMask selfLayer;
@@ -61,6 +68,7 @@ public class AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audio = gameObject.GetComponent<AudioSource>();
         animatorBehaviour = gameObject.GetComponentInChildren<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
@@ -147,18 +155,16 @@ public class AI : MonoBehaviour
 
     void Death()
     {
+        audio.clip = deathClip;
+        audio.Play();
         animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(dyingAnimation, exitPercent: 0.7f,
             exitAction: info =>
             {
                 info.AnimatorBehaviour.SetMotionSpeed(0);
         }));
-<<<<<<< Updated upstream
         animatorBehaviour.EnableCustomAnimation = false;
-        Destroy(gameObject, 5f);
-=======
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         Destroy(gameObject, 2f);
->>>>>>> Stashed changes
         dead = true;
     }
 
@@ -246,11 +252,18 @@ public class AI : MonoBehaviour
     }
     void Alert()
     {
-        Collider[] listeners = Physics.OverlapSphere(transform.position, 20, LayerMask.GetMask("AI"));
-        foreach (Collider listner in listeners)
+        if (hasAlerted == false)
         {
-            listner.gameObject.GetComponent<AI>().player = player;
+            audio.clip = spottedClip;
+            audio.Play();
+            Collider[] listeners = Physics.OverlapSphere(transform.position, 20, LayerMask.GetMask("AI"));
+            foreach (Collider listner in listeners)
+            {
+                listner.gameObject.GetComponent<AI>().player = player;
+            }
+            hasAlerted = true;
         }
+
     }
     void Idle()
     {

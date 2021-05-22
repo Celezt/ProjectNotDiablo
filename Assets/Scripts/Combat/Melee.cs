@@ -25,6 +25,7 @@ public class Melee : MonoBehaviour
     private Transform originPos;
     Collider ownCollider;
 
+
     void Start()
     {
         targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
