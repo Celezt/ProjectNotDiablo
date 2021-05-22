@@ -52,7 +52,6 @@ public class MoveBehaviour : MonoBehaviour
     {
         get
         {
-            Transform cameraTransform = _mainCamera.transform;
             Vector3 cameraPivotForward = _cameraPivotTransform.forward;
             Vector3 cameraPivotRight = _cameraPivotTransform.right;
 

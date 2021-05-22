@@ -778,9 +778,15 @@ MonoBehaviour:
   _firstButton: {fileID: 443070463}
   _isInputVariable: {fileID: 11400000, guid: 58da3bf122009d940a8e7417c12cac7b, type: 2}
   _inputControlSchemeVariable: {fileID: 11400000, guid: 274c8a6e860aaee4189157a3f7ee7016, type: 2}
-  _valueLists: []
-  _playerHealth: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
-  _playerMaxHealth: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
+  _valueLists:
+  - {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
+  - {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
+  - {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
+  - {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  _floatVariables:
+  - {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  - {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
+  - {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
 --- !u!4 &838734300
 Transform:
   m_ObjectHideFlags: 0
@@ -861,31 +867,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.487801
+      value: -12.618204
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6393433
+      value: -1.643714
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30.954712
+      value: 31.067408
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7049433
+      value: 0.7062317
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.14260304
+      value: 0.1360793
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.687252
+      value: 0.68816566
       objectReference: {fileID: 0}
     - target: {fileID: 4505635189672904731, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.101999976
+      value: -0.09564153
       objectReference: {fileID: 0}
     - target: {fileID: 6091474611166655768, guid: 5a0fe5310b2b8fd4db421994feed7113, type: 3}
       propertyPath: m_Targets.Array.size

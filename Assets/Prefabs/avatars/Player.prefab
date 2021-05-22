@@ -47,8 +47,8 @@ GameObject:
   - component: {fileID: 7651242026116013290}
   - component: {fileID: 2881561965629204934}
   - component: {fileID: 3146463153671593021}
-  - component: {fileID: 8042037470972645018}
   - component: {fileID: 5906153228361175930}
+  - component: {fileID: 6111159512543720079}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -371,31 +371,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4261f5e252ec0ec4b99fd6ab40c0f00f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data: {fileID: 8042037470972645018}
+  _data: {fileID: 6111159512543720079}
   _animationData:
     _clip: {fileID: 7400000, guid: 88b371f485b13064183196949595c588, type: 3}
     _speedMultiplier: 1
     _exitPercent: 0.7
---- !u!114 &8042037470972645018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2691928546050736854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c07bfe4351dfb419b180adb6ca6b83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Health: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
-  MaxHealth: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
-  MovementSpeed: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
-  StunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
-  StunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
-  StunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
-  InvisibilityFrameList: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
-  AnimatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
 --- !u!114 &5906153228361175930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +396,27 @@ MonoBehaviour:
   _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
   _randomPopupOffset: 0.5
   _offsetPopup: {x: 0, y: 1, z: 0}
+--- !u!114 &6111159512543720079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c07bfe4351dfb419b180adb6ca6b83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: {fileID: 11400000, guid: 1a2b16e0f23e4dd45a051529ac71cd77, type: 2}
+  MaxHealth: {fileID: 11400000, guid: 26446631443d30d46936c25c30170dee, type: 2}
+  MovementSpeed: {fileID: 11400000, guid: f7c2f1a9afecc1a44aa90eb4d64d73e3, type: 2}
+  StunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
+  StunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
+  StunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
+  InvisibilityFrameList: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  AnimatorModifierEvent: {fileID: 11400000, guid: 4d80127fe6560d34b8babd8acf500bca, type: 2}
+  DieEvent: {fileID: 11400000, guid: 7707f1026a5a62d4fb5308e371bdd596, type: 2}
 --- !u!1 &7058626723183384902
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,10 +38,8 @@ public class TakeDamage : MonoBehaviour
                 data.AnimatorModifierEvent.Raise(new AnimatorModifier(_takeDamageClip));
                 data.StunAttackList.Add(new Duration(_stunAttack));
                 data.InvisibilityFrameList.Add(new Duration(_invisibilityFrame));
-
                 SpawnPopup(damage);
             }
-
         }
         else if (gameObject.layer == LayerMask.NameToLayer("AI"))   // AI hit logic.
         {
