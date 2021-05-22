@@ -8,13 +8,15 @@ using UnityEngine.Animations;
 public struct AnimatorModifierInfo : IEquatable<AnimatorModifierInfo>
 {
     public AnimatorStateInfo StateInfo { get; }
-    public AnimatorClipInfo ClipInfo { get; }
+    public Animator Animator { get; }
+    public AnimatorBehaviour AnimatorBehaviour { get; }
 
     public bool Equals(AnimatorModifierInfo other) => StateInfo.Equals(other.StateInfo);
 
-    public AnimatorModifierInfo(AnimatorStateInfo stateInfo, AnimatorClipInfo clipInfo)
+    public AnimatorModifierInfo(AnimatorStateInfo stateInfo, AnimatorBehaviour animatorBehaviour, Animator animator)
     {
         StateInfo = stateInfo;
-        ClipInfo = clipInfo;
+        AnimatorBehaviour = animatorBehaviour;
+        Animator = animator;
     }
 }

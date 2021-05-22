@@ -53,13 +53,13 @@ public class MoveBehaviour : MonoBehaviour
         get
         {
             Transform cameraTransform = _mainCamera.transform;
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 cameraRight = cameraTransform.right;
+            Vector3 cameraPivotForward = _cameraPivotTransform.forward;
+            Vector3 cameraPivotRight = _cameraPivotTransform.right;
 
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
+            cameraPivotForward.y = 0f;
+            cameraPivotRight.y = 0f;
 
-            return cameraForward * _smoothInputMovement.z + cameraRight * _smoothInputMovement.x;
+            return cameraPivotForward * _smoothInputMovement.z + cameraPivotRight * _smoothInputMovement.x;
         }
     }
 
@@ -337,13 +337,7 @@ public class MoveBehaviour : MonoBehaviour
 
         while (true)
         {
-            for (int i = 0; i < _stunMoveList.Count; i++)
-            {
-                Duration duration = _stunMoveList[i];
-
-                if (!duration.IsActive)
-                    _stunMoveList.Remove(duration);
-            }
+            _stunMoveList.List.RemoveAll(item => !item.IsActive);
 
             if (_stunMoveList.Count != 0)
             {

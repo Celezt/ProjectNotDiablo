@@ -47,7 +47,7 @@ public class AI : MonoBehaviour
     float ChargeSpeed;
     float chargeAcceleration;
 
-    AnimatorBehaviour animatorModifier;
+    AnimatorBehaviour animatorBehaviour;
 
     [SerializeField]
     AnimationClip attackAnimation;
@@ -61,7 +61,7 @@ public class AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animatorModifier = gameObject.GetComponentInChildren<AnimatorBehaviour>();
+        animatorBehaviour = gameObject.GetComponentInChildren<AnimatorBehaviour>();
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = gameObject.GetComponentInChildren<FieldOfView>();
         agent.acceleration = baseAcceleration;
@@ -116,7 +116,7 @@ public class AI : MonoBehaviour
         //else if (agent.velocity != Vector3.zero)
         //{
         //}
-        animatorModifier.SmoothLocalMotion = agent.velocity.normalized;
+        animatorBehaviour.SmoothLocalMotion = agent.velocity.normalized;
         //Debug.Log(agent.velocity.normalized);
 
         distanceToDestination = agent.remainingDistance;
@@ -144,12 +144,13 @@ public class AI : MonoBehaviour
 
     void Death()
     {
-        animatorModifier.OnAnimationModifierRaised(new AnimatorModifier(dyingAnimation, speedMultiplier: 1.0f, exitAction: info =>
-        {
-            animatorModifier.Animator.SetFloat(Animator.StringToHash("CustomMotionSpeed"), 0);
+        animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(dyingAnimation, exitPercent: 0.7f,
+            exitAction: info =>
+            {
+                info.AnimatorBehaviour.SetMotionSpeed(0);
         }));
+        animatorBehaviour.EnableCustomAnimation = false;
         Destroy(gameObject, 5f);
-        animatorModifier.EnableCustomAnimation = false;
         dead = true;
     }
 
@@ -197,9 +198,9 @@ public class AI : MonoBehaviour
         {
             selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
 
-            if (animatorModifier.IsAnimationModifierRunning == false)
+            if (animatorBehaviour.IsAnimationModifierRunning == false)
             {
-                animatorModifier.OnAnimationModifierRaised(new AnimatorModifier(attackAnimation));
+                animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(attackAnimation));
             }
         }
     }

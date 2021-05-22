@@ -610,7 +610,7 @@ AnimatorState:
   m_SpeedParameter: CustomMotionSpeed
   m_MirrorParameter: CustomMotionMirror
   m_CycleOffsetParameter: 
-  m_TimeParameter: MotionX
+  m_TimeParameter: NormalizedTime
 --- !u!1101 &-1309443237127489388
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -812,6 +812,12 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: CustomIndex
     m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: ExitPercent
+    m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -1321,4 +1327,4 @@ AnimatorState:
   m_SpeedParameter: CustomMotionSpeed
   m_MirrorParameter: CustomMotionMirror
   m_CycleOffsetParameter: 
-  m_TimeParameter: MotionX
+  m_TimeParameter: NormalizedTime

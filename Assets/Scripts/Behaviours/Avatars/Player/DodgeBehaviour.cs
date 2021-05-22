@@ -137,13 +137,7 @@ public class DodgeBehaviour : MonoBehaviour
 
         while (true)
         {
-            for (int i = 0; i < _stunDodgeList.Count; i++)
-            {
-                Duration duration = _stunDodgeList[i];
-
-                if (!duration.IsActive)
-                    _stunDodgeList.Remove(duration);
-            }
+            _stunDodgeList.List.RemoveAll(item => !item.IsActive);
 
             if (_stunDodgeList.Count != 0)
             {

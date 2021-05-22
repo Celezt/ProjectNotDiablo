@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Player@InvisibilityFrameFloat
   m_EditorClassIdentifier: 
   _developerDescription: 
-  Duration: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
-  Affect: 2
+  _durationValueList: {fileID: 11400000, guid: 7cf92239b350dca44bb4b1578289f3a3, type: 2}
+  _affect: 0

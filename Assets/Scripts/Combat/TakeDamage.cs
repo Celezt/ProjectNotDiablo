@@ -10,8 +10,8 @@ public class TakeDamage : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private Damageable _damageable;
     [SerializeField, ConditionalField(nameof(_damageable), true, Damageable.None)] AnimationClip _takeDamageClip;
-    [SerializeField, ConditionalField(nameof(_damageable), false, Damageable.Player)] float _invisibilityFrame = 0.5f;
-
+    [SerializeField, ConditionalField(nameof(_damageable), false, Damageable.Player), Min(0)] float _invisibilityFrame = 0.5f;
+    [SerializeField, ConditionalField(nameof(_damageable), false, Damageable.Player), Min(0)] float _stunAttack = 0.3f;
 
     [Header("Popup")]
     [SerializeField] private bool _hasPopup;
@@ -32,8 +32,16 @@ public class TakeDamage : MonoBehaviour
         {
             PlayerDataReference data = gameObject.GetComponent<PlayerDataReference>();
             data.Health.Value -= damage;
-            data.AnimatorModifierEvent.Raise(new AnimatorModifier(_takeDamageClip));
-            data.InvisibilityFrameList.Add(new Duration(_invisibilityFrame));
+
+            if (data.Health.Value > 0 && data.InvisibilityFrameList.Count <= 0)
+            {
+                data.AnimatorModifierEvent.Raise(new AnimatorModifier(_takeDamageClip));
+                data.StunAttackList.Add(new Duration(_stunAttack));
+                data.InvisibilityFrameList.Add(new Duration(_invisibilityFrame));
+
+                SpawnPopup(damage);
+            }
+
         }
         else if (gameObject.layer == LayerMask.NameToLayer("AI"))   // AI hit logic.
         {
@@ -44,13 +52,18 @@ public class TakeDamage : MonoBehaviour
             {
                 AnimatorBehaviour animatorBehaviour = gameObject.GetComponent<AnimatorBehaviour>();
                 animatorBehaviour?.OnAnimationModifierRaised(new AnimatorModifier(_takeDamageClip));
+
+                SpawnPopup(damage);
             }
         }
         else if (gameObject.layer == LayerMask.NameToLayer("Damageble"))
         {
-
+            SpawnPopup(damage);
         }
+    }
 
+    private void SpawnPopup(float value)
+    {
         if (_hasPopup && _popup != null)
         {
             Vector3 position = transform.position;
@@ -60,7 +73,7 @@ public class TakeDamage : MonoBehaviour
                 _offsetPopup.z + Random.Range(position.z - _randomPopupOffset, position.z + _randomPopupOffset)),
                 Quaternion.identity);
             Text text = instance.GetComponentInChildren<Text>();
-            text.text = damage.ToString();
+            text.text = value.ToString();
         }
     }
 }

@@ -10,9 +10,6 @@ namespace UnityAtoms.BaseAtoms
     [CreateAssetMenu(menuName = "Unity Atoms/Variables/Duration", fileName = "DurationVariable")]
     public sealed class DurationVariable : AtomVariable<Duration, DurationPair, DurationEvent, DurationPairEvent, DurationDurationFunction>
     {
-        protected override bool ValueEquals(Duration other)
-        {
-            throw new NotImplementedException();
-        }
+        protected override bool ValueEquals(Duration other) => other.ID == Value.ID;
     }
 }

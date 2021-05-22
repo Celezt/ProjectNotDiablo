@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 583105869144826515}
   - component: {fileID: 7651242026116013290}
   - component: {fileID: 2881561965629204934}
+  - component: {fileID: 3146463153671593021}
   - component: {fileID: 8042037470972645018}
   - component: {fileID: 5906153228361175930}
   m_Layer: 6
@@ -159,7 +160,7 @@ MonoBehaviour:
   _speedBackwardMultiplier: 0.5
   _speedSideMultiplier: 0.5
   _movementSmoothSpeedStart: 2
-  _movementSmoothSpeedEnd: 4
+  _movementSmoothSpeedEnd: 8
   _turnSpeed: 3
   _fallLayerMask:
     serializedVersion: 2
@@ -207,7 +208,7 @@ MonoBehaviour:
     AnimationSpeedMultiplier: 5
     StunMultiplier: 1
     InvisibilityDuration: 0.5
-    Cooldown: 0.5
+    Cooldown: 0.8
     ForceStrength: 32
     ForceCurve:
       serializedVersion: 2
@@ -268,7 +269,7 @@ MonoBehaviour:
     AnimationSpeedMultiplier: 1
     StunMultiplier: 0.85
     InvisibilityDuration: 0.8
-    Cooldown: 0.5
+    Cooldown: 0.8
     ForceStrength: 56
     ForceCurve:
       serializedVersion: 2
@@ -358,6 +359,23 @@ MonoBehaviour:
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
   _stunMoveList: {fileID: 11400000, guid: cba856c9d8c64a346a2fecb64b913792, type: 2}
   _stunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
+--- !u!114 &3146463153671593021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2691928546050736854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4261f5e252ec0ec4b99fd6ab40c0f00f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data: {fileID: 8042037470972645018}
+  _animationData:
+    _clip: {fileID: 7400000, guid: 88b371f485b13064183196949595c588, type: 3}
+    _speedMultiplier: 1
+    _exitPercent: 0.7
 --- !u!114 &8042037470972645018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +411,7 @@ MonoBehaviour:
   _damageable: 1
   _takeDamageClip: {fileID: 7400000, guid: 1b31cb902429704429a2c2584363dd59, type: 3}
   _invisibilityFrame: 0.5
+  _stunAttack: 0.3
   _hasPopup: 1
   _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
   _randomPopupOffset: 0.5

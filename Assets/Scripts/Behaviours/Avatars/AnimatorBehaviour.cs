@@ -29,6 +29,10 @@ public class AnimatorBehaviour : MonoBehaviour
 
     public bool IsAnimationModifierRunning => _isAnimationModifierRunning;
 
+    public void SetMotionSpeed(float value) => _animator.SetFloat(_customMotionSpeedID, value);
+
+    public InternalBehaviour Internal => _internal;
+
     #region Inspector
     [Header("Settings")]
     [SerializeField, MustBeAssigned] private Animator _animator;
@@ -39,7 +43,10 @@ public class AnimatorBehaviour : MonoBehaviour
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
-    private Queue<Action<AnimatorModifierInfo>> _exitCustomActionQueue;
+    private Queue<Action<AnimatorModifierInfo>> _exitCustomActionQueue = new Queue<Action<AnimatorModifierInfo>>();
+    private Action<AnimatorModifierInfo> _enterCustomAction;
+
+    private InternalBehaviour _internal;
 
     private int _customIndex;
     private bool _isAnimationModifierRunning;
@@ -52,8 +59,9 @@ public class AnimatorBehaviour : MonoBehaviour
     private readonly int _isCustomID = Animator.StringToHash("IsCustom");
     private readonly int _customIndexID = Animator.StringToHash("CustomIndex");
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
-
+    private readonly int _exitPercentID = Animator.StringToHash("ExitPercent");
     #region Events
+
     /// <summary>
     /// Raise a new custom animation.
     /// </summary>
@@ -74,22 +82,15 @@ public class AnimatorBehaviour : MonoBehaviour
             }
 
             _animator.SetInteger(_customIndexID, _customIndex);
+            _animator.SetFloat(_exitPercentID, value.Exitpercent);
             _animator.SetFloat(_customMotionSpeedID, value.SpeedMultiplier);
             _animator.SetBool(_isCustomID, true);
 
             _exitCustomActionQueue.Enqueue(value.ExitAction);
+            _enterCustomAction = value.EnterAction;
 
             _customIndex = (_customIndex + 1) % 2;
         }
-    }
-
-    /// <summary>
-    /// WARNING: should not be called from outside.
-    /// </summary>
-    public void OnAnimationModifierExitRaised(AnimatorModifierInfo info)
-    {
-        _exitCustomActionQueue.Dequeue()?.Invoke(info);
-        _isAnimationModifierRunning = (_exitCustomActionQueue.Count > 0);
     }
 
     public void OnFalling(bool value)
@@ -99,12 +100,15 @@ public class AnimatorBehaviour : MonoBehaviour
     #endregion
 
     #region Unity Message
+    private void Awake()
+    {
+        _internal = new InternalBehaviour(this);
+    }
+
     private void Start()
     {
         _animatorOverrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
         _animator.runtimeAnimatorController = _animatorOverrideController;
-
-        _exitCustomActionQueue = new Queue<Action<AnimatorModifierInfo>>();
     }
 
     private void OnEnable()
@@ -142,5 +146,39 @@ public class AnimatorBehaviour : MonoBehaviour
     {
         if (_fallingReference.Usage <= 1)   // If no event is used.
             _animator.SetBool(_isFallingID, _fallingReference.Value);
+    }
+
+    /// <summary>
+    /// WARNING: should not be called from outside.´å
+    /// </summary>
+    public class InternalBehaviour
+    {
+        private AnimatorBehaviour _animatorBehaviour;
+
+        public InternalBehaviour(AnimatorBehaviour animatorBehaviour) => _animatorBehaviour = animatorBehaviour;
+
+        public void OnAnimatorModifierEnterRaised(AnimatorModifierInfo info)
+        {
+            _animatorBehaviour._enterCustomAction?.Invoke(info);
+            _animatorBehaviour._enterCustomAction = null;
+        }
+
+        public void OnAnimationModifierExitRaised(AnimatorModifierInfo info, bool isLastExit)
+        {
+            if (isLastExit)
+            {
+                for (int i = 0; i < _animatorBehaviour._exitCustomActionQueue.Count; i++)
+                {
+                    _animatorBehaviour._exitCustomActionQueue.Dequeue()?.Invoke(info);
+                }
+            }
+            else
+            {
+                if (_animatorBehaviour._exitCustomActionQueue.Count > 0)
+                    _animatorBehaviour._exitCustomActionQueue.Dequeue()?.Invoke(info);
+            }
+
+            _animatorBehaviour._isAnimationModifierRunning = (_animatorBehaviour._exitCustomActionQueue.Count > 0);
+        }
     }
 }
