@@ -12,10 +12,11 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 {
     [SerializeField] private SceneReference _newStartScreen;
     [SerializeField] private GameObject _menuContent;
-    [SerializeField] private Text _timeText;
     [SerializeField] private GameObject _deathMenuContent;
+    [SerializeField] private GameObject _gameplayContent;
     [SerializeField] private GameObject _firstMenuButton;
     [SerializeField] private GameObject _firstDeathMenuButton;
+    [SerializeField] private Text _timeText;
     [SerializeField] private UICursorHandler _cursorHandler;
 
     [Foldout("Atoms", true)]
@@ -135,6 +136,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
         _menuContent.SetActive(false);  // Disable menu on start.
         _deathMenuContent.SetActive(false);
+        _gameplayContent.SetActive(true);
     }
 
     private void Start()
@@ -189,6 +191,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
 
         _menuContent.SetActive(true);
+        _gameplayContent.SetActive(false);
 
         if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
             SelectFirstObject(_firstMenuButton);
@@ -210,6 +213,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
         DeselectFirstObject();
         _menuContent.SetActive(false);
+        _gameplayContent.SetActive(true);
 
         Time.timeScale = 1.0f;
         playerInput.SwitchCurrentActionMap("Ground");

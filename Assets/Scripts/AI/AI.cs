@@ -162,6 +162,7 @@ public class AI : MonoBehaviour
             {
                 info.AnimatorBehaviour.SetMotionSpeed(0);
         }));
+
         animatorBehaviour.EnableCustomAnimation = false;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         Destroy(gameObject, 2f);
