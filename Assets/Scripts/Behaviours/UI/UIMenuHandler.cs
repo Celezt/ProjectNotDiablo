@@ -95,6 +95,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
         _invisibilityFrameList?.Add(_EmptyDuration);
 
         _deathMenuContent.SetActive(true);
+        _gameplayContent.SetActive(false);
 
         if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
             SelectFirstObject(_firstDeathMenuButton);

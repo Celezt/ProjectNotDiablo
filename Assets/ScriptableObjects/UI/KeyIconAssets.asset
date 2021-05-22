@@ -59,19 +59,19 @@ MonoBehaviour:
     ButtonNorth: {fileID: 0}
     ButtonEast: {fileID: 0}
     ButtonWest: {fileID: 0}
-    StartButton: {fileID: 0}
+    StartButton: {fileID: 21300000, guid: 352971e68b9473f4b8eb3d621f9ace5a, type: 3}
     SelectButton: {fileID: 0}
     LeftTrigger: {fileID: 21300000, guid: 9920d7ba838f82840a41b92b040f8c31, type: 3}
     RightTrigger: {fileID: 21300000, guid: 2935f0a7bc71fc94193ee88d68c10e5e, type: 3}
     LeftShoulder: {fileID: 21300000, guid: fd81bbbb59db8e942aa173b8c18a9e16, type: 3}
     RightShoulder: {fileID: 21300000, guid: 11a429187bfb9d9498cc59fff2360150, type: 3}
     Dpad: {fileID: 0}
-    DpadUp: {fileID: 0}
-    DpadDown: {fileID: 0}
-    DpadLeft: {fileID: 0}
-    DpadRight: {fileID: 0}
+    DpadUp: {fileID: 21300000, guid: 2cd01dcb6fb598540a46a632692aad8c, type: 3}
+    DpadDown: {fileID: 21300000, guid: e7eaeaa072f486d4fa65715f05a7ae45, type: 3}
+    DpadLeft: {fileID: 21300000, guid: c9c566e41998d4146840701b566bfb9e, type: 3}
+    DpadRight: {fileID: 21300000, guid: fbeb833981e9d224681a0106af5f9ee8, type: 3}
     LeftStick: {fileID: 0}
     RightStick: {fileID: 0}
-    LeftStickPress: {fileID: 0}
+    LeftStickPress: {fileID: 21300000, guid: f961088dcff67224ca35d40710292818, type: 3}
     RightStickPress: {fileID: 21300000, guid: fd9966b162cc7d7498614056d178854f, type: 3}
     Empty: {fileID: 21300000, guid: daa7d737012a1ee4c83608b1a2077925, type: 3}
