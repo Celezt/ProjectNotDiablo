@@ -116,7 +116,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     {
         _isInputVariable.Value = true;
 
-        _EmptyDuration = Duration.Empty;
+        _EmptyDuration = Duration.Infinity;
         _stunAttackList?.Add(_EmptyDuration);
         _stunDodgeList?.Add(_EmptyDuration);
         _stunMoveList?.Add(_EmptyDuration);

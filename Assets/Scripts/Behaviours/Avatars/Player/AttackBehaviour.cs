@@ -142,13 +142,7 @@ public class AttackBehaviour : MonoBehaviour
 
         while (true)
         {
-            for (int i = 0; i < _stunAttackList.Count; i++)
-            {
-                Duration duration = _stunAttackList[i];
-
-                if (!duration.IsActive)
-                    _stunAttackList.Remove(duration);
-            }
+            _stunAttackList.List.RemoveAll(item => !item.IsActive);
 
             if (_stunAttackList.Count != 0)
             {

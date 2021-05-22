@@ -146,7 +146,7 @@ MonoBehaviour:
   PlayerInRange: 0
   player: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 2a2ff845dd4f08a4b9f16004cdac1005, type: 3}
-  dyingAnimation: {fileID: 7400000, guid: 5c18535ba2b33a34194d075e040ee599, type: 2}
+  dyingAnimation: {fileID: 7400000, guid: 4dc448ac47a91c6428de3a7af494b625, type: 3}
 --- !u!114 &3647866934931321420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageable: 2
   _takeDamageClip: {fileID: 7400000, guid: e263228e6d15f8e4c91604a4e0af284d, type: 3}
+  _invisibilityFrame: 0.5
   _hasPopup: 1
   _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
   _randomPopupOffset: 0.5
@@ -2380,7 +2381,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6986557909673790422}
   - component: {fileID: 7041073282867660990}
-  - component: {fileID: 4999725832929942982}
   m_Layer: 0
   m_Name: SkeletonOutlaw_NoArmor - LOD0
   m_TagString: Untagged
@@ -2425,19 +2425,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4999725832929942982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6981401532572695094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 206d4dae2fd65e140a043414a0ec5897, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animatorBehaviour: {fileID: 3860246274861885920}
 --- !u!1 &6981403221543216718
 GameObject:
   m_ObjectHideFlags: 0

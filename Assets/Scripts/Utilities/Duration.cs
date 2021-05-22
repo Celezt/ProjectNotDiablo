@@ -22,7 +22,7 @@ public struct Duration : IEquatable<Duration>
             if (!_paused)
                 Update();
 
-            return _isActive;
+            return _timeLeft > 0;
         }
     }
     /// <summary>
@@ -81,7 +81,6 @@ public struct Duration : IEquatable<Duration>
     [SerializeField] private float _timeLeft;
     [SerializeField] private float _initTime;
     private bool _paused;
-    private bool _isActive;
     private bool _activatedAction;
 
     public bool Equals(Duration other) => ID == other.ID;
@@ -127,7 +126,6 @@ public struct Duration : IEquatable<Duration>
     {
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
-        _isActive = true;
         _paused = false;
         _timeLeft = duration;
         _initTime = duration;
@@ -138,7 +136,7 @@ public struct Duration : IEquatable<Duration>
     /// </summary>
     public void Update()
     {
-        if (_paused | float.IsNaN(_timeLeft))
+        if (_paused || float.IsPositiveInfinity(_timeLeft))
             return;
 
         float currentTime = Time.time;
@@ -147,7 +145,6 @@ public struct Duration : IEquatable<Duration>
 
         if (_timeLeft - deltaTime >= 0)
         {
-            _isActive = true;
             _timeLeft -= deltaTime;
         }
         else
@@ -159,7 +156,6 @@ public struct Duration : IEquatable<Duration>
                     _action.Invoke();
             }
 
-            _isActive = false;
             _timeLeft = 0;
         }
     }
@@ -169,7 +165,6 @@ public struct Duration : IEquatable<Duration>
         ID = ++_counter;
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
-        _isActive = true;
         _paused = false;
         _timeLeft = duration;
         _initTime = duration;
@@ -182,7 +177,6 @@ public struct Duration : IEquatable<Duration>
         ID = ++_counter;
         _oldGameTime = Time.time;
         _pauseGameTime = _oldGameTime;
-        _isActive = true;
         _paused = false;
         _timeLeft = duration;
         _initTime = duration;
@@ -190,7 +184,7 @@ public struct Duration : IEquatable<Duration>
         _activatedAction = false;
     }
 
-    public static Duration Empty => new Duration(float.NaN);
+    public static Duration Infinity => new Duration(float.PositiveInfinity);
 
     public static bool operator ==(Duration lhs, Duration rhs) => lhs.ID == rhs.ID;
     public static bool operator !=(Duration lhs, Duration rhs) => lhs.ID != rhs.ID;
