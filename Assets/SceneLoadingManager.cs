@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SceneLoadingManager : MonoBehaviour
 {
     public MeshCombineStudio.MeshCombiner meshCombiner;
-
+    public DungeonGenerator dungeonGenerator;
     public CanvasGroup canvas;
     public Slider progressBar;
     int loadingProgress = 0;
@@ -18,6 +18,7 @@ public class SceneLoadingManager : MonoBehaviour
     bool navmeshGenerated;
     bool aiGenerated;
     bool processActive;
+    bool end;
 
     // Start is called before the first frame update
     void Awake()
@@ -40,58 +41,67 @@ public class SceneLoadingManager : MonoBehaviour
         if (dungeonLoaded == false)
         {
             GenerateDungeon();
-            dungeonLoaded = true;
         }
-        if (roomsOptimised == false && dungeonLoaded == true && processActive == false)
+
+        if (navmeshGenerated == false && dungeonLoaded == true)
         {
-            OptimiseRooms();
-            processActive = true;
-        }
-        if (navmeshGenerated == false && roomsOptimised == true)
-        {
-            GenerateDungeon();
+            GenerateNavmesh();
             navmeshGenerated = true;
         }
         if (navmeshGenerated == true && aiGenerated == false)
         {
-            GenerateDungeon();
+            GenerateAi();
             aiGenerated = true;
         }
-        if (aiGenerated == true)
+        if (roomsOptimised == false && dungeonLoaded == true && processActive == false && aiGenerated == true)
         {
+            processActive = true;
+            OptimiseRooms();
+        }
+        if (aiGenerated == true && roomsOptimised == true && end == false)
+        {
+            end = true;
             EndLoading();
         }
+
     }
 
     
     void GenerateDungeon()
     {
-        loadingProgress = 20;
-        Debug.Log("Generating Dungeon");
         
+        Debug.Log("Generating Dungeon");
+        while(dungeonLoaded == false)
+        {
+            dungeonLoaded = dungeonGenerator.GenerateDungeon();
+        }
+        loadingProgress = 20;
     }
     void OptimiseRooms()
     {
         loadingProgress = 40;
         Debug.Log("Optimising Rooms");
-        
-        meshCombiner.CombineAll();
+        roomsOptimised = true;
+        //meshCombiner.CombineAll();
     }
     void GenerateNavmesh()
     {
         loadingProgress = 60;
         Debug.Log("Generating Navmesh");
-        
+        dungeonGenerator.BuildNavMesh();
+
     }
     void GenerateAi()
     {
         loadingProgress = 80;
         Debug.Log("Generating AI");
-
+        dungeonGenerator.SpawnMonsters();
+        
     }
     void EndLoading()
     {
         loadingProgress = 100;
+        dungeonGenerator.SpawnPlayer();
         Debug.Log("Ending Loading screen");
         StartCoroutine(FadeLoadingScreen(2));
     }
@@ -109,5 +119,6 @@ public class SceneLoadingManager : MonoBehaviour
         }
         canvas.alpha = 0;
         canvas.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
