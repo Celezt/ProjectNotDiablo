@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b46c0f62c93543f88d3eb693740d091, type: 3}
-  m_Name: Skeleton@MaxHealth
+  m_Name: Boss@Health
   m_EditorClassIdentifier: 
   _developerDescription: 
   _id: 
   _value: 50
-  _changed: {fileID: 11400000, guid: 8e8a45beaa76c6946b3a481250873375, type: 2}
+  _changed: {fileID: 11400000, guid: 0daf3d5ac7f99004b8aa261a4364ef8f, type: 2}
   _changedWithHistory: {fileID: 0}
   _triggerChangedOnOnEnable: 1
   _triggerChangedWithHistoryOnOnEnable: 0
   _oldValue: 50
-  _initialValue: 50
-  _preChangeTransformers: []
+  _initialValue: 200
+  _preChangeTransformers:
+  - {fileID: 11400000, guid: 5b931591acab95b4a9f8b93542c8f8ab, type: 2}

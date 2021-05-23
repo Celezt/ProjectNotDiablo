@@ -535,6 +535,17 @@
                 },
                 {
                     "name": "",
+                    "id": "72fc17e1-2bb8-4c88-a7ed-2719a8770d96",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "Scale(factor=11)",
+                    "groups": "",
+                    "action": "Hotbar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6dd4a9d7-859c-4e37-8f34-a679d05fccfb",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",

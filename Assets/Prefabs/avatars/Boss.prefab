@@ -289,7 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5325219043844715061}
   m_Layer: 12
-  m_Name: Skeleton - Data
+  m_Name: Boss - Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 4709608989011865671}
   - component: {fileID: 8510588707011152881}
   m_Layer: 12
-  m_Name: Skeleton - MaxHealth
+  m_Name: Boss - MaxHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inMemoryCopy: {fileID: 0}
-  _base: {fileID: 11400000, guid: 08c1f654e958c644eafa64e47abb96cd, type: 2}
+  _base: {fileID: 11400000, guid: 0b0cc5b6246c57a49883206408b7c1fe, type: 2}
 --- !u!1 &7498123085980085675
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 5193994627649866668}
   - component: {fileID: 2848686487084727733}
   m_Layer: 12
-  m_Name: Skeleton - Health
+  m_Name: Boss - Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inMemoryCopy: {fileID: 0}
-  _base: {fileID: 11400000, guid: 05b0c08bab5698f458acaecfd423cca0, type: 2}
+  _base: {fileID: 11400000, guid: ee74a2fb05da9e945a93ed50bb52269e, type: 2}
 --- !u!1 &8016639751962167874
 GameObject:
   m_ObjectHideFlags: 0
