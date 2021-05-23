@@ -26,7 +26,7 @@ public class ItemPickupScript : MonoBehaviour
         item.itemType = itemType;
         if(script == null)
         {
-            GameObject temp = GameObject.Find("HotBar/Inventory");
+            GameObject temp = GameObject.Find("UIHotBar/Inventory");
             script = temp.GetComponent<HotbarScript>();
         }
         inventory = script.GetInventory();
@@ -42,6 +42,11 @@ public class ItemPickupScript : MonoBehaviour
         }
         if(inventory == null)
         {
+            if(script == null)
+            {
+                GameObject temp = GameObject.Find("UIHotBar/Inventory");
+                script = temp.GetComponent<HotbarScript>();
+            }
             inventory = script.GetInventory();
         }
         Debug.Log(inventory);
