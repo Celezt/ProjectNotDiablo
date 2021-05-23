@@ -58,12 +58,12 @@ public class Inventory
                     return false;
                 }
                 items[indexFirstNull].amount += 1;
-                Transform amountText = scriptMain.GetSlot(indexFirstNull + 1).transform.Find("Border").transform.Find("Amount");
+                Transform amountText = scriptMain.GetSlot(indexFirstNull + 1).transform.Find("Slot - Amount");
                 Debug.Log(amountText);
                 if(amountText != null)
                 {
-                    TextMeshProUGUI uiText = amountText.GetComponent<TextMeshProUGUI>();
-                    uiText.SetText(items[indexFirstNull].amount.ToString());
+                    Text uiText = amountText.GetComponent<Text>();
+                    uiText.text=items[indexFirstNull].amount.ToString();
                 }
                 Debug.Log(items[indexFirstNull].amount);
                 return true;
@@ -119,17 +119,16 @@ public class Inventory
             {
 
                 int newAmount = items[index].amount -= 1;
-                Transform amountText = scriptMain.GetSlot(index + 1).transform.Find("Border").transform.Find("Amount");
+                Transform amountText = scriptMain.GetSlot(index + 1).transform.Find("Slot - Amount");
                 Debug.Log(amountText);
                 if (amountText != null)
                 {
-
-                    TextMeshProUGUI uiText = amountText.GetComponent<TextMeshProUGUI>();
+                    Text uItext = amountText.GetComponent<Text>();
                     if (newAmount == 1)
                     {
-                        uiText.SetText("");
+                        uItext.text = "";
                     }
-                    else uiText.SetText(newAmount.ToString());
+                    else uItext.text = newAmount.ToString();
                 }
                 
             }
@@ -137,10 +136,12 @@ public class Inventory
         else
         {
             Debug.Log("Turn white");
+            
             GameObject tempSlot = scriptMain.GetSlot(index + 1) ;
-            GameObject tempBorder = tempSlot.transform.Find("Border").gameObject;
+            GameObject tempBorder = tempSlot.transform.Find("Slot - Frame").gameObject;
             Image tempImg = tempBorder.GetComponent<Image>();
             tempImg.color = Color.white;
+            
             items[index] = null;
             AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
             Debug.Log(hands);
@@ -186,12 +187,12 @@ public class Inventory
             for (int i = 1; i < 6; i++)
             {
                 GameObject tempSlot = scriptMain.GetSlot((int)i);
-                GameObject tempBorder = tempSlot.transform.Find("Border").gameObject;
+                GameObject tempBorder = tempSlot.transform.Find("Slot - Frame").gameObject;
                 Image tempImg = tempBorder.GetComponent<Image>();
                 tempImg.color = Color.white;
             }
             GameObject slot = scriptMain.GetSlot((int)inputkey);
-            GameObject border = slot.transform.Find("Border").gameObject;
+            GameObject border = slot.transform.Find("Slot - Frame").gameObject;
             Image img = border.GetComponent<Image>();
             img.color = Color.red;
             
