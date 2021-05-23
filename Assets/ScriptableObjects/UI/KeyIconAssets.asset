@@ -58,7 +58,7 @@ MonoBehaviour:
     ButtonSouth: {fileID: 21300000, guid: 54700151937aa19488a53b4a9eaf180b, type: 3}
     ButtonNorth: {fileID: 0}
     ButtonEast: {fileID: 0}
-    ButtonWest: {fileID: 0}
+    ButtonWest: {fileID: 21300000, guid: b67a0cb352cf29543ba303e111499351, type: 3}
     StartButton: {fileID: 21300000, guid: 352971e68b9473f4b8eb3d621f9ace5a, type: 3}
     SelectButton: {fileID: 0}
     LeftTrigger: {fileID: 21300000, guid: 9920d7ba838f82840a41b92b040f8c31, type: 3}
