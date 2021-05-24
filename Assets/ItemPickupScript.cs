@@ -24,12 +24,14 @@ public class ItemPickupScript : MonoBehaviour
         item = new Item();
         item.amount = 1;
         item.itemType = itemType;
+        /*
         if(script == null)
         {
             GameObject temp = GameObject.Find("UIHotBar/Inventory");
             script = temp.GetComponent<HotbarScript>();
         }
         inventory = script.GetInventory();
+        */
     }
 
 
