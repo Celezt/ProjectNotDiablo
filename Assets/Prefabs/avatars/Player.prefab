@@ -142,6 +142,14 @@ MonoBehaviour:
     _constant: {fileID: 0}
     _variable: {fileID: 11400000, guid: 8d92c2a6d47429548819be05e9bd1e48, type: 2}
     _variableInstancer: {fileID: 0}
+  _dyingReference:
+    _usage: 0
+    _event: {fileID: 11400000, guid: 7707f1026a5a62d4fb5308e371bdd596, type: 2}
+    _eventInstancer: {fileID: 0}
+    _collection: {fileID: 0}
+    _list: {fileID: 0}
+    _collectionInstancer: {fileID: 0}
+    _listInstancer: {fileID: 0}
 --- !u!114 &583105869144826515
 MonoBehaviour:
   m_ObjectHideFlags: 0

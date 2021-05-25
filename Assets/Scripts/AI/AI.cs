@@ -157,12 +157,7 @@ public class AI : MonoBehaviour
     {
         audio.clip = deathClip;
         audio.Play();
-        animatorBehaviour.OnAnimationModifierRaised(new AnimatorModifier(dyingAnimation, exitPercent: 0.7f,
-            exitAction: info =>
-            {
-                info.AnimatorBehaviour.SetMotionSpeed(0);
-        }));
-
+        animatorBehaviour.RaiseDying();
         animatorBehaviour.EnableCustomAnimation = false;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         Destroy(gameObject, 2f);
