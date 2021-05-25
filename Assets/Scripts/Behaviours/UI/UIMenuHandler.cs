@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class UIMenuHandler : Singleton<UIMenuHandler>
 {
+    [Header("References")]
     [SerializeField] private SceneReference _newStartScreen;
     [SerializeField] private GameObject _menuContent;
     [SerializeField] private GameObject _deathMenuContent;
@@ -18,6 +19,9 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     [SerializeField] private GameObject _firstDeathMenuButton;
     [SerializeField] private Text _timeText;
     [SerializeField] private UICursorHandler _cursorHandler;
+
+    [Header("OnDeath")]
+    [SerializeField] private float _deathDelay = 3;
 
     [Foldout("Atoms", true)]
     [SerializeField] private BoolVariable _isInputVariable;
@@ -76,33 +80,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
     /// <summary>
     /// Enable death menu.
     /// </summary>
-    public void OnDeathMenu()
-    {
-        _menuState = MenuState.DeathMenu;
-
-        _controls.Disable();
-
-        TimeSpan timeSpan = TimeSpan.FromSeconds(_gameplayTimer.Timer);
-        _gameplayTimer.Paused();
-        _timeText.text = "Play Time: " + timeSpan.ToString(@"hh\:mm\:ss");
-
-        _isInputVariable.Value = true;
-
-        _EmptyDuration = Duration.Infinity;
-        _stunAttackList?.Add(_EmptyDuration);
-        _stunDodgeList?.Add(_EmptyDuration);
-        _stunMoveList?.Add(_EmptyDuration);
-        _invisibilityFrameList?.Add(_EmptyDuration);
-
-        _deathMenuContent.SetActive(true);
-        _gameplayContent.SetActive(false);
-
-        if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
-            SelectFirstObject(_firstDeathMenuButton);
-
-        Time.timeScale = 0.0f;
-        PlayerInput.GetPlayerByIndex(0).SwitchCurrentActionMap("UI");
-    }
+    public void OnDeathMenu() => StartCoroutine(CoroutineDeath());
 
     public void OnDeviceChanged(PlayerInput input)
     {
@@ -222,4 +200,34 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
     private void SelectFirstObject(GameObject firstButton) => EventSystem.current.SetSelectedGameObject(firstButton);
     private void DeselectFirstObject() => EventSystem.current.SetSelectedGameObject(null);
+
+    private IEnumerator CoroutineDeath()
+    {
+        yield return new WaitForSeconds(_deathDelay);
+
+        _menuState = MenuState.DeathMenu;
+
+        _controls.Disable();
+
+        TimeSpan timeSpan = TimeSpan.FromSeconds(_gameplayTimer.Timer);
+        _gameplayTimer.Paused();
+        _timeText.text = "Play Time: " + timeSpan.ToString(@"hh\:mm\:ss");
+
+        _isInputVariable.Value = true;
+
+        _EmptyDuration = Duration.Infinity;
+        _stunAttackList?.Add(_EmptyDuration);
+        _stunDodgeList?.Add(_EmptyDuration);
+        _stunMoveList?.Add(_EmptyDuration);
+        _invisibilityFrameList?.Add(_EmptyDuration);
+
+        _deathMenuContent.SetActive(true);
+        _gameplayContent.SetActive(false);
+
+        if (_cursorHandler.CursorType == UICursorHandler.CursorTypes.Controller)
+            SelectFirstObject(_firstDeathMenuButton);
+
+        Time.timeScale = 0.0f;
+        PlayerInput.GetPlayerByIndex(0).SwitchCurrentActionMap("UI");
+    }
 }

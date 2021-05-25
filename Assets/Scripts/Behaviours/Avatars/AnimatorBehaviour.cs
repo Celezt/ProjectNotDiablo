@@ -30,16 +30,18 @@ public class AnimatorBehaviour : MonoBehaviour
     public bool IsAnimationModifierRunning => _isAnimationModifierRunning;
 
     public void SetMotionSpeed(float value) => _animator.SetFloat(_customMotionSpeedID, value);
+    public void RaiseDying() => _dyingReference.Event.Raise();
 
     public InternalBehaviour Internal => _internal;
 
     #region Inspector
     [Header("Settings")]
     [SerializeField, MustBeAssigned] private Animator _animator;
-    [Foldout("Atoms", true)]
+    [Header("Atoms")]
     [SerializeField] private Vector3Reference _smoothLocalMotionReference = new Vector3Reference();
     [SerializeField] private AnimatorModifierEventReference _animatorModifierEvent = new AnimatorModifierEventReference();
     [SerializeField] private BoolReference _fallingReference = new BoolReference();
+    [SerializeField] private VoidBaseEventReference _dyingReference;
     #endregion
 
     private AnimatorOverrideController _animatorOverrideController;
@@ -60,6 +62,7 @@ public class AnimatorBehaviour : MonoBehaviour
     private readonly int _customIndexID = Animator.StringToHash("CustomIndex");
     private readonly int _customMotionSpeedID = Animator.StringToHash("CustomMotionSpeed");
     private readonly int _exitPercentID = Animator.StringToHash("ExitPercent");
+    private readonly int _isDyingID = Animator.StringToHash("IsDying");
     #region Events
 
     /// <summary>
@@ -69,7 +72,7 @@ public class AnimatorBehaviour : MonoBehaviour
     {
         if (_enableCustomAnimation)
         {
-            _isAnimationModifierRunning = true;
+                  _isAnimationModifierRunning = true;
 
             switch (_customIndex)
             {
@@ -93,10 +96,8 @@ public class AnimatorBehaviour : MonoBehaviour
         }
     }
 
-    public void OnFalling(bool value)
-    {
-        _animator.SetBool(_isFallingID, value);
-    }
+    public void OnFalling(bool value) => _animator.SetBool(_isFallingID, value);
+    public void OnDying() => _animator.SetBool(_isDyingID, true);
     #endregion
 
     #region Unity Message
@@ -117,6 +118,9 @@ public class AnimatorBehaviour : MonoBehaviour
 
         if (_fallingReference.Usage >= 2)
             _fallingReference.GetEvent<BoolEvent>().Register(OnFalling);
+
+        if (_dyingReference != null)
+            _dyingReference.Event?.Register(OnDying);
     }
 
     private void Update()
@@ -131,6 +135,9 @@ public class AnimatorBehaviour : MonoBehaviour
 
         if (_fallingReference.Usage >= 2)
             _fallingReference.GetEvent<BoolEvent>().Unregister(OnFalling);
+
+        if (_dyingReference != null)
+            _dyingReference.Event?.Unregister(OnDying);
     }
     #endregion
 

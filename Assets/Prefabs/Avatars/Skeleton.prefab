@@ -29,6 +29,7 @@ Transform:
   m_Children:
   - {fileID: 4894422655387262484}
   - {fileID: 5378240842767607295}
+  - {fileID: 5072363669958488276}
   m_Father: {fileID: 4454038921776860766}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -116,6 +117,14 @@ MonoBehaviour:
     _constant: {fileID: 0}
     _variable: {fileID: 0}
     _variableInstancer: {fileID: 0}
+  _dyingReference:
+    _usage: 1
+    _event: {fileID: 0}
+    _eventInstancer: {fileID: 2201556863544268211}
+    _collection: {fileID: 0}
+    _list: {fileID: 0}
+    _collectionInstancer: {fileID: 0}
+    _listInstancer: {fileID: 0}
 --- !u!114 &3647866934931321411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,6 +365,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inMemoryCopy: {fileID: 0}
   _base: {fileID: 11400000, guid: 08c1f654e958c644eafa64e47abb96cd, type: 2}
+--- !u!1 &5770758743080613361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5072363669958488276}
+  - component: {fileID: 2201556863544268211}
+  m_Layer: 12
+  m_Name: Skeleton - Die
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5072363669958488276
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5770758743080613361}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4764323937526130573}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2201556863544268211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5770758743080613361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ddf86bc0bd24f30868f3a6a765342e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inMemoryCopy: {fileID: 0}
+  _base: {fileID: 11400000, guid: 0da7d3a5b1a2a3b4d9c606153f5fc948, type: 2}
 --- !u!1 &6980603735416813062
 GameObject:
   m_ObjectHideFlags: 0

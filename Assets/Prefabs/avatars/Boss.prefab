@@ -84,6 +84,14 @@ MonoBehaviour:
     _constant: {fileID: 0}
     _variable: {fileID: 0}
     _variableInstancer: {fileID: 0}
+  _dyingReference:
+    _usage: 1
+    _event: {fileID: 0}
+    _eventInstancer: {fileID: 6216347882786867788}
+    _collection: {fileID: 0}
+    _list: {fileID: 0}
+    _collectionInstancer: {fileID: 0}
+    _listInstancer: {fileID: 0}
 --- !u!114 &4136396034200414203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +124,7 @@ MonoBehaviour:
   dead: 0
   player: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 2a2ff845dd4f08a4b9f16004cdac1005, type: 3}
-  dyingAnimation: {fileID: 0}
+  dyingAnimation: {fileID: 7400000, guid: 4dc448ac47a91c6428de3a7af494b625, type: 3}
   deathClip: {fileID: 8300000, guid: 525933722c8cd5e41a67b7dafb441cec, type: 3}
   spottedClip: {fileID: 8300000, guid: a1e7304a106b4df4a91ef1987ab2e4c4, type: 3}
   hitSoundClip: {fileID: 8300000, guid: fe8cfb54ba0025d47a490a91ffff2e6e, type: 3}
@@ -175,11 +183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eed7b7f8b0423949aa7c7cbfbd736bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageable: 0
-  _takeDamageClip: {fileID: 0}
+  _damageable: 2
+  _takeDamageClip: {fileID: 7400000, guid: e263228e6d15f8e4c91604a4e0af284d, type: 3}
   _invisibilityFrame: 0.5
   _stunAttack: 0.3
-  _hasPopup: 0
+  _hasPopup: 1
   _popup: {fileID: 3947180271784262534, guid: b186b4d460374304aac35ce510f10ee7, type: 3}
   _randomPopupOffset: 0.5
   _offsetPopup: {x: 0, y: 0, z: 0}
@@ -308,6 +316,7 @@ Transform:
   m_Children:
   - {fileID: 5193994627649866668}
   - {fileID: 4709608989011865671}
+  - {fileID: 7715758932460498202}
   m_Father: {fileID: 3906680452880456678}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -356,6 +365,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inMemoryCopy: {fileID: 0}
   _base: {fileID: 11400000, guid: 0b0cc5b6246c57a49883206408b7c1fe, type: 2}
+--- !u!1 &7006186468422357951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7715758932460498202}
+  - component: {fileID: 6216347882786867788}
+  m_Layer: 12
+  m_Name: Boss - Die
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7715758932460498202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7006186468422357951}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5325219043844715061}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6216347882786867788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7006186468422357951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ddf86bc0bd24f30868f3a6a765342e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inMemoryCopy: {fileID: 0}
+  _base: {fileID: 11400000, guid: c98d133f593295048a8ba5b32d9ac708, type: 2}
 --- !u!1 &7498123085980085675
 GameObject:
   m_ObjectHideFlags: 0
