@@ -215,8 +215,8 @@ MonoBehaviour:
     Animation: {fileID: 7400002, guid: 238163f950175d845b03cb6dac0c6e60, type: 3}
     AnimationSpeedMultiplier: 5
     StunMultiplier: 1
-    InvisibilityDuration: 0.5
-    Cooldown: 0.8
+    InvisibilityDuration: 0.4
+    Cooldown: 0.6
     ForceStrength: 32
     ForceCurve:
       serializedVersion: 2
@@ -276,7 +276,7 @@ MonoBehaviour:
     Animation: {fileID: 7400000, guid: 68d04a7b9dcc0fd4b877df82f02d1d61, type: 3}
     AnimationSpeedMultiplier: 1
     StunMultiplier: 0.85
-    InvisibilityDuration: 0.8
+    InvisibilityDuration: 0.6
     Cooldown: 0.8
     ForceStrength: 56
     ForceCurve:
@@ -397,7 +397,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageable: 1
-  _takeDamageClip: {fileID: 7400000, guid: 1b31cb902429704429a2c2584363dd59, type: 3}
+  _takeDamageAnimation:
+    _clip: {fileID: 7400000, guid: 23fd8c182a6515648baa9d0a89922e73, type: 3}
+    _speedMultiplier: 1
+    _exitPercent: 1
   _invisibilityFrame: 0.5
   _stunAttack: 0.3
   _hasPopup: 1

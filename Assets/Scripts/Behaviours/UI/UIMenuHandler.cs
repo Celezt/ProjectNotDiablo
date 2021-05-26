@@ -209,7 +209,7 @@ public class UIMenuHandler : Singleton<UIMenuHandler>
 
         _controls.Disable();
 
-        TimeSpan timeSpan = TimeSpan.FromSeconds(_gameplayTimer.Timer);
+        TimeSpan timeSpan = TimeSpan.FromSeconds(_gameplayTimer.Timer - _deathDelay);
         _gameplayTimer.Paused();
         _timeText.text = "Play Time: " + timeSpan.ToString(@"hh\:mm\:ss");
 

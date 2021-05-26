@@ -9,7 +9,7 @@ public class TakeDamage : MonoBehaviour
 {
     [Header("Damage")]
     [SerializeField] private Damageable _damageable;
-    [SerializeField, ConditionalField(nameof(_damageable), true, Damageable.None)] AnimationClip _takeDamageClip;
+    [SerializeField, ConditionalField(nameof(_damageable), true, Damageable.None)] AnimatorModifier _takeDamageAnimation;
     [SerializeField, ConditionalField(nameof(_damageable), false, Damageable.Player), Min(0)] float _invisibilityFrame = 0.5f;
     [SerializeField, ConditionalField(nameof(_damageable), false, Damageable.Player), Min(0)] float _stunAttack = 0.3f;
 
@@ -36,7 +36,8 @@ public class TakeDamage : MonoBehaviour
 
             if (data.Health.Value > 0 && data.InvisibilityFrameList.Count <= 0)
             {
-                data.AnimatorModifierEvent.Raise(new AnimatorModifier(_takeDamageClip));
+                if (_takeDamageAnimation.Clip != null)
+                    data.AnimatorModifierEvent.Raise(new AnimatorModifier(_takeDamageAnimation.Clip, _takeDamageAnimation.SpeedMultiplier, _takeDamageAnimation.Exitpercent));
                 data.StunAttackList.Add(new Duration(_stunAttack));
                 data.InvisibilityFrameList.Add(new Duration(_invisibilityFrame));
                 SpawnPopup(damage);
@@ -53,7 +54,8 @@ public class TakeDamage : MonoBehaviour
             if (ai.health.Value > 0)
             {
                 AnimatorBehaviour animatorBehaviour = gameObject.GetComponent<AnimatorBehaviour>();
-                animatorBehaviour?.OnAnimationModifierRaised(new AnimatorModifier(_takeDamageClip));
+                if (_takeDamageAnimation.Clip != null)
+                    animatorBehaviour?.OnAnimationModifierRaised(new AnimatorModifier(_takeDamageAnimation.Clip, _takeDamageAnimation.SpeedMultiplier, _takeDamageAnimation.Exitpercent));
 
                 SpawnPopup(damage);
             }

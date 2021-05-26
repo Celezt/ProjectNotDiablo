@@ -184,7 +184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageable: 2
-  _takeDamageClip: {fileID: 7400000, guid: e263228e6d15f8e4c91604a4e0af284d, type: 3}
+  _takeDamageAnimation:
+    _clip: {fileID: 0}
+    _speedMultiplier: 1
+    _exitPercent: 1
   _invisibilityFrame: 0.5
   _stunAttack: 0.3
   _hasPopup: 1

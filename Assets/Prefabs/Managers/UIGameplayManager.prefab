@@ -724,6 +724,7 @@ MonoBehaviour:
   _firstDeathMenuButton: {fileID: 7586071934067649627}
   _timeText: {fileID: 6590565578308450843}
   _cursorHandler: {fileID: 7636560815269815761}
+  _deathDelay: 2
   _isInputVariable: {fileID: 11400000, guid: 58da3bf122009d940a8e7417c12cac7b, type: 2}
   _stunAttackList: {fileID: 11400000, guid: 35d4a6ea4f2c4dc4bb2c0f065b8649b2, type: 2}
   _stunDodgeList: {fileID: 11400000, guid: a41179f392014c346a2815641e5056cd, type: 2}
