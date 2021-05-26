@@ -102,6 +102,7 @@ public class RoomPrefab : MonoBehaviour
                 monsterSpawnPoints[i].position.z);
             pos = transform.position + transform.rotation * pos * tileSize;
 
+            Gizmos.DrawWireCube(pos, new Vector3(tileSize, 0.01f, tileSize));
             Gizmos.DrawMesh(monsterSpawnMesh, -1, pos, rot, tileDimensions / 4.0f);
         }
 
@@ -167,7 +168,12 @@ public class RoomPrefab : MonoBehaviour
             int monIndex = Random.Range(0, monsterPool.monsters.Count);
             MonsterSpawnPoint spawnPoint = monsterSpawnPoints[pointIndex];
             
-            Vector3 spawnPos = (pivotRot * spawnPoint.position * tileSize) + roomPosition;
+            Vector3 spawnPos = new Vector3(
+                spawnPoint.position.x + Random.Range(-tileSize/2.0f, tileSize/2.0f),
+                spawnPoint.position.y, 
+                spawnPoint.position.z + Random.Range(-tileSize/2.0f, tileSize/2.0f));
+
+            spawnPos = (pivotRot * spawnPos * tileSize) + roomPosition;
             Vector3 spawnRot = new Vector3(spawnPoint.rotation.x, 
                 spawnPoint.rotation.y + angle, spawnPoint.rotation.z);
 
