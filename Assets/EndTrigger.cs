@@ -7,22 +7,23 @@ public class EndTrigger : MonoBehaviour
     AI boss;
     Animator animator;
     bool open;
-    
 
-    private void Awake()
+
+    private void Start()
     {
         animator = gameObject.GetComponent<Animator>();
+        if (boss == null)
+        {
+            StartCoroutine(FindBoss());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (boss != null)
+        //Kills player and ends game
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && open == true)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player") && open == true)
-            {
-                //End Game
-                other.gameObject.GetComponent<TakeDamage>().ReciveDamage(1000);
-            }
+            other.gameObject.GetComponent<TakeDamage>().ReciveDamage(1000);
         }
     }
     private void Update()
@@ -35,16 +36,13 @@ public class EndTrigger : MonoBehaviour
                 animator.Play("OpenGateWay");
             }
         }
-        if (boss == null)
-        {
-            StartCoroutine(FindBoss());
-        }
+
     }
 
     IEnumerator FindBoss()
     {
-        yield return new WaitForSecondsRealtime(10);
+        yield return new WaitForSecondsRealtime(4);
         boss = GameObject.FindGameObjectWithTag("Boss").GetComponent<AI>();
-
+        Debug.Log(boss);
     }
 }

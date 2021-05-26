@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2428820194508254227}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Corridor_T
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,6 +97,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b15c6739cdc060b4a8dfcfd5346f5195, type: 3}
       propertyPath: m_Name
       value: Corridor_T
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b15c6739cdc060b4a8dfcfd5346f5195, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b15c6739cdc060b4a8dfcfd5346f5195, type: 3}
       propertyPath: m_IsActive
