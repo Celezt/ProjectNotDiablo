@@ -169,7 +169,7 @@ MonoBehaviour:
   _speedSideMultiplier: 0.5
   _movementSmoothSpeedStart: 2
   _movementSmoothSpeedEnd: 8
-  _turnSpeed: 3
+  _turnSpeed: 6
   _fallLayerMask:
     serializedVersion: 2
     m_Bits: 8209
