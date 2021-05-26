@@ -155,6 +155,7 @@ MonoBehaviour:
   selectedWeapon: {fileID: 983252866071263882}
   PlayerInRange: 0
   dead: 0
+  Stunned: 0
   player: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 2a2ff845dd4f08a4b9f16004cdac1005, type: 3}
   dyingAnimation: {fileID: 7400000, guid: 4dc448ac47a91c6428de3a7af494b625, type: 3}
@@ -174,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 10
-  viewAngle: 180
+  viewAngle: 280
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 8192

@@ -45,10 +45,14 @@ public class TakeDamage : MonoBehaviour
         }
         else if (gameObject.layer == LayerMask.NameToLayer("AI"))   // AI hit logic.
         {
+            
+            
             AI ai = gameObject.GetComponent<AI>();
             AudioSource source = gameObject.GetComponent<AudioSource>();
             AudioClip clip = gameObject.GetComponent<AI>().hitSoundClip;
             source.Play();
+            ai.Stunned = true;
+            ai.CallStunned();
             ai.health.Value -= damage;
 
             if (ai.health.Value > 0)

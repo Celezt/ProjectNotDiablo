@@ -29,6 +29,9 @@ public class AI : MonoBehaviour
     bool enemyVisible;
     public bool PlayerInRange = false;
     public bool dead;
+    public bool Stunned;
+
+    Collider collider;
 
     PatrolArea selectedPatrolArea;
     NavMeshAgent agent;
@@ -93,16 +96,34 @@ public class AI : MonoBehaviour
             weaponRange = selectedWeapon.GetComponent<Melee>().range;
         }
     }
+    public void CallStunned()
+    {
+        StartCoroutine(waiter());
+    }
 
+    IEnumerator waiter()
+    {
+        yield return new WaitForSecondsRealtime(2);
+        Stunned = false;
+    }
     // Update is called once per frame
+    public void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("AI")) ;
+        {
+            destination = new Vector3(1, 0, 1) + transform.position;
+            agent.destination = destination;
+        }
+    }
     void Update()
     {
+
         if (health <= 0 && dead != true)
         {
             Death();
             enabled = false;
         }
-        if (dead == true)
+        if (dead == true || Stunned == true)
         {
             return;
         }
