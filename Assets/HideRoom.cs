@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class HideRoom : MonoBehaviour
 {
-    [SerializeField]
-    GameObject blackBox;
-    // Start is called before the first frame update
+    MeshRenderer renderer;
     void Start()
     {
-        blackBox.SetActive(true);
+        renderer = gameObject.GetComponent<MeshRenderer>();
+        renderer.enabled = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            renderer.enabled = false;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            renderer.enabled = true;
+        }
     }
 }

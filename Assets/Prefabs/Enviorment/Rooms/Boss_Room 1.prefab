@@ -10368,7 +10368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6668e1112ea02c541aff8d1ae4bb7ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boss: {fileID: 0}
 --- !u!95 &6035997416809644186
 Animator:
   serializedVersion: 3
@@ -13750,8 +13749,8 @@ MonoBehaviour:
   - position: {x: 2.722085, y: 0.98795706, z: -3.0355377}
     rotation: {x: -0, y: 241.79736, z: 0}
   monsterPool: {fileID: 11400000, guid: 8fcebd2c7802b6f46940a8dfbf1d13a3, type: 2}
-  minMonsters: 2
-  maxMonsters: 5
+  minMonsters: 1
+  maxMonsters: 1
   playerSpawnPoint:
     position: {x: 0.11242342, y: 0.31969166, z: -3.9751625}
     rotation: {x: -0.0027875148, y: 1.1366116, z: 359.90707}
