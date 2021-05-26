@@ -771,9 +771,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _newGameScene:
-    Scene: {fileID: 102900000, guid: a816f5198dcd9bc47b1bae1cb67634a6, type: 3}
-    SceneName: DebugGameplay
-    sceneIndex: 3
+    Scene: {fileID: 102900000, guid: cb50341305e48644dabcbc7683bab3e2, type: 3}
+    SceneName: Loading
+    sceneIndex: 1
     sceneEnabled: 1
   _firstButton: {fileID: 443070463}
   _isInputVariable: {fileID: 11400000, guid: 58da3bf122009d940a8e7417c12cac7b, type: 2}
