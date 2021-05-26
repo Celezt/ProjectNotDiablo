@@ -203,7 +203,7 @@ public class HotbarScript : MonoBehaviour
         */
         inventory.RemoveItem((int)inputkey - 1);
         GameObject player = GameObject.Find("Player");
-        var pos = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+        var pos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
         Quaternion q = new Quaternion();
         newObject.GetComponent<BoxCollider>().enabled = true;
         newObject.GetComponent<ItemPickupScript>().enabled = true;
