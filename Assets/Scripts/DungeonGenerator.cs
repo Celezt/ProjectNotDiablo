@@ -187,7 +187,7 @@ public class DungeonGenerator : MonoBehaviour
 
     void GeneratePrefabRoom(Vector2Int position, bool endRoom) 
     {
-        float rotAngle = Random.Range(0, 4) * 90.0f;
+        float rotAngle = Random.Range(0, 2) * 90.0f;
         Quaternion randRotation = Quaternion.AngleAxis(rotAngle,
             new Vector3(0.0f, 1.0f, 0.0f));
 
