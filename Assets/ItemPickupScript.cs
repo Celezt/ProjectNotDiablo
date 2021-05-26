@@ -24,6 +24,20 @@ public class ItemPickupScript : MonoBehaviour
         item = new Item();
         item.amount = 1;
         item.itemType = itemType;
+        GameObject currentObj = this.gameObject;
+        if(currentObj != null)
+        {
+            if(currentObj.transform.parent != null)
+            {
+                if (currentObj.transform.parent.name != "Character R Hand")
+                {
+                    this.gameObject.GetComponent<BoxCollider>().enabled = true;
+                }
+            }
+            
+            
+        }
+
         /*
         if(script == null)
         {
