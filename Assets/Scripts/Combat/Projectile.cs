@@ -35,7 +35,7 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         targetLayer = LayerMask.GetMask("Damageble", "Player", "AI");
-        ignoreLayer = LayerMask.GetMask("Enviorment");
+        ignoreLayer = LayerMask.GetMask("Ignore Raycast");
     }
 
     private void Awake()
