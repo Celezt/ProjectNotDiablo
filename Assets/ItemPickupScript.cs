@@ -18,9 +18,11 @@ public class ItemPickupScript : MonoBehaviour
     */
     public Inventory inventory;
     public System.DateTime created = System.DateTime.Now;
-    
+    Collider collider;
     void Awake()
     {
+        collider = gameObject.GetComponent<Collider>();
+        collider.enabled = true;
         item = new Item();
         item.amount = 1;
         item.itemType = itemType;
