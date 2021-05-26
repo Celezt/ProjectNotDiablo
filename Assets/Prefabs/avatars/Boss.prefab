@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2298974355366818244}
   m_Layer: 12
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,6 +122,7 @@ MonoBehaviour:
   selectedWeapon: {fileID: 8016639751962167874}
   PlayerInRange: 0
   dead: 0
+  Stunned: 0
   player: {fileID: 0}
   attackAnimation: {fileID: 7400000, guid: 2a2ff845dd4f08a4b9f16004cdac1005, type: 3}
   dyingAnimation: {fileID: 7400000, guid: 4dc448ac47a91c6428de3a7af494b625, type: 3}

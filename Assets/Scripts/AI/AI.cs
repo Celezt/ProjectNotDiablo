@@ -98,13 +98,18 @@ public class AI : MonoBehaviour
     }
     public void CallStunned()
     {
-        StartCoroutine(waiter());
+         StartCoroutine(stunWaiter());
     }
 
-    IEnumerator waiter()
+    IEnumerator stunWaiter()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1);
         Stunned = false;
+    }
+    IEnumerator AttackWaiter()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
     }
     // Update is called once per frame
     public void OnCollisionStay(Collision collision)
@@ -227,7 +232,7 @@ public class AI : MonoBehaviour
         }
         if (selectedWeapon.GetComponent<Melee>() != null)
         {
-            selectedWeapon.GetComponent<Melee>().Attack(transform, gameObject.GetComponent<Collider>());
+            StartCoroutine(AttackWaiter());
 
             if (animatorBehaviour.IsAnimationModifierRunning == false)
             {
