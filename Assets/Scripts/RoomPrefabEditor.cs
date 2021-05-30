@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(RoomPrefab))]
 public class RoomPrefabEditor : Editor
 {
@@ -38,10 +39,10 @@ public class RoomPrefabEditor : Editor
 
         bool editModeVal = false;
         editModeVal = EditorGUILayout.Toggle("Edit Mode", editMode);
-        
+
         if (editMode != editModeVal) {
             if (roomPrefab.transform.rotation == Quaternion.identity)
-                editMode = editModeVal; 
+                editMode = editModeVal;
             else
                 Debug.LogWarning("You can't enable edit mode while rotated.");
         }
@@ -67,14 +68,14 @@ public class RoomPrefabEditor : Editor
         EditorGUILayout.Space(10.0f);
 
         EditorGUILayout.PropertyField(connections, new GUIContent("Corridor Connection Points"));
-        
+
         EditorGUILayout.Space(10.0f);
 
         EditorGUILayout.PropertyField(monsterPool, new GUIContent("Monster Pool"));
 
         EditorGUILayout.PropertyField(minMonsters, new GUIContent("Minimum Monsters"));
         EditorGUILayout.PropertyField(maxMonsters, new GUIContent("Maximum Monsters"));
-        
+
         EditorGUILayout.PropertyField(monsterSpawnPoints, new GUIContent("Monster Spawn Points"));
 
         EditorGUILayout.Space(10.0f);
@@ -92,7 +93,7 @@ public class RoomPrefabEditor : Editor
         RoomPrefab roomPrefab = target as RoomPrefab;
 
         // Connection handles
-     
+
         EditorGUI.BeginChangeCheck();
 
         List<Vector2Int> newConnections = new List<Vector2Int>(roomPrefab.connections.Count);
@@ -101,14 +102,14 @@ public class RoomPrefabEditor : Editor
             Vector3 pos = new Vector3(roomPrefab.connections[i].x * roomPrefab.tileSize, 0.0f,
                 roomPrefab.connections[i].y * roomPrefab.tileSize);
             pos += roomPrefab.transform.position;
-            
+
             pos = Handles.PositionHandle(pos, Quaternion.identity);
             pos -= roomPrefab.transform.position;
             pos /= roomPrefab.tileSize;
 
             newConnections.Add(new Vector2Int((int)pos.x, (int)pos.z));
         }
-        
+
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(roomPrefab, "Move connection");
 
@@ -120,7 +121,7 @@ public class RoomPrefabEditor : Editor
 
         // Monster spawn point handles
 
-        RoomPrefab.MonsterSpawnPoint 
+        RoomPrefab.MonsterSpawnPoint
         GetTransformedSpawnPoint(RoomPrefab.MonsterSpawnPoint spawnPoint)
         {
             Vector3 pos = new Vector3(
@@ -128,7 +129,7 @@ public class RoomPrefabEditor : Editor
                 spawnPoint.position.y * roomPrefab.tileSize,
                 spawnPoint.position.z * roomPrefab.tileSize);
             pos += roomPrefab.transform.position;
-            
+
             Quaternion rot = Quaternion.Euler(spawnPoint.rotation);
             Vector3 scale = new Vector3(1.0f, 1.0f, 1.0f);
 
@@ -148,13 +149,13 @@ public class RoomPrefabEditor : Editor
         var spawnPoints = new List<RoomPrefab.MonsterSpawnPoint>(roomPrefab.monsterSpawnPoints.Count);
         var playerSpawnPoint = new RoomPrefab.MonsterSpawnPoint();
 
-        for (int i = 0; i < roomPrefab.monsterSpawnPoints.Count; i++) {            
+        for (int i = 0; i < roomPrefab.monsterSpawnPoints.Count; i++) {
             var point = GetTransformedSpawnPoint(roomPrefab.monsterSpawnPoints[i]);
             spawnPoints.Add(point);
         }
 
         playerSpawnPoint = GetTransformedSpawnPoint(roomPrefab.playerSpawnPoint);
-        
+
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(roomPrefab, "Move monster spawn point");
 
@@ -167,5 +168,5 @@ public class RoomPrefabEditor : Editor
         }
 
     }
-
 }
+#endif
