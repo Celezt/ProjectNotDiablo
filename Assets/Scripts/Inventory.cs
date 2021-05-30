@@ -27,7 +27,7 @@ public class Inventory
     {
         int indexFirstNull = -1;
         bool sameItem = false;
-        Debug.Log(item.amount);
+
         for(int i = 0; i < items.Length; i++)
         {
             if(items[i] == null)
@@ -43,14 +43,14 @@ public class Inventory
                 indexFirstNull = i;
                 break;
             }
-            
+
         }
         if (sameItem)
         {
             if(items[indexFirstNull].amount >= maxNumberOfItems)
             {
                 return false;
-            } 
+            }
             else
             {
                 if(item.itemType == Item.ItemType.Spell || item.itemType == Item.ItemType.Sword)
@@ -59,13 +59,13 @@ public class Inventory
                 }
                 items[indexFirstNull].amount += 1;
                 Transform amountText = scriptMain.GetSlot(indexFirstNull + 1).transform.Find("Slot - Amount");
-                Debug.Log(amountText);
+
                 if(amountText != null)
                 {
                     Text uiText = amountText.GetComponent<Text>();
                     uiText.text=items[indexFirstNull].amount.ToString();
                 }
-                Debug.Log(items[indexFirstNull].amount);
+
                 return true;
             }
         }
@@ -94,8 +94,7 @@ public class Inventory
                     break;
 
             }
-            
-            //Debug.Log(newSprite);
+
             img.sprite = newSprite;
 
             return true;
@@ -120,7 +119,7 @@ public class Inventory
 
                 int newAmount = items[index].amount -= 1;
                 Transform amountText = scriptMain.GetSlot(index + 1).transform.Find("Slot - Amount");
-                Debug.Log(amountText);
+
                 if (amountText != null)
                 {
                     Text uItext = amountText.GetComponent<Text>();
@@ -130,27 +129,26 @@ public class Inventory
                     }
                     else uItext.text = newAmount.ToString();
                 }
-                
+
             }
         }
         else
         {
             Debug.Log("Turn white");
-            
+
             GameObject tempSlot = scriptMain.GetSlot(index + 1) ;
             GameObject tempBorder = tempSlot.transform.Find("Slot - Frame").gameObject;
             Image tempImg = tempBorder.GetComponent<Image>();
             tempImg.color = Color.white;
-            
+
             items[index] = null;
             AttackBehaviour abScript = GameObject.Find("Player").GetComponent<AttackBehaviour>();
-            Debug.Log(hands);
+
             abScript.SelectedWeapon = hands;
 
             return true;
         }
-        //Debug.Log(items[index].itemType);
-        Debug.Log(items[index].amount);
+
         return false;
     }
 
@@ -182,7 +180,7 @@ public class Inventory
                     return false;
                 }
             }
-                
+
 
             for (int i = 1; i < 6; i++)
             {
@@ -195,7 +193,7 @@ public class Inventory
             GameObject border = slot.transform.Find("Slot - Frame").gameObject;
             Image img = border.GetComponent<Image>();
             img.color = Color.red;
-            
+
             if(item.itemType == Item.ItemType.Spell)
             {
                 abScript.SelectedWeapon = spellbook;
@@ -206,7 +204,7 @@ public class Inventory
             }
             return true;
 
-            
+
         }
         else
         {
@@ -252,7 +250,7 @@ public class Inventory
     {
         scriptMain = script;
     }
-    
+
     public void SetHealth(FloatVariable health)
     {
         this.health = health;
